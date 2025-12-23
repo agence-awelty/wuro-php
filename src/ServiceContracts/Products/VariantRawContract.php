@@ -1,0 +1,89 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Wuro\ServiceContracts\Products;
+
+use Wuro\Core\Contracts\BaseResponse;
+use Wuro\Core\Exceptions\APIException;
+use Wuro\Products\Variant\VariantCreateParams;
+use Wuro\Products\Variant\VariantDeleteParams;
+use Wuro\Products\Variant\VariantRetrieveParams;
+use Wuro\Products\Variant\VariantUpdateParams;
+use Wuro\RequestOptions;
+
+interface VariantRawContract
+{
+    /**
+     * @api
+     *
+     * @param string $uid Identifiant unique du produit parent
+     * @param array<string,mixed>|VariantCreateParams $params
+     *
+     * @return BaseResponse<mixed>
+     *
+     * @throws APIException
+     */
+    public function create(
+        string $uid,
+        array|VariantCreateParams $params,
+        ?RequestOptions $requestOptions = null,
+    ): BaseResponse;
+
+    /**
+     * @api
+     *
+     * @param string $uid Identifiant unique de la variante
+     * @param array<string,mixed>|VariantRetrieveParams $params
+     *
+     * @return BaseResponse<mixed>
+     *
+     * @throws APIException
+     */
+    public function retrieve(
+        string $uid,
+        array|VariantRetrieveParams $params,
+        ?RequestOptions $requestOptions = null,
+    ): BaseResponse;
+
+    /**
+     * @api
+     *
+     * @param string $uid Path param: Identifiant unique de la variante
+     * @param array<string,mixed>|VariantUpdateParams $params
+     *
+     * @return BaseResponse<mixed>
+     *
+     * @throws APIException
+     */
+    public function update(
+        string $uid,
+        array|VariantUpdateParams $params,
+        ?RequestOptions $requestOptions = null,
+    ): BaseResponse;
+
+    /**
+     * @api
+     *
+     * @return BaseResponse<mixed>
+     *
+     * @throws APIException
+     */
+    public function list(?RequestOptions $requestOptions = null): BaseResponse;
+
+    /**
+     * @api
+     *
+     * @param string $uid Identifiant unique de la variante
+     * @param array<string,mixed>|VariantDeleteParams $params
+     *
+     * @return BaseResponse<mixed>
+     *
+     * @throws APIException
+     */
+    public function delete(
+        string $uid,
+        array|VariantDeleteParams $params,
+        ?RequestOptions $requestOptions = null,
+    ): BaseResponse;
+}
