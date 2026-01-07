@@ -12,6 +12,8 @@ use Wuro\Core\Exceptions\APIStatusException;
 use Wuro\RequestOptions;
 
 /**
+ * @phpstan-import-type NormalizedRequest from \Wuro\Core\BaseClient
+ *
  * @internal
  *
  * @template Item
@@ -94,7 +96,7 @@ trait SdkPage
     /**
      * @internal
      *
-     * @return array{normalized_request, RequestOptions}
+     * @return array{NormalizedRequest, RequestOptions}
      */
     abstract protected function nextRequest(): ?array;
 }

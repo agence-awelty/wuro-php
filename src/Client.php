@@ -30,6 +30,10 @@ use Wuro\Services\QuotesService;
 use Wuro\Services\StatisticsService;
 use Wuro\Services\UsersService;
 
+/**
+ * @phpstan-import-type NormalizedRequest from \Wuro\Core\BaseClient
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 class Client extends BaseClient
 {
     public string $appID;
@@ -198,6 +202,12 @@ class Client extends BaseClient
     }
 
     /** @return array<string,string> */
+    protected function authHeaders(): array
+    {
+        return [...$this->appIDAuth(), ...$this->appSecretAuth()];
+    }
+
+    /** @return array<string,string> */
     protected function appIDAuth(): array
     {
         return $this->appID ? ['X-APP-ID' => $this->appID] : [];
@@ -207,5 +217,33 @@ class Client extends BaseClient
     protected function appSecretAuth(): array
     {
         return $this->appSecret ? ['X-APP-SECRET' => $this->appSecret] : [];
+    }
+
+    /**
+     * @internal
+     *
+     * @param string|list<string> $path
+     * @param array<string,mixed> $query
+     * @param array<string,string|int|list<string|int>|null> $headers
+     * @param RequestOpts|null $opts
+     *
+     * @return array{NormalizedRequest, RequestOptions}
+     */
+    protected function buildRequest(
+        string $method,
+        string|array $path,
+        array $query,
+        array $headers,
+        mixed $body,
+        RequestOptions|array|null $opts,
+    ): array {
+        return parent::buildRequest(
+            method: $method,
+            path: $path,
+            query: $query,
+            headers: [...$this->authHeaders(), ...$headers],
+            body: $body,
+            opts: $opts,
+        );
     }
 }
