@@ -16,7 +16,8 @@ use Wuro\Core\Conversion\ListOf;
  * - ID de poste pour un poste spécifique
  * - Tableau d'IDs pour plusieurs postes
  *
- * @phpstan-type PositionToShape = string|list<string>
+ * @phpstan-type PositionToVariants = string|list<string>
+ * @phpstan-type PositionToShape = PositionToVariants
  */
 final class PositionTo implements ConverterSource
 {

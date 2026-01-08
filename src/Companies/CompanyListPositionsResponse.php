@@ -13,7 +13,7 @@ use Wuro\Core\Contracts\BaseModel;
  * @phpstan-import-type PositionShape from \Wuro\Companies\Position\Position
  *
  * @phpstan-type CompanyListPositionsResponseShape = array{
- *   positions?: list<PositionShape>|null
+ *   positions?: list<Position|PositionShape>|null
  * }
  */
 final class CompanyListPositionsResponse implements BaseModel
@@ -35,7 +35,7 @@ final class CompanyListPositionsResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<PositionShape>|null $positions
+     * @param list<Position|PositionShape>|null $positions
      */
     public static function with(?array $positions = null): self
     {
@@ -47,7 +47,7 @@ final class CompanyListPositionsResponse implements BaseModel
     }
 
     /**
-     * @param list<PositionShape> $positions
+     * @param list<Position|PositionShape> $positions
      */
     public function withPositions(array $positions): self
     {

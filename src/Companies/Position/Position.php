@@ -24,9 +24,9 @@ use Wuro\Core\Contracts\BaseModel;
  *   firstName?: string|null,
  *   lastName?: string|null,
  *   releaseDate?: \DateTimeInterface|null,
- *   rights?: list<RightShape>|null,
+ *   rights?: list<Right|RightShape>|null,
  *   state?: null|State|value-of<State>,
- *   teams?: list<TeamShape>|null,
+ *   teams?: list<Team|TeamShape>|null,
  *   type?: string|null,
  *   updatedAt?: \DateTimeInterface|null,
  *   user?: string|null,
@@ -144,9 +144,9 @@ final class Position implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<RightShape>|null $rights
+     * @param list<Right|RightShape>|null $rights
      * @param State|value-of<State>|null $state
-     * @param list<TeamShape>|null $teams
+     * @param list<Team|TeamShape>|null $teams
      */
     public static function with(
         ?string $_id = null,
@@ -277,7 +277,7 @@ final class Position implements BaseModel
     /**
      * List of rights.
      *
-     * @param list<RightShape> $rights
+     * @param list<Right|RightShape> $rights
      */
     public function withRights(array $rights): self
     {
@@ -303,7 +303,7 @@ final class Position implements BaseModel
     /**
      * List of teams.
      *
-     * @param list<TeamShape> $teams
+     * @param list<Team|TeamShape> $teams
      */
     public function withTeams(array $teams): self
     {

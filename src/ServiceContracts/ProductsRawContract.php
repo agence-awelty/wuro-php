@@ -19,12 +19,16 @@ use Wuro\Products\ProductUpdateParams;
 use Wuro\Products\ProductUpdateResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface ProductsRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|ProductCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductNewResponse>
      *
@@ -32,7 +36,7 @@ interface ProductsRawContract
      */
     public function create(
         array|ProductCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -40,6 +44,7 @@ interface ProductsRawContract
      *
      * @param string $uid Identifiant unique du produit
      * @param array<string,mixed>|ProductRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductGetResponse>
      *
@@ -48,7 +53,7 @@ interface ProductsRawContract
     public function retrieve(
         string $uid,
         array|ProductRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -56,6 +61,7 @@ interface ProductsRawContract
      *
      * @param string $uid Identifiant unique du produit
      * @param array<string,mixed>|ProductUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductUpdateResponse>
      *
@@ -64,13 +70,14 @@ interface ProductsRawContract
     public function update(
         string $uid,
         array|ProductUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|ProductListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductListResponse>
      *
@@ -78,13 +85,14 @@ interface ProductsRawContract
      */
     public function list(
         array|ProductListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du produit
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductDeleteResponse>
      *
@@ -92,13 +100,14 @@ interface ProductsRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|ProductImportFromCsvParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductImportFromCsvResponse>
      *
@@ -106,13 +115,14 @@ interface ProductsRawContract
      */
     public function importFromCsv(
         array|ProductImportFromCsvParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du produit parent
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -120,6 +130,6 @@ interface ProductsRawContract
      */
     public function listVariants(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 }

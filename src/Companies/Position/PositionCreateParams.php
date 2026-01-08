@@ -30,7 +30,7 @@ use Wuro\Core\Contracts\BaseModel;
  * @phpstan-import-type RightShape from \Wuro\Companies\Position\PositionCreateParams\Right
  *
  * @phpstan-type PositionCreateParamsShape = array{
- *   type: string, user: string, rights?: list<RightShape>|null
+ *   type: string, user: string, rights?: list<Right|RightShape>|null
  * }
  */
 final class PositionCreateParams implements BaseModel
@@ -83,7 +83,7 @@ final class PositionCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<RightShape>|null $rights
+     * @param list<Right|RightShape>|null $rights
      */
     public static function with(
         string $type,
@@ -125,7 +125,7 @@ final class PositionCreateParams implements BaseModel
     /**
      * Liste des droits spécifiques.
      *
-     * @param list<RightShape> $rights
+     * @param list<Right|RightShape> $rights
      */
     public function withRights(array $rights): self
     {

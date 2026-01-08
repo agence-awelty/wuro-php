@@ -10,6 +10,9 @@ use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\Companies\AppInfosContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class AppInfosService implements AppInfosContract
 {
     /**
@@ -36,10 +39,13 @@ final class AppInfosService implements AppInfosContract
      * - Limites et quotas
      * - Paramètres de personnalisation
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
-    public function retrieve(?RequestOptions $requestOptions = null): CompanyApp
-    {
+    public function retrieve(
+        RequestOptions|array|null $requestOptions = null
+    ): CompanyApp {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieve(requestOptions: $requestOptions);
 
@@ -58,12 +64,13 @@ final class AppInfosService implements AppInfosContract
      * - Paramètres de personnalisation
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieveByID(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyApp {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieveByID($uid, requestOptions: $requestOptions);

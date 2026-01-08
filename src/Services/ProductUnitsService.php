@@ -10,6 +10,9 @@ use Wuro\ProductUnits\ProductUnitListResponseItem;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\ProductUnitsContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class ProductUnitsService implements ProductUnitsContract
 {
     /**
@@ -40,12 +43,15 @@ final class ProductUnitsService implements ProductUnitsContract
      * - Sélection de l'unité lors de la création/modification d'un produit
      * - Affichage sur les devis et factures
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return list<ProductUnitListResponseItem>
      *
      * @throws APIException
      */
-    public function list(?RequestOptions $requestOptions = null): array
-    {
+    public function list(
+        RequestOptions|array|null $requestOptions = null
+    ): array {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->list(requestOptions: $requestOptions);
 

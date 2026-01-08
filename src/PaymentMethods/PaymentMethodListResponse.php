@@ -12,7 +12,7 @@ use Wuro\Core\Contracts\BaseModel;
  * @phpstan-import-type PaymentMethodShape from \Wuro\PaymentMethods\PaymentMethod
  *
  * @phpstan-type PaymentMethodListResponseShape = array{
- *   paymentMethods?: list<PaymentMethodShape>|null, total?: int|null
+ *   paymentMethods?: list<PaymentMethod|PaymentMethodShape>|null, total?: int|null
  * }
  */
 final class PaymentMethodListResponse implements BaseModel
@@ -44,7 +44,7 @@ final class PaymentMethodListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<PaymentMethodShape>|null $paymentMethods
+     * @param list<PaymentMethod|PaymentMethodShape>|null $paymentMethods
      */
     public static function with(
         ?array $paymentMethods = null,
@@ -61,7 +61,7 @@ final class PaymentMethodListResponse implements BaseModel
     /**
      * Tableau des moyens de paiement.
      *
-     * @param list<PaymentMethodShape> $paymentMethods
+     * @param list<PaymentMethod|PaymentMethodShape> $paymentMethods
      */
     public function withPaymentMethods(array $paymentMethods): self
     {

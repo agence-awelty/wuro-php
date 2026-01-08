@@ -7,6 +7,7 @@ namespace Wuro\Services;
 use Wuro\Client;
 use Wuro\Companies\CompanyConfirmDomainResponse;
 use Wuro\Companies\CompanyCreateParams;
+use Wuro\Companies\CompanyCreateParams\Address;
 use Wuro\Companies\CompanyGetByIDResponse;
 use Wuro\Companies\CompanyGetCgvResponse;
 use Wuro\Companies\CompanyGetExtraInfosResponse;
@@ -19,6 +20,10 @@ use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\CompaniesRawContract;
 
+/**
+ * @phpstan-import-type AddressShape from \Wuro\Companies\CompanyCreateParams\Address
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class CompaniesRawService implements CompaniesRawContract
 {
     // @phpstan-ignore-next-line
@@ -45,9 +50,7 @@ final class CompaniesRawService implements CompaniesRawContract
      * @param array{
      *   name: string,
      *   url: string,
-     *   addresses?: list<array{
-     *     city?: string, country?: string, street?: string, zipCode?: string
-     *   }>,
+     *   addresses?: list<Address|AddressShape>,
      *   commercialCourt?: string,
      *   companyType?: string,
      *   email?: string,
@@ -61,6 +64,7 @@ final class CompaniesRawService implements CompaniesRawContract
      *   tvaNumber?: string,
      *   website?: string,
      * }|CompanyCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyNewResponse>
      *
@@ -68,7 +72,7 @@ final class CompaniesRawService implements CompaniesRawContract
      */
     public function create(
         array|CompanyCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = CompanyCreateParams::parseRequest(
             $params,
@@ -90,12 +94,14 @@ final class CompaniesRawService implements CompaniesRawContract
      *
      * Retourne les informations de l'entreprise associée à la requête authentifiée.
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<CompanyGetResponse>
      *
      * @throws APIException
      */
     public function retrieve(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -116,13 +122,15 @@ final class CompaniesRawService implements CompaniesRawContract
      *
      * **Événement déclenché:** UPDATE_COMPANY
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<CompanyUpdateResponse>
      *
      * @throws APIException
      */
     public function update(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -144,13 +152,15 @@ final class CompaniesRawService implements CompaniesRawContract
      *
      * **Événement déclenché:** DELETE_COMPANY
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<mixed>
      *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -175,6 +185,7 @@ final class CompaniesRawService implements CompaniesRawContract
      * - Active les fonctionnalités liées au domaine personnalisé (envoi d'emails, etc.)
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyConfirmDomainResponse>
      *
@@ -182,7 +193,7 @@ final class CompaniesRawService implements CompaniesRawContract
      */
     public function confirmDomain(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -207,6 +218,7 @@ final class CompaniesRawService implements CompaniesRawContract
      * - Gestion des droits et permissions
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyListPositionsResponse>
      *
@@ -214,7 +226,7 @@ final class CompaniesRawService implements CompaniesRawContract
      */
     public function listPositions(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -231,6 +243,7 @@ final class CompaniesRawService implements CompaniesRawContract
      * Récupère les détails d'une entreprise spécifique.
      *
      * @param string $uid ID de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyGetByIDResponse>
      *
@@ -238,7 +251,7 @@ final class CompaniesRawService implements CompaniesRawContract
      */
     public function retrieveByID(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -264,6 +277,7 @@ final class CompaniesRawService implements CompaniesRawContract
      * - Page de mentions légales
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyGetCgvResponse>
      *
@@ -271,7 +285,7 @@ final class CompaniesRawService implements CompaniesRawContract
      */
     public function retrieveCgv(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -296,6 +310,7 @@ final class CompaniesRawService implements CompaniesRawContract
      * - Administration et configuration
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyGetExtraInfosResponse>
      *
@@ -303,7 +318,7 @@ final class CompaniesRawService implements CompaniesRawContract
      */
     public function retrieveExtraInfos(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
