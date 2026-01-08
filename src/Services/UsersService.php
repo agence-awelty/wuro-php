@@ -14,9 +14,16 @@ use Wuro\Users\UserGetResponse;
 use Wuro\Users\UserListInvitationsResponse;
 use Wuro\Users\UserListNotificationsResponse;
 use Wuro\Users\UserListPositionsResponse;
+use Wuro\Users\UserUpdateParams\Address;
 use Wuro\Users\UserUpdateParams\Gender;
+use Wuro\Users\UserUpdateParams\Phone;
 use Wuro\Users\UserUpdateResponse;
 
+/**
+ * @phpstan-import-type AddressShape from \Wuro\Users\UserUpdateParams\Address
+ * @phpstan-import-type PhoneShape from \Wuro\Users\UserUpdateParams\Phone
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class UsersService implements UsersContract
 {
     /**
@@ -38,10 +45,12 @@ final class UsersService implements UsersContract
      * Retourne les informations de l'utilisateur actuellement authentifié.
      * Utile pour obtenir le profil de l'utilisateur après connexion.
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function retrieve(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): UserGetResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieve(requestOptions: $requestOptions);
@@ -59,41 +68,36 @@ final class UsersService implements UsersContract
      * - Le mot de passe ne peut pas être modifié via cette route (utiliser /auth/password/reset)
      * - Déclenche un événement UPDATE_USER
      *
-     * @param array{
-     *   city?: string,
-     *   country?: string,
-     *   street?: string,
-     *   streetEnd?: string,
-     *   zipCode?: string,
-     * } $address Adresse postale
+     * @param Address|AddressShape $address Adresse postale
      * @param string $avatar URL ou fichier base64 de l'avatar
-     * @param string|\DateTimeInterface $birthdate Date de naissance
+     * @param \DateTimeInterface $birthdate Date de naissance
      * @param string $firstName Prénom
-     * @param 'H'|'F'|'Other'|Gender $gender Genre
+     * @param Gender|value-of<Gender> $gender Genre
      * @param string $lastName Nom de famille
-     * @param array{number?: string} $phone Téléphone principal
+     * @param Phone|PhoneShape $phone Téléphone principal
      * @param string $socialSecuNumber Numéro de sécurité sociale
      * @param string $title Civilité (MR, MME, etc.)
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function update(
         string $uid,
-        ?array $address = null,
+        Address|array|null $address = null,
         ?string $avatar = null,
-        string|\DateTimeInterface|null $birthdate = null,
+        ?\DateTimeInterface $birthdate = null,
         ?string $firstName = null,
-        string|Gender|null $gender = null,
+        Gender|string|null $gender = null,
         ?string $lastName = null,
         ?string $personalEmail = null,
         ?string $personalPhoneFixe = null,
-        ?array $phone = null,
+        Phone|array|null $phone = null,
         ?string $professionalEmail = null,
         ?string $professionalPhone = null,
         ?string $professionalPhoneFixe = null,
         ?string $socialSecuNumber = null,
         ?string $title = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): UserUpdateResponse {
         $params = Util::removeNulls(
             [
@@ -130,11 +134,13 @@ final class UsersService implements UsersContract
      * - L'utilisateur n'est pas supprimé de la base de données
      * - Déclenche un événement DELETE_USER
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function deactivate(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): mixed {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->deactivate($uid, requestOptions: $requestOptions);
@@ -162,12 +168,13 @@ final class UsersService implements UsersContract
      * - Gestion des demandes d'ajout à des entreprises
      *
      * @param string $uid Identifiant unique de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function listInvitations(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): UserListInvitationsResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->listInvitations($uid, requestOptions: $requestOptions);
@@ -196,12 +203,13 @@ final class UsersService implements UsersContract
      * - Badge de notifications non lues
      *
      * @param string $uid Identifiant unique de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function listNotifications(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): UserListNotificationsResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->listNotifications($uid, requestOptions: $requestOptions);
@@ -224,12 +232,13 @@ final class UsersService implements UsersContract
      * - Vérification des accès utilisateur
      *
      * @param string $uid Identifiant unique de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function listPositions(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): UserListPositionsResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->listPositions($uid, requestOptions: $requestOptions);
@@ -249,12 +258,13 @@ final class UsersService implements UsersContract
      * L'API détecte automatiquement le format.
      *
      * @param string $uid ID MongoDB ou adresse email de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieveByUid(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): UserGetByUidResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieveByUid($uid, requestOptions: $requestOptions);

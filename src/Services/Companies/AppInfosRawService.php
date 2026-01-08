@@ -11,6 +11,9 @@ use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\Companies\AppInfosRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class AppInfosRawService implements AppInfosRawContract
 {
     // @phpstan-ignore-next-line
@@ -30,12 +33,14 @@ final class AppInfosRawService implements AppInfosRawContract
      * - Limites et quotas
      * - Paramètres de personnalisation
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<CompanyApp>
      *
      * @throws APIException
      */
     public function retrieve(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -58,6 +63,7 @@ final class AppInfosRawService implements AppInfosRawContract
      * - Paramètres de personnalisation
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyApp>
      *
@@ -65,7 +71,7 @@ final class AppInfosRawService implements AppInfosRawContract
      */
     public function retrieveByID(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(

@@ -12,6 +12,9 @@ use Wuro\PurchaseFile\PurchaseFileAnalyzeResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\PurchaseFileRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class PurchaseFileRawService implements PurchaseFileRawContract
 {
     // @phpstan-ignore-next-line
@@ -37,6 +40,7 @@ final class PurchaseFileRawService implements PurchaseFileRawContract
      * - `preSubmitPurchase` : Données avec totaux recalculés (pour vérification)
      *
      * @param array{file?: string}|PurchaseFileAnalyzeParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseFileAnalyzeResponse>
      *
@@ -44,7 +48,7 @@ final class PurchaseFileRawService implements PurchaseFileRawContract
      */
     public function analyze(
         array|PurchaseFileAnalyzeParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PurchaseFileAnalyzeParams::parseRequest(
             $params,

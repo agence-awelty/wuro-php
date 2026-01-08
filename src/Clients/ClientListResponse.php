@@ -12,7 +12,7 @@ use Wuro\Core\Contracts\BaseModel;
  * @phpstan-import-type ClientShape from \Wuro\Clients\Client
  *
  * @phpstan-type ClientListResponseShape = array{
- *   clients?: list<ClientShape>|null,
+ *   clients?: list<Client|ClientShape>|null,
  *   limit?: int|null,
  *   skip?: int|null,
  *   total?: int|null,
@@ -59,7 +59,7 @@ final class ClientListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<ClientShape>|null $clients
+     * @param list<Client|ClientShape>|null $clients
      */
     public static function with(
         ?array $clients = null,
@@ -80,7 +80,7 @@ final class ClientListResponse implements BaseModel
     /**
      * Tableau des clients.
      *
-     * @param list<ClientShape> $clients
+     * @param list<Client|ClientShape> $clients
      */
     public function withClients(array $clients): self
     {

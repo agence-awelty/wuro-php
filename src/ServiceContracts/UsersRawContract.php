@@ -15,23 +15,29 @@ use Wuro\Users\UserListPositionsResponse;
 use Wuro\Users\UserUpdateParams;
 use Wuro\Users\UserUpdateResponse;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface UsersRawContract
 {
     /**
      * @api
+     *
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserGetResponse>
      *
      * @throws APIException
      */
     public function retrieve(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|UserUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserUpdateResponse>
      *
@@ -40,11 +46,13 @@ interface UsersRawContract
     public function update(
         string $uid,
         array|UserUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
+     *
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -52,13 +60,14 @@ interface UsersRawContract
      */
     public function deactivate(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserListInvitationsResponse>
      *
@@ -66,13 +75,14 @@ interface UsersRawContract
      */
     public function listInvitations(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserListNotificationsResponse>
      *
@@ -80,13 +90,14 @@ interface UsersRawContract
      */
     public function listNotifications(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserListPositionsResponse>
      *
@@ -94,13 +105,14 @@ interface UsersRawContract
      */
     public function listPositions(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID MongoDB ou adresse email de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserGetByUidResponse>
      *
@@ -108,6 +120,6 @@ interface UsersRawContract
      */
     public function retrieveByUid(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 }

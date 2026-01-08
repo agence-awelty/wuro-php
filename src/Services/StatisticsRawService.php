@@ -11,6 +11,9 @@ use Wuro\RequestOptions;
 use Wuro\ServiceContracts\StatisticsRawContract;
 use Wuro\Statistics\StatisticGetPaymentsResponse;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class StatisticsRawService implements StatisticsRawContract
 {
     // @phpstan-ignore-next-line
@@ -39,12 +42,14 @@ final class StatisticsRawService implements StatisticsRawContract
      * - Rapports de trésorerie
      * - Analyse des modes de paiement préférés
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<StatisticGetPaymentsResponse>
      *
      * @throws APIException
      */
     public function retrievePayments(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(

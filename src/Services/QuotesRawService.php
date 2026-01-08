@@ -11,8 +11,7 @@ use Wuro\Quotes\Line\QuoteLine;
 use Wuro\Quotes\QuoteCreateAdvanceInvoiceParams;
 use Wuro\Quotes\QuoteCreatePackageParams;
 use Wuro\Quotes\QuoteCreateParams;
-use Wuro\Quotes\QuoteCreateParams\QuoteLine\Type;
-use Wuro\Quotes\QuoteCreateParams\State;
+use Wuro\Quotes\QuoteCreateParams\Type;
 use Wuro\Quotes\QuoteDeleteResponse;
 use Wuro\Quotes\QuoteGetLogsParams;
 use Wuro\Quotes\QuoteGetLogsResponse;
@@ -20,6 +19,7 @@ use Wuro\Quotes\QuoteGetResponse;
 use Wuro\Quotes\QuoteGetStatsParams;
 use Wuro\Quotes\QuoteGetStatsResponse;
 use Wuro\Quotes\QuoteListParams;
+use Wuro\Quotes\QuoteListParams\State;
 use Wuro\Quotes\QuoteListResponse;
 use Wuro\Quotes\QuoteNewAdvanceInvoiceResponse;
 use Wuro\Quotes\QuoteNewInvoiceFromQuoteResponse;
@@ -34,6 +34,11 @@ use Wuro\Quotes\QuoteUpdateResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\QuotesRawContract;
 
+/**
+ * @phpstan-import-type QuoteLineShape from \Wuro\Quotes\QuoteCreateParams\QuoteLine as QuoteLineShape1
+ * @phpstan-import-type QuoteLineShape from \Wuro\Quotes\Line\QuoteLine
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class QuotesRawService implements QuotesRawContract
 {
     // @phpstan-ignore-next-line
@@ -69,24 +74,14 @@ final class QuotesRawService implements QuotesRawContract
      *   clientEmail?: string,
      *   clientName?: string,
      *   clientZipCode?: string,
-     *   date?: string|\DateTimeInterface,
-     *   expiryDate?: string|\DateTimeInterface,
-     *   quoteLines?: list<array{
-     *     description?: string,
-     *     discount?: float,
-     *     priceHt?: float,
-     *     product?: string,
-     *     quantity?: float,
-     *     reference?: string,
-     *     title?: string,
-     *     tvaRate?: float,
-     *     type?: 'product'|'header'|'subtotal'|'globalDiscount'|Type,
-     *     unit?: string,
-     *   }>,
-     *   state?: 'draft'|'pending'|'waiting'|'accepted'|'refused'|State,
+     *   date?: \DateTimeInterface,
+     *   expiryDate?: \DateTimeInterface,
+     *   quoteLines?: list<QuoteCreateParams\QuoteLine|QuoteLineShape1>,
+     *   state?: QuoteCreateParams\State|value-of<QuoteCreateParams\State>,
      *   title?: string,
-     *   type?: 'quote'|'proforma'|'bdc'|QuoteCreateParams\Type,
+     *   type?: Type|value-of<Type>,
      * }|QuoteCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewResponse>
      *
@@ -94,7 +89,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function create(
         array|QuoteCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = QuoteCreateParams::parseRequest(
             $params,
@@ -121,6 +116,7 @@ final class QuotesRawService implements QuotesRawContract
      *
      * @param string $uid ID du devis
      * @param array{populate?: string}|QuoteRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteGetResponse>
      *
@@ -129,7 +125,7 @@ final class QuotesRawService implements QuotesRawContract
     public function retrieve(
         string $uid,
         array|QuoteRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = QuoteRetrieveParams::parseRequest(
             $params,
@@ -165,25 +161,14 @@ final class QuotesRawService implements QuotesRawContract
      *   clientEmail?: string,
      *   clientName?: string,
      *   clientZipCode?: string,
-     *   date?: string|\DateTimeInterface,
-     *   expiryDate?: string|\DateTimeInterface,
-     *   quoteLines?: list<array{
-     *     _id?: string,
-     *     description?: string,
-     *     priceHt?: float,
-     *     quantity?: float,
-     *     reference?: string,
-     *     title?: string,
-     *     totalHt?: float,
-     *     totalTtc?: float,
-     *     tvaRate?: float,
-     *     type?: 'product'|'header'|'subtotal'|'globalDiscount'|QuoteLine\Type,
-     *     unit?: string,
-     *   }|QuoteLine>,
-     *   state?: 'draft'|'pending'|'waiting'|'accepted'|'refused'|'invoiced'|'canceled'|QuoteUpdateParams\State,
+     *   date?: \DateTimeInterface,
+     *   expiryDate?: \DateTimeInterface,
+     *   quoteLines?: list<QuoteLine|QuoteLineShape>,
+     *   state?: QuoteUpdateParams\State|value-of<QuoteUpdateParams\State>,
      *   title?: string,
-     *   type?: 'quote'|'proforma'|'bdc'|QuoteUpdateParams\Type,
+     *   type?: QuoteUpdateParams\Type|value-of<QuoteUpdateParams\Type>,
      * }|QuoteUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteUpdateResponse>
      *
@@ -192,7 +177,7 @@ final class QuotesRawService implements QuotesRawContract
     public function update(
         string $uid,
         array|QuoteUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = QuoteUpdateParams::parseRequest(
             $params,
@@ -230,13 +215,14 @@ final class QuotesRawService implements QuotesRawContract
      * @param array{
      *   client?: string,
      *   limit?: int,
-     *   maxDate?: string|\DateTimeInterface,
-     *   minDate?: string|\DateTimeInterface,
+     *   maxDate?: \DateTimeInterface,
+     *   minDate?: \DateTimeInterface,
      *   skip?: int,
      *   sort?: string,
-     *   state?: value-of<QuoteListParams\State>,
-     *   type?: 'quote'|'proforma'|'bdc'|QuoteListParams\Type,
+     *   state?: value-of<State>,
+     *   type?: QuoteListParams\Type|value-of<QuoteListParams\Type>,
      * }|QuoteListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteListResponse>
      *
@@ -244,7 +230,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function list(
         array|QuoteListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = QuoteListParams::parseRequest(
             $params,
@@ -270,13 +256,15 @@ final class QuotesRawService implements QuotesRawContract
      * - L'état passe à 'inactive' (soft delete)
      * - Déclenche un événement DELETE_QUOTE
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<QuoteDeleteResponse>
      *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -300,6 +288,7 @@ final class QuotesRawService implements QuotesRawContract
      * @param array{
      *   amount?: float, percentage?: float
      * }|QuoteCreateAdvanceInvoiceParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewAdvanceInvoiceResponse>
      *
@@ -308,7 +297,7 @@ final class QuotesRawService implements QuotesRawContract
     public function createAdvanceInvoice(
         string $uid,
         array|QuoteCreateAdvanceInvoiceParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = QuoteCreateAdvanceInvoiceParams::parseRequest(
             $params,
@@ -333,6 +322,7 @@ final class QuotesRawService implements QuotesRawContract
      * Le bon de livraison reprend les lignes du devis.
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -340,7 +330,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function createDeliveryReceipt(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -362,6 +352,7 @@ final class QuotesRawService implements QuotesRawContract
      * - La facture est créée avec numérotation automatique
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewInvoiceResponse>
      *
@@ -369,7 +360,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function createInvoice(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -391,6 +382,7 @@ final class QuotesRawService implements QuotesRawContract
      * - Le devis passe à l'état 'invoiced'
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewInvoiceFromQuoteResponse>
      *
@@ -398,7 +390,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function createInvoiceFromQuote(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -422,6 +414,7 @@ final class QuotesRawService implements QuotesRawContract
      * @param array{
      *   quotesID: list<string>, deferred?: bool
      * }|QuoteCreatePackageParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewPackageResponse>
      *
@@ -429,7 +422,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function createPackage(
         array|QuoteCreatePackageParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = QuoteCreatePackageParams::parseRequest(
             $params,
@@ -454,6 +447,7 @@ final class QuotesRawService implements QuotesRawContract
      * La proforma est une facture sans valeur comptable utilisée comme document préliminaire.
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewProformaInvoiceResponse>
      *
@@ -461,7 +455,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function createProformaInvoice(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -480,6 +474,7 @@ final class QuotesRawService implements QuotesRawContract
      * Le bon de commande est un document confirmant la commande avant facturation.
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewPurchaseOrderResponse>
      *
@@ -487,7 +482,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function createPurchaseOrder(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -513,6 +508,7 @@ final class QuotesRawService implements QuotesRawContract
      * - HTML complet avec styles CSS intégrés
      *
      * @param string $uid Identifiant unique du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<string>
      *
@@ -520,7 +516,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function generateHTML(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -547,6 +543,7 @@ final class QuotesRawService implements QuotesRawContract
      * - Le fichier est retourné en téléchargement direct
      *
      * @param string $uid Identifiant unique du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<string>
      *
@@ -554,7 +551,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function generatePdf(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -581,6 +578,7 @@ final class QuotesRawService implements QuotesRawContract
      * - Besoin d'un rendu identique au navigateur
      *
      * @param string $uid Identifiant unique du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<string>
      *
@@ -588,7 +586,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function generatePdfChromium(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -606,6 +604,7 @@ final class QuotesRawService implements QuotesRawContract
      * Récupère les logs d'actions effectuées sur tous les devis.
      *
      * @param array{limit?: int, skip?: int}|QuoteGetLogsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteGetLogsResponse>
      *
@@ -613,7 +612,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function getLogs(
         array|QuoteGetLogsParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = QuoteGetLogsParams::parseRequest(
             $params,
@@ -643,10 +642,9 @@ final class QuotesRawService implements QuotesRawContract
      * Utilise les mêmes filtres que GET /quotes.
      *
      * @param array{
-     *   maxDate?: string|\DateTimeInterface,
-     *   minDate?: string|\DateTimeInterface,
-     *   state?: string,
+     *   maxDate?: \DateTimeInterface, minDate?: \DateTimeInterface, state?: string
      * }|QuoteGetStatsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteGetStatsResponse>
      *
@@ -654,7 +652,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function getStats(
         array|QuoteGetStatsParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = QuoteGetStatsParams::parseRequest(
             $params,
@@ -677,6 +675,7 @@ final class QuotesRawService implements QuotesRawContract
      * Récupère l'historique des actions sur un devis spécifique.
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -684,7 +683,7 @@ final class QuotesRawService implements QuotesRawContract
      */
     public function retrieveLogs(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(

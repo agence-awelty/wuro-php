@@ -12,6 +12,9 @@ use Wuro\InvoiceFile\InvoiceFileAnalyzeResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\InvoiceFileRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class InvoiceFileRawService implements InvoiceFileRawContract
 {
     // @phpstan-ignore-next-line
@@ -37,6 +40,7 @@ final class InvoiceFileRawService implements InvoiceFileRawContract
      * - `preSubmitInvoice`: Données avec totaux recalculés (pour vérification)
      *
      * @param array{file: string}|InvoiceFileAnalyzeParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceFileAnalyzeResponse>
      *
@@ -44,7 +48,7 @@ final class InvoiceFileRawService implements InvoiceFileRawContract
      */
     public function analyze(
         array|InvoiceFileAnalyzeParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceFileAnalyzeParams::parseRequest(
             $params,

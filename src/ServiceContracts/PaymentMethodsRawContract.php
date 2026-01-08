@@ -16,12 +16,16 @@ use Wuro\PaymentMethods\PaymentMethodUpdateParams;
 use Wuro\PaymentMethods\PaymentMethodUpdateResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface PaymentMethodsRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|PaymentMethodCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PaymentMethodNewResponse>
      *
@@ -29,13 +33,14 @@ interface PaymentMethodsRawContract
      */
     public function create(
         array|PaymentMethodCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PaymentMethodGetResponse>
      *
@@ -43,7 +48,7 @@ interface PaymentMethodsRawContract
      */
     public function retrieve(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
@@ -51,6 +56,7 @@ interface PaymentMethodsRawContract
      *
      * @param string $uid Identifiant unique du moyen de paiement
      * @param array<string,mixed>|PaymentMethodUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PaymentMethodUpdateResponse>
      *
@@ -59,13 +65,14 @@ interface PaymentMethodsRawContract
     public function update(
         string $uid,
         array|PaymentMethodUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|PaymentMethodListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PaymentMethodListResponse>
      *
@@ -73,13 +80,14 @@ interface PaymentMethodsRawContract
      */
     public function list(
         array|PaymentMethodListParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PaymentMethodDeleteResponse>
      *
@@ -87,6 +95,6 @@ interface PaymentMethodsRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 }

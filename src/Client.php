@@ -31,8 +31,8 @@ use Wuro\Services\StatisticsService;
 use Wuro\Services\UsersService;
 
 /**
- * @phpstan-import-type NormalizedRequest from \Wuro\Core\BaseClient
  * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ * @phpstan-import-type NormalizedRequest from \Wuro\Core\BaseClient
  */
 class Client extends BaseClient
 {

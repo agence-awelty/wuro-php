@@ -13,7 +13,9 @@ use Wuro\Invoices\InvoiceListWaitingPaymentsResponse\Invoice;
  * @phpstan-import-type InvoiceShape from \Wuro\Invoices\InvoiceListWaitingPaymentsResponse\Invoice
  *
  * @phpstan-type InvoiceListWaitingPaymentsResponseShape = array{
- *   invoices?: list<InvoiceShape>|null, total?: int|null, totalAmount?: float|null
+ *   invoices?: list<Invoice|InvoiceShape>|null,
+ *   total?: int|null,
+ *   totalAmount?: float|null,
  * }
  */
 final class InvoiceListWaitingPaymentsResponse implements BaseModel
@@ -44,7 +46,7 @@ final class InvoiceListWaitingPaymentsResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<InvoiceShape>|null $invoices
+     * @param list<Invoice|InvoiceShape>|null $invoices
      */
     public static function with(
         ?array $invoices = null,
@@ -61,7 +63,7 @@ final class InvoiceListWaitingPaymentsResponse implements BaseModel
     }
 
     /**
-     * @param list<InvoiceShape> $invoices
+     * @param list<Invoice|InvoiceShape> $invoices
      */
     public function withInvoices(array $invoices): self
     {

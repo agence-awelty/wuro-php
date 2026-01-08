@@ -9,8 +9,9 @@ use Wuro\Core\Contracts\BaseResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\Core\Util;
 use Wuro\DeliveryReceipts\DeliveryReceiptCreateParams;
-use Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Line\Type;
+use Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Line;
 use Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\State;
+use Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Type;
 use Wuro\DeliveryReceipts\DeliveryReceiptDeleteResponse;
 use Wuro\DeliveryReceipts\DeliveryReceiptGenerateHTMLResponse;
 use Wuro\DeliveryReceipts\DeliveryReceiptGeneratePdfParams;
@@ -25,6 +26,11 @@ use Wuro\DeliveryReceipts\DeliveryReceiptUpdateResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\DeliveryReceiptsRawContract;
 
+/**
+ * @phpstan-import-type LineShape from \Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Line
+ * @phpstan-import-type LineShape from \Wuro\DeliveryReceipts\DeliveryReceiptUpdateParams\Line as LineShape1
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
 {
     // @phpstan-ignore-next-line
@@ -66,21 +72,14 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      *   clientEmail?: string,
      *   clientName?: string,
      *   clientZipCode?: string,
-     *   date?: string|\DateTimeInterface,
-     *   lines?: list<array{
-     *     description?: string,
-     *     order?: int,
-     *     quantity?: float,
-     *     reference?: string,
-     *     title?: string,
-     *     type?: 'product'|'header'|Type,
-     *     weight?: float,
-     *   }>,
-     *   shippingDate?: string|\DateTimeInterface,
-     *   state?: 'draft'|'waiting'|'shipped'|'delivered'|State,
+     *   date?: \DateTimeInterface,
+     *   lines?: list<Line|LineShape>,
+     *   shippingDate?: \DateTimeInterface,
+     *   state?: State|value-of<State>,
      *   title?: string,
-     *   type?: 'delivery'|DeliveryReceiptCreateParams\Type,
+     *   type?: Type|value-of<Type>,
      * }|DeliveryReceiptCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptNewResponse>
      *
@@ -88,7 +87,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      */
     public function create(
         array|DeliveryReceiptCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = DeliveryReceiptCreateParams::parseRequest(
             $params,
@@ -119,6 +118,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      *
      * @param string $uid Identifiant unique du bon de livraison
      * @param array{populate?: string}|DeliveryReceiptRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptGetResponse>
      *
@@ -127,7 +127,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
     public function retrieve(
         string $uid,
         array|DeliveryReceiptRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = DeliveryReceiptRetrieveParams::parseRequest(
             $params,
@@ -176,18 +176,13 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      *   clientEmail?: string,
      *   clientName?: string,
      *   clientZipCode?: string,
-     *   date?: string|\DateTimeInterface,
-     *   lines?: list<array{
-     *     description?: string,
-     *     quantity?: float,
-     *     reference?: string,
-     *     title?: string,
-     *     weight?: float,
-     *   }>,
-     *   shippingDate?: string|\DateTimeInterface,
-     *   state?: 'draft'|'waiting'|'shipped'|'delivered'|'refused'|'canceled'|'inactive'|DeliveryReceiptUpdateParams\State,
+     *   date?: \DateTimeInterface,
+     *   lines?: list<DeliveryReceiptUpdateParams\Line|LineShape1>,
+     *   shippingDate?: \DateTimeInterface,
+     *   state?: DeliveryReceiptUpdateParams\State|value-of<DeliveryReceiptUpdateParams\State>,
      *   title?: string,
      * }|DeliveryReceiptUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptUpdateResponse>
      *
@@ -196,7 +191,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
     public function update(
         string $uid,
         array|DeliveryReceiptUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = DeliveryReceiptUpdateParams::parseRequest(
             $params,
@@ -233,8 +228,9 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      *   limit?: int,
      *   skip?: int,
      *   sort?: string,
-     *   state?: 'draft'|'waiting'|'shipped'|'delivered'|'refused'|'canceled'|'inactive'|DeliveryReceiptListParams\State,
+     *   state?: DeliveryReceiptListParams\State|value-of<DeliveryReceiptListParams\State>,
      * }|DeliveryReceiptListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptListResponse>
      *
@@ -242,7 +238,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      */
     public function list(
         array|DeliveryReceiptListParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = DeliveryReceiptListParams::parseRequest(
             $params,
@@ -271,6 +267,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      * Un événement `DELETE_RECEIPT` est émis après la suppression.
      *
      * @param string $uid Identifiant unique du bon de livraison
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptDeleteResponse>
      *
@@ -278,7 +275,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -313,6 +310,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      * Un événement `CREATE_INVOICE` est émis après la création de la facture.
      *
      * @param string $uid Identifiant unique du bon de livraison source
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptNewInvoiceResponse>
      *
@@ -320,7 +318,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      */
     public function createInvoice(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -348,6 +346,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      * - **metadata** : Les informations clés du bon (client, numéro, dates, etc.)
      *
      * @param string $uid Identifiant unique du bon de livraison
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptGenerateHTMLResponse>
      *
@@ -355,7 +354,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      */
     public function generateHTML(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -386,6 +385,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
      *
      * @param string $uid Identifiant unique du bon de livraison
      * @param array{forceDownload?: bool}|DeliveryReceiptGeneratePdfParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<string>
      *
@@ -394,7 +394,7 @@ final class DeliveryReceiptsRawService implements DeliveryReceiptsRawContract
     public function generatePdf(
         string $uid,
         array|DeliveryReceiptGeneratePdfParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = DeliveryReceiptGeneratePdfParams::parseRequest(
             $params,

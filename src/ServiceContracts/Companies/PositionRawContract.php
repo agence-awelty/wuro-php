@@ -11,6 +11,9 @@ use Wuro\Core\Contracts\BaseResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface PositionRawContract
 {
     /**
@@ -18,6 +21,7 @@ interface PositionRawContract
      *
      * @param string $uid Identifiant unique de l'entreprise
      * @param array<string,mixed>|PositionCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<Position>
      *
@@ -26,7 +30,7 @@ interface PositionRawContract
     public function create(
         string $uid,
         array|PositionCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -34,6 +38,7 @@ interface PositionRawContract
      *
      * @param string $uid Path param: Identifiant unique du poste
      * @param array<string,mixed>|PositionUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<Position>
      *
@@ -42,6 +47,6 @@ interface PositionRawContract
     public function update(
         string $uid,
         array|PositionUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

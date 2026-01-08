@@ -6,6 +6,7 @@ namespace Wuro\Services;
 
 use Wuro\Absences\AbsenceCreateParams;
 use Wuro\Absences\AbsenceCreateParams\FromMoment;
+use Wuro\Absences\AbsenceCreateParams\Log;
 use Wuro\Absences\AbsenceCreateParams\State;
 use Wuro\Absences\AbsenceCreateParams\ToMoment;
 use Wuro\Absences\AbsenceDeleteResponse;
@@ -22,6 +23,13 @@ use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\AbsencesRawContract;
 
+/**
+ * @phpstan-import-type LogShape from \Wuro\Absences\AbsenceCreateParams\Log
+ * @phpstan-import-type LogShape from \Wuro\Absences\AbsenceUpdateParams\Log as LogShape1
+ * @phpstan-import-type PositionToShape from \Wuro\Absences\AbsenceListParams\PositionTo
+ * @phpstan-import-type TypeShape from \Wuro\Absences\AbsenceListParams\Type
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class AbsencesRawService implements AbsencesRawContract
 {
     // @phpstan-ignore-next-line
@@ -57,16 +65,17 @@ final class AbsencesRawService implements AbsencesRawContract
      * permettant de notifier les responsables de la nouvelle demande.
      *
      * @param array{
-     *   from: string|\DateTimeInterface,
-     *   to: string|\DateTimeInterface,
+     *   from: \DateTimeInterface,
+     *   to: \DateTimeInterface,
      *   type: string,
-     *   fromMoment?: 'half-am'|'half-pm'|'full'|FromMoment,
-     *   logs?: list<array{comment?: string, file?: string}>,
+     *   fromMoment?: FromMoment|value-of<FromMoment>,
+     *   logs?: list<Log|LogShape>,
      *   positionTo?: string,
-     *   state?: 'waiting'|'accepted'|'rejected'|'canceled'|State,
-     *   toMoment?: 'half-am'|'half-pm'|'full'|ToMoment,
+     *   state?: State|value-of<State>,
+     *   toMoment?: ToMoment|value-of<ToMoment>,
      *   userTo?: string,
      * }|AbsenceCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceNewResponse>
      *
@@ -74,7 +83,7 @@ final class AbsencesRawService implements AbsencesRawContract
      */
     public function create(
         array|AbsenceCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = AbsenceCreateParams::parseRequest(
             $params,
@@ -105,6 +114,7 @@ final class AbsencesRawService implements AbsencesRawContract
      *
      * @param string $uid Identifiant unique de l'absence
      * @param array{populate?: string}|AbsenceRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceGetResponse>
      *
@@ -113,7 +123,7 @@ final class AbsencesRawService implements AbsencesRawContract
     public function retrieve(
         string $uid,
         array|AbsenceRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = AbsenceRetrieveParams::parseRequest(
             $params,
@@ -159,21 +169,15 @@ final class AbsencesRawService implements AbsencesRawContract
      *
      * @param string $uid Identifiant unique de l'absence
      * @param array{
-     *   from?: string|\DateTimeInterface,
-     *   fromMoment?: 'half-am'|'half-pm'|'full'|AbsenceUpdateParams\FromMoment,
-     *   logs?: list<array{
-     *     comment?: string,
-     *     date?: string|\DateTimeInterface,
-     *     file?: string,
-     *     method?: string,
-     *     position?: string,
-     *     state?: string,
-     *   }>,
-     *   state?: 'waiting'|'accepted'|'rejected'|'canceled'|'inactive'|AbsenceUpdateParams\State,
-     *   to?: string|\DateTimeInterface,
-     *   toMoment?: 'half-am'|'half-pm'|'full'|AbsenceUpdateParams\ToMoment,
+     *   from?: \DateTimeInterface,
+     *   fromMoment?: AbsenceUpdateParams\FromMoment|value-of<AbsenceUpdateParams\FromMoment>,
+     *   logs?: list<AbsenceUpdateParams\Log|LogShape1>,
+     *   state?: AbsenceUpdateParams\State|value-of<AbsenceUpdateParams\State>,
+     *   to?: \DateTimeInterface,
+     *   toMoment?: AbsenceUpdateParams\ToMoment|value-of<AbsenceUpdateParams\ToMoment>,
      *   type?: string,
      * }|AbsenceUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceUpdateResponse>
      *
@@ -182,7 +186,7 @@ final class AbsencesRawService implements AbsencesRawContract
     public function update(
         string $uid,
         array|AbsenceUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = AbsenceUpdateParams::parseRequest(
             $params,
@@ -226,20 +230,21 @@ final class AbsencesRawService implements AbsencesRawContract
      * - **half-pm** : Après-midi uniquement
      *
      * @param array{
-     *   from?: string|\DateTimeInterface,
-     *   inPeriod?: list<string|\DateTimeInterface>,
+     *   from?: \DateTimeInterface,
+     *   inPeriod?: list<\DateTimeInterface>,
      *   limit?: int,
      *   month?: int,
-     *   positionTo?: string|list<string>,
+     *   positionTo?: PositionToShape,
      *   skip?: int,
      *   sort?: string,
-     *   state?: 'waiting'|'accepted'|'rejected'|'canceled'|'inactive'|AbsenceListParams\State,
-     *   to?: string|\DateTimeInterface,
+     *   state?: AbsenceListParams\State|value-of<AbsenceListParams\State>,
+     *   to?: \DateTimeInterface,
      *   today?: bool,
-     *   type?: string|list<string>,
+     *   type?: TypeShape,
      *   userTo?: string,
      *   year?: int,
      * }|AbsenceListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceListResponse>
      *
@@ -247,7 +252,7 @@ final class AbsencesRawService implements AbsencesRawContract
      */
     public function list(
         array|AbsenceListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = AbsenceListParams::parseRequest(
             $params,
@@ -285,6 +290,7 @@ final class AbsencesRawService implements AbsencesRawContract
      * le collaborateur de l'annulation de sa demande.
      *
      * @param string $uid Identifiant unique de l'absence
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceDeleteResponse>
      *
@@ -292,7 +298,7 @@ final class AbsencesRawService implements AbsencesRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(

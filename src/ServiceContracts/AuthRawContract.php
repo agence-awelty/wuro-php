@@ -10,12 +10,16 @@ use Wuro\Core\Contracts\BaseResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface AuthRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|AuthLoginParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AuthLoginResponse>
      *
@@ -23,6 +27,6 @@ interface AuthRawContract
      */
     public function login(
         array|AuthLoginParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

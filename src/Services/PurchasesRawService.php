@@ -8,6 +8,8 @@ use Wuro\Client;
 use Wuro\Core\Contracts\BaseResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\Purchases\PurchaseCreateParams;
+use Wuro\Purchases\PurchaseCreateParams\Line;
+use Wuro\Purchases\PurchaseCreateParams\Payment;
 use Wuro\Purchases\PurchaseCreateParams\State;
 use Wuro\Purchases\PurchaseCreateParams\Type;
 use Wuro\Purchases\PurchaseDeleteResponse;
@@ -22,6 +24,13 @@ use Wuro\Purchases\PurchaseUpdateResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\PurchasesRawContract;
 
+/**
+ * @phpstan-import-type LineShape from \Wuro\Purchases\PurchaseCreateParams\Line
+ * @phpstan-import-type PaymentShape from \Wuro\Purchases\PurchaseCreateParams\Payment
+ * @phpstan-import-type LineShape from \Wuro\Purchases\PurchaseUpdateParams\Line as LineShape1
+ * @phpstan-import-type PaymentShape from \Wuro\Purchases\PurchaseUpdateParams\Payment as PaymentShape1
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class PurchasesRawService implements PurchasesRawContract
 {
     // @phpstan-ignore-next-line
@@ -57,22 +66,13 @@ final class PurchasesRawService implements PurchasesRawContract
      *   analyticalCode?: string,
      *   categories?: list<string>,
      *   currency?: string,
-     *   date?: string|\DateTimeInterface,
+     *   date?: \DateTimeInterface,
      *   invoiceNumber?: string,
-     *   lines?: list<array{
-     *     title?: string,
-     *     totalHt?: float,
-     *     totalTtc?: float,
-     *     totalTva?: float,
-     *     tvaRate?: float,
-     *     type?: string,
-     *   }>,
-     *   paymentDate?: string|\DateTimeInterface,
-     *   paymentExpiryDate?: string|\DateTimeInterface,
-     *   payments?: list<array{
-     *     amount?: float, date?: string|\DateTimeInterface, mode?: string
-     *   }>,
-     *   state?: 'draft'|'waiting'|'paid'|'to_pay'|'notpaid'|State,
+     *   lines?: list<Line|LineShape>,
+     *   paymentDate?: \DateTimeInterface,
+     *   paymentExpiryDate?: \DateTimeInterface,
+     *   payments?: list<Payment|PaymentShape>,
+     *   state?: State|value-of<State>,
      *   supplier?: string,
      *   supplierCode?: string,
      *   supplierName?: string,
@@ -81,8 +81,9 @@ final class PurchasesRawService implements PurchasesRawContract
      *   totalHt?: float,
      *   totalTtc?: float,
      *   totalTva?: float,
-     *   type?: 'purchase'|'purchase_credit'|Type,
+     *   type?: Type|value-of<Type>,
      * }|PurchaseCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseNewResponse>
      *
@@ -90,7 +91,7 @@ final class PurchasesRawService implements PurchasesRawContract
      */
     public function create(
         array|PurchaseCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PurchaseCreateParams::parseRequest(
             $params,
@@ -120,6 +121,7 @@ final class PurchasesRawService implements PurchasesRawContract
      *
      * @param string $uid Identifiant unique de l'achat
      * @param array{populate?: string}|PurchaseRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseGetResponse>
      *
@@ -128,7 +130,7 @@ final class PurchasesRawService implements PurchasesRawContract
     public function retrieve(
         string $uid,
         array|PurchaseRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PurchaseRetrieveParams::parseRequest(
             $params,
@@ -165,22 +167,13 @@ final class PurchasesRawService implements PurchasesRawContract
      *   analyticalCode?: string,
      *   categories?: list<string>,
      *   currency?: string,
-     *   date?: string|\DateTimeInterface,
+     *   date?: \DateTimeInterface,
      *   invoiceNumber?: string,
-     *   lines?: list<array{
-     *     title?: string,
-     *     totalHt?: float,
-     *     totalTtc?: float,
-     *     totalTva?: float,
-     *     tvaRate?: float,
-     *     type?: string,
-     *   }>,
-     *   paymentDate?: string|\DateTimeInterface,
-     *   paymentExpiryDate?: string|\DateTimeInterface,
-     *   payments?: list<array{
-     *     amount?: float, date?: string|\DateTimeInterface, mode?: string
-     *   }>,
-     *   state?: 'draft'|'waiting'|'paid'|'to_pay'|'notpaid'|PurchaseUpdateParams\State,
+     *   lines?: list<PurchaseUpdateParams\Line|LineShape1>,
+     *   paymentDate?: \DateTimeInterface,
+     *   paymentExpiryDate?: \DateTimeInterface,
+     *   payments?: list<PurchaseUpdateParams\Payment|PaymentShape1>,
+     *   state?: PurchaseUpdateParams\State|value-of<PurchaseUpdateParams\State>,
      *   supplier?: string,
      *   supplierCode?: string,
      *   supplierName?: string,
@@ -189,8 +182,9 @@ final class PurchasesRawService implements PurchasesRawContract
      *   totalHt?: float,
      *   totalTtc?: float,
      *   totalTva?: float,
-     *   type?: 'purchase'|'purchase_credit'|PurchaseUpdateParams\Type,
+     *   type?: PurchaseUpdateParams\Type|value-of<PurchaseUpdateParams\Type>,
      * }|PurchaseUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseUpdateResponse>
      *
@@ -199,7 +193,7 @@ final class PurchasesRawService implements PurchasesRawContract
     public function update(
         string $uid,
         array|PurchaseUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PurchaseUpdateParams::parseRequest(
             $params,
@@ -237,9 +231,10 @@ final class PurchasesRawService implements PurchasesRawContract
      *   limit?: int,
      *   skip?: int,
      *   sort?: string,
-     *   state?: 'draft'|'waiting'|'paid'|'to_pay'|'notpaid'|'inactive'|PurchaseListParams\State,
+     *   state?: PurchaseListParams\State|value-of<PurchaseListParams\State>,
      *   supplier?: string,
      * }|PurchaseListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseListResponse>
      *
@@ -247,7 +242,7 @@ final class PurchasesRawService implements PurchasesRawContract
      */
     public function list(
         array|PurchaseListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PurchaseListParams::parseRequest(
             $params,
@@ -276,6 +271,7 @@ final class PurchasesRawService implements PurchasesRawContract
      * Un événement `DELETE_PURCHASE` est émis après la suppression.
      *
      * @param string $uid Identifiant unique de l'achat
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseDeleteResponse>
      *
@@ -283,7 +279,7 @@ final class PurchasesRawService implements PurchasesRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -311,6 +307,7 @@ final class PurchasesRawService implements PurchasesRawContract
      * **Événement déclenché:** CREATE_PURCHASE_CREDIT
      *
      * @param string $uid Identifiant unique de l'achat d'origine
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseNewCreditResponse>
      *
@@ -318,7 +315,7 @@ final class PurchasesRawService implements PurchasesRawContract
      */
     public function createCredit(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -339,12 +336,14 @@ final class PurchasesRawService implements PurchasesRawContract
      * - Répartition par fournisseur
      * - Montants en attente de paiement
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<mixed>
      *
      * @throws APIException
      */
     public function getStats(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(

@@ -17,12 +17,16 @@ use Wuro\Core\Contracts\BaseResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface CompaniesRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|CompanyCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyNewResponse>
      *
@@ -30,22 +34,26 @@ interface CompaniesRawContract
      */
     public function create(
         array|CompanyCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
+     *
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyGetResponse>
      *
      * @throws APIException
      */
     public function retrieve(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
+     *
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyUpdateResponse>
      *
@@ -53,11 +61,13 @@ interface CompaniesRawContract
      */
     public function update(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
+     *
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -65,13 +75,14 @@ interface CompaniesRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyConfirmDomainResponse>
      *
@@ -79,13 +90,14 @@ interface CompaniesRawContract
      */
     public function confirmDomain(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyListPositionsResponse>
      *
@@ -93,13 +105,14 @@ interface CompaniesRawContract
      */
     public function listPositions(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyGetByIDResponse>
      *
@@ -107,13 +120,14 @@ interface CompaniesRawContract
      */
     public function retrieveByID(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyGetCgvResponse>
      *
@@ -121,13 +135,14 @@ interface CompaniesRawContract
      */
     public function retrieveCgv(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<CompanyGetExtraInfosResponse>
      *
@@ -135,6 +150,6 @@ interface CompaniesRawContract
      */
     public function retrieveExtraInfos(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 }
