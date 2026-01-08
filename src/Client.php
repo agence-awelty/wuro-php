@@ -31,8 +31,8 @@ use Wuro\Services\StatisticsService;
 use Wuro\Services\UsersService;
 
 /**
- * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
  * @phpstan-import-type NormalizedRequest from \Wuro\Core\BaseClient
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
  */
 class Client extends BaseClient
 {
@@ -145,21 +145,28 @@ class Client extends BaseClient
      */
     public AuthService $auth;
 
+    /**
+     * @param RequestOpts|null $requestOptions
+     */
     public function __construct(
         ?string $appID = null,
         ?string $appSecret = null,
-        ?string $baseUrl = null
+        ?string $baseUrl = null,
+        RequestOptions|array|null $requestOptions = null,
     ) {
         $this->appID = (string) ($appID ?? getenv('WURO_APP_ID'));
         $this->appSecret = (string) ($appSecret ?? getenv('WURO_APP_SECRET'));
 
         $baseUrl ??= getenv('WURO_BASE_URL') ?: 'https://wuro.pro/api/v3.2';
 
-        $options = RequestOptions::with(
-            uriFactory: Psr17FactoryDiscovery::findUriFactory(),
-            streamFactory: Psr17FactoryDiscovery::findStreamFactory(),
-            requestFactory: Psr17FactoryDiscovery::findRequestFactory(),
-            transporter: Psr18ClientDiscovery::find(),
+        $options = RequestOptions::parse(
+            RequestOptions::with(
+                uriFactory: Psr17FactoryDiscovery::findUriFactory(),
+                streamFactory: Psr17FactoryDiscovery::findStreamFactory(),
+                requestFactory: Psr17FactoryDiscovery::findRequestFactory(),
+                transporter: Psr18ClientDiscovery::find(),
+            ),
+            $requestOptions,
         );
 
         parent::__construct(
