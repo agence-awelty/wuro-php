@@ -112,15 +112,12 @@ You can use the `maxRetries` option to configure or disable this:
 <?php
 
 use Wuro\Client;
-use Wuro\RequestOptions;
 
 // Configure the default for all requests:
-$client = new Client(maxRetries: 0);
+$client = new Client(requestOptions: ['maxRetries' => 0]);
 
 // Or, configure per-request:
-$result = $client->invoices->create(
-  requestOptions: RequestOptions::with(maxRetries: 5)
-);
+$result = $client->invoices->create(requestOptions: ['maxRetries' => 5]);
 ```
 
 ## Advanced concepts
@@ -136,14 +133,12 @@ Note: the `extra*` parameters of the same name overrides the documented paramete
 ```php
 <?php
 
-use Wuro\RequestOptions;
-
 $invoice = $client->invoices->create(
-  requestOptions: RequestOptions::with(
-    extraQueryParams: ['my_query_parameter' => 'value'],
-    extraBodyParams: ['my_body_parameter' => 'value'],
-    extraHeaders: ['my-header' => 'value'],
-  ),
+  requestOptions: [
+    'extraQueryParams' => ['my_query_parameter' => 'value'],
+    'extraBodyParams' => ['my_body_parameter' => 'value'],
+    'extraHeaders' => ['my-header' => 'value'],
+  ],
 );
 ```
 
