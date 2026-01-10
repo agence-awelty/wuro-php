@@ -10,6 +10,9 @@ use Wuro\RequestOptions;
 use Wuro\ServiceContracts\StatisticsContract;
 use Wuro\Statistics\StatisticGetPaymentsResponse;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class StatisticsService implements StatisticsContract
 {
     /**
@@ -45,10 +48,12 @@ final class StatisticsService implements StatisticsContract
      * - Rapports de trésorerie
      * - Analyse des modes de paiement préférés
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function retrievePayments(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): StatisticGetPaymentsResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrievePayments(requestOptions: $requestOptions);

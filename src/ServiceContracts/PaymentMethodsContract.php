@@ -14,6 +14,9 @@ use Wuro\PaymentMethods\PaymentMethodUpdateParams\State;
 use Wuro\PaymentMethods\PaymentMethodUpdateResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface PaymentMethodsContract
 {
     /**
@@ -28,7 +31,8 @@ interface PaymentMethodsContract
      * @param string $rang Rang Paybox (spécifique Paybox)
      * @param string $secret Clé secrète (Stripe, Paybox) - **Ne jamais exposer côté client**
      * @param string $site Numéro de site Paybox (spécifique Paybox)
-     * @param 'paybox'|'epayment'|'check'|'stripe'|'paypal'|'transfer'|'other'|Tag $tag Type de moyen de paiement
+     * @param Tag|value-of<Tag> $tag Type de moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -41,20 +45,21 @@ interface PaymentMethodsContract
         ?string $rang = null,
         ?string $secret = null,
         ?string $site = null,
-        string|Tag $tag = 'other',
-        ?RequestOptions $requestOptions = null,
+        Tag|string $tag = 'other',
+        RequestOptions|array|null $requestOptions = null,
     ): PaymentMethodNewResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieve(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): PaymentMethodGetResponse;
 
     /**
@@ -65,8 +70,8 @@ interface PaymentMethodsContract
      * @param string $modality Modalités de paiement affichées sur les documents.
      * Ex. "Paiement à 30 jours", "RIB : FR76...", "Payable à réception"
      * @param string $name Nom du moyen de paiement (ex. "Virement bancaire", "Carte Bancaire")
-     * @param 'active'|'inactive'|State $state État du moyen de paiement
-     * @param 'paybox'|'epayment'|'check'|'stripe'|'paypal'|'transfer'|'other'|\Wuro\PaymentMethods\PaymentMethodUpdateParams\Tag $tag Type de moyen de paiement :
+     * @param State|value-of<State> $state État du moyen de paiement
+     * @param \Wuro\PaymentMethods\PaymentMethodUpdateParams\Tag|value-of<\Wuro\PaymentMethods\PaymentMethodUpdateParams\Tag> $tag Type de moyen de paiement :
      * - **check** : Chèque
      * - **transfer** : Virement bancaire
      * - **stripe** : Stripe
@@ -74,6 +79,7 @@ interface PaymentMethodsContract
      * - **paybox** : Paybox
      * - **epayment** : Paiement électronique
      * - **other** : Autre
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -82,34 +88,36 @@ interface PaymentMethodsContract
         ?bool $default = null,
         ?string $modality = null,
         ?string $name = null,
-        string|State|null $state = null,
-        string|\Wuro\PaymentMethods\PaymentMethodUpdateParams\Tag|null $tag = null,
-        ?RequestOptions $requestOptions = null,
+        State|string|null $state = null,
+        \Wuro\PaymentMethods\PaymentMethodUpdateParams\Tag|string|null $tag = null,
+        RequestOptions|array|null $requestOptions = null,
     ): PaymentMethodUpdateResponse;
 
     /**
      * @api
      *
-     * @param 'active'|'inactive'|\Wuro\PaymentMethods\PaymentMethodListParams\State $state Filtrer par état (active/inactive)
-     * @param 'paybox'|'epayment'|'check'|'stripe'|'paypal'|'transfer'|'other'|\Wuro\PaymentMethods\PaymentMethodListParams\Tag $tag Filtrer par type de moyen de paiement
+     * @param \Wuro\PaymentMethods\PaymentMethodListParams\State|value-of<\Wuro\PaymentMethods\PaymentMethodListParams\State> $state Filtrer par état (active/inactive)
+     * @param \Wuro\PaymentMethods\PaymentMethodListParams\Tag|value-of<\Wuro\PaymentMethods\PaymentMethodListParams\Tag> $tag Filtrer par type de moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function list(
-        string|\Wuro\PaymentMethods\PaymentMethodListParams\State|null $state = null,
-        string|\Wuro\PaymentMethods\PaymentMethodListParams\Tag|null $tag = null,
-        ?RequestOptions $requestOptions = null,
+        \Wuro\PaymentMethods\PaymentMethodListParams\State|string|null $state = null,
+        \Wuro\PaymentMethods\PaymentMethodListParams\Tag|string|null $tag = null,
+        RequestOptions|array|null $requestOptions = null,
     ): PaymentMethodListResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): PaymentMethodDeleteResponse;
 }

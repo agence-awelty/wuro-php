@@ -12,7 +12,7 @@ use Wuro\Core\Contracts\BaseModel;
  * @phpstan-import-type ProductCategoryShape from \Wuro\ProductCategories\ProductCategory
  *
  * @phpstan-type ProductCategoryListResponseShape = array{
- *   count?: int|null, data?: list<ProductCategoryShape>|null
+ *   count?: int|null, data?: list<ProductCategory|ProductCategoryShape>|null
  * }
  */
 final class ProductCategoryListResponse implements BaseModel
@@ -40,7 +40,7 @@ final class ProductCategoryListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<ProductCategoryShape>|null $data
+     * @param list<ProductCategory|ProductCategoryShape>|null $data
      */
     public static function with(?int $count = null, ?array $data = null): self
     {
@@ -64,7 +64,7 @@ final class ProductCategoryListResponse implements BaseModel
     }
 
     /**
-     * @param list<ProductCategoryShape> $data
+     * @param list<ProductCategory|ProductCategoryShape> $data
      */
     public function withData(array $data): self
     {

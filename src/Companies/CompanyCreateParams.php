@@ -31,7 +31,7 @@ use Wuro\Core\Contracts\BaseModel;
  * @phpstan-type CompanyCreateParamsShape = array{
  *   name: string,
  *   url: string,
- *   addresses?: list<AddressShape>|null,
+ *   addresses?: list<Address|AddressShape>|null,
  *   commercialCourt?: string|null,
  *   companyType?: string|null,
  *   email?: string|null,
@@ -164,7 +164,7 @@ final class CompanyCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<AddressShape>|null $addresses
+     * @param list<Address|AddressShape>|null $addresses
      */
     public static function with(
         string $name,
@@ -228,7 +228,7 @@ final class CompanyCreateParams implements BaseModel
     }
 
     /**
-     * @param list<AddressShape> $addresses
+     * @param list<Address|AddressShape> $addresses
      */
     public function withAddresses(array $addresses): self
     {

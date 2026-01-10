@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Wuro\ServiceContracts;
 
 use Wuro\Core\Exceptions\APIException;
-use Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Line\Type;
+use Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Line;
 use Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\State;
+use Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Type;
 use Wuro\DeliveryReceipts\DeliveryReceiptDeleteResponse;
 use Wuro\DeliveryReceipts\DeliveryReceiptGenerateHTMLResponse;
 use Wuro\DeliveryReceipts\DeliveryReceiptGetResponse;
@@ -16,6 +17,11 @@ use Wuro\DeliveryReceipts\DeliveryReceiptNewResponse;
 use Wuro\DeliveryReceipts\DeliveryReceiptUpdateResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type LineShape from \Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Line
+ * @phpstan-import-type LineShape from \Wuro\DeliveryReceipts\DeliveryReceiptUpdateParams\Line as LineShape1
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface DeliveryReceiptsContract
 {
     /**
@@ -28,20 +34,13 @@ interface DeliveryReceiptsContract
      * @param string $clientEmail Email du client (pour envoi du bon)
      * @param string $clientName Nom du client (copié du client si non fourni)
      * @param string $clientZipCode Code postal
-     * @param string|\DateTimeInterface $date Date du bon (par défaut aujourd'hui)
-     * @param list<array{
-     *   description?: string,
-     *   order?: int,
-     *   quantity?: float,
-     *   reference?: string,
-     *   title?: string,
-     *   type?: 'product'|'header'|Type,
-     *   weight?: float,
-     * }> $lines Lignes du bon de livraison
-     * @param string|\DateTimeInterface $shippingDate Date d'expédition prévue
-     * @param 'draft'|'waiting'|'shipped'|'delivered'|State $state État initial du bon
+     * @param \DateTimeInterface $date Date du bon (par défaut aujourd'hui)
+     * @param list<Line|LineShape> $lines Lignes du bon de livraison
+     * @param \DateTimeInterface $shippingDate Date d'expédition prévue
+     * @param State|value-of<State> $state État initial du bon
      * @param string $title Description courte ou libellé du bon
-     * @param 'delivery'|\Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Type $type Type de document (delivery par défaut)
+     * @param Type|value-of<Type> $type Type de document (delivery par défaut)
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -53,13 +52,13 @@ interface DeliveryReceiptsContract
         ?string $clientEmail = null,
         ?string $clientName = null,
         ?string $clientZipCode = null,
-        string|\DateTimeInterface|null $date = null,
+        ?\DateTimeInterface $date = null,
         ?array $lines = null,
-        string|\DateTimeInterface|null $shippingDate = null,
-        string|State $state = 'draft',
+        ?\DateTimeInterface $shippingDate = null,
+        State|string $state = 'draft',
         ?string $title = null,
-        string|\Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Type $type = 'delivery',
-        ?RequestOptions $requestOptions = null,
+        Type|string $type = 'delivery',
+        RequestOptions|array|null $requestOptions = null,
     ): DeliveryReceiptNewResponse;
 
     /**
@@ -67,13 +66,14 @@ interface DeliveryReceiptsContract
      *
      * @param string $uid Identifiant unique du bon de livraison
      * @param string $populate Relations à inclure (ex. "client", "documentModel")
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieve(
         string $uid,
         ?string $populate = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): DeliveryReceiptGetResponse;
 
     /**
@@ -86,16 +86,10 @@ interface DeliveryReceiptsContract
      * @param string $clientEmail Email du client
      * @param string $clientName Nom du client
      * @param string $clientZipCode Code postal du client
-     * @param string|\DateTimeInterface $date Date du bon de livraison
-     * @param list<array{
-     *   description?: string,
-     *   quantity?: float,
-     *   reference?: string,
-     *   title?: string,
-     *   weight?: float,
-     * }> $lines Lignes du bon de livraison
-     * @param string|\DateTimeInterface $shippingDate Date d'expédition
-     * @param 'draft'|'waiting'|'shipped'|'delivered'|'refused'|'canceled'|'inactive'|\Wuro\DeliveryReceipts\DeliveryReceiptUpdateParams\State $state État du bon de livraison :
+     * @param \DateTimeInterface $date Date du bon de livraison
+     * @param list<\Wuro\DeliveryReceipts\DeliveryReceiptUpdateParams\Line|LineShape1> $lines Lignes du bon de livraison
+     * @param \DateTimeInterface $shippingDate Date d'expédition
+     * @param \Wuro\DeliveryReceipts\DeliveryReceiptUpdateParams\State|value-of<\Wuro\DeliveryReceipts\DeliveryReceiptUpdateParams\State> $state État du bon de livraison :
      * - **draft** : Brouillon
      * - **waiting** : En attente d'expédition
      * - **shipped** : Expédié
@@ -103,6 +97,7 @@ interface DeliveryReceiptsContract
      * - **refused** : Refusé
      * - **canceled** : Annulé
      * @param string $title Description courte ou libellé du bon
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -114,12 +109,12 @@ interface DeliveryReceiptsContract
         ?string $clientEmail = null,
         ?string $clientName = null,
         ?string $clientZipCode = null,
-        string|\DateTimeInterface|null $date = null,
+        ?\DateTimeInterface $date = null,
         ?array $lines = null,
-        string|\DateTimeInterface|null $shippingDate = null,
-        string|\Wuro\DeliveryReceipts\DeliveryReceiptUpdateParams\State|null $state = null,
+        ?\DateTimeInterface $shippingDate = null,
+        \Wuro\DeliveryReceipts\DeliveryReceiptUpdateParams\State|string|null $state = null,
         ?string $title = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): DeliveryReceiptUpdateResponse;
 
     /**
@@ -129,7 +124,8 @@ interface DeliveryReceiptsContract
      * @param int $limit Nombre maximum de bons à retourner
      * @param int $skip Nombre de bons à ignorer (pagination)
      * @param string $sort Champ de tri et direction
-     * @param 'draft'|'waiting'|'shipped'|'delivered'|'refused'|'canceled'|'inactive'|\Wuro\DeliveryReceipts\DeliveryReceiptListParams\State $state Filtre par état
+     * @param \Wuro\DeliveryReceipts\DeliveryReceiptListParams\State|value-of<\Wuro\DeliveryReceipts\DeliveryReceiptListParams\State> $state Filtre par état
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -138,44 +134,47 @@ interface DeliveryReceiptsContract
         int $limit = 20,
         int $skip = 0,
         ?string $sort = null,
-        string|\Wuro\DeliveryReceipts\DeliveryReceiptListParams\State|null $state = null,
-        ?RequestOptions $requestOptions = null,
+        \Wuro\DeliveryReceipts\DeliveryReceiptListParams\State|string|null $state = null,
+        RequestOptions|array|null $requestOptions = null,
     ): DeliveryReceiptListResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du bon de livraison
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): DeliveryReceiptDeleteResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du bon de livraison source
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function createInvoice(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): DeliveryReceiptNewInvoiceResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du bon de livraison
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function generateHTML(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): DeliveryReceiptGenerateHTMLResponse;
 
     /**
@@ -183,12 +182,13 @@ interface DeliveryReceiptsContract
      *
      * @param string $uid Identifiant unique du bon de livraison
      * @param bool $forceDownload Si true, force le téléchargement du fichier au lieu de l'afficher
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function generatePdf(
         string $uid,
         bool $forceDownload = false,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): string;
 }

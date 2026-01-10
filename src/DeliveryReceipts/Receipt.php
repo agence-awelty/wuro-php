@@ -32,7 +32,7 @@ use Wuro\DeliveryReceipts\Receipt\Type;
  *   deliveryZipCode?: string|null,
  *   fromInvoice?: string|null,
  *   fromQuote?: string|null,
- *   lines?: list<LineShape>|null,
+ *   lines?: list<Line|LineShape>|null,
  *   notes?: string|null,
  *   number?: string|null,
  *   numberOrder?: string|null,
@@ -241,7 +241,7 @@ final class Receipt implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<LineShape>|null $lines
+     * @param list<Line|LineShape>|null $lines
      * @param State|value-of<State>|null $state
      * @param Type|value-of<Type>|null $type
      */
@@ -501,7 +501,7 @@ final class Receipt implements BaseModel
     /**
      * List of delivery receipt lines.
      *
-     * @param list<LineShape> $lines
+     * @param list<Line|LineShape> $lines
      */
     public function withLines(array $lines): self
     {

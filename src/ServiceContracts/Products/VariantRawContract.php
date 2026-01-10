@@ -12,6 +12,9 @@ use Wuro\Products\Variant\VariantRetrieveParams;
 use Wuro\Products\Variant\VariantUpdateParams;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface VariantRawContract
 {
     /**
@@ -19,6 +22,7 @@ interface VariantRawContract
      *
      * @param string $uid Identifiant unique du produit parent
      * @param array<string,mixed>|VariantCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -27,7 +31,7 @@ interface VariantRawContract
     public function create(
         string $uid,
         array|VariantCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -35,6 +39,7 @@ interface VariantRawContract
      *
      * @param string $uid Identifiant unique de la variante
      * @param array<string,mixed>|VariantRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -43,7 +48,7 @@ interface VariantRawContract
     public function retrieve(
         string $uid,
         array|VariantRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -51,6 +56,7 @@ interface VariantRawContract
      *
      * @param string $uid Path param: Identifiant unique de la variante
      * @param array<string,mixed>|VariantUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -59,23 +65,28 @@ interface VariantRawContract
     public function update(
         string $uid,
         array|VariantUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<mixed>
      *
      * @throws APIException
      */
-    public function list(?RequestOptions $requestOptions = null): BaseResponse;
+    public function list(
+        RequestOptions|array|null $requestOptions = null
+    ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de la variante
      * @param array<string,mixed>|VariantDeleteParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -84,6 +95,6 @@ interface VariantRawContract
     public function delete(
         string $uid,
         array|VariantDeleteParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

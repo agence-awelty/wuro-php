@@ -13,7 +13,7 @@ use Wuro\Invoices\Line\Invoice;
  * @phpstan-import-type InvoiceShape from \Wuro\Invoices\Line\Invoice
  *
  * @phpstan-type InvoiceListResponseShape = array{
- *   invoices?: list<InvoiceShape>|null,
+ *   invoices?: list<Invoice|InvoiceShape>|null,
  *   limit?: int|null,
  *   skip?: int|null,
  *   total?: int|null,
@@ -50,7 +50,7 @@ final class InvoiceListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<InvoiceShape>|null $invoices
+     * @param list<Invoice|InvoiceShape>|null $invoices
      */
     public static function with(
         ?array $invoices = null,
@@ -69,7 +69,7 @@ final class InvoiceListResponse implements BaseModel
     }
 
     /**
-     * @param list<InvoiceShape> $invoices
+     * @param list<Invoice|InvoiceShape> $invoices
      */
     public function withInvoices(array $invoices): self
     {

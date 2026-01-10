@@ -6,6 +6,7 @@ namespace Wuro\Services;
 
 use Wuro\Client;
 use Wuro\Companies\CompanyConfirmDomainResponse;
+use Wuro\Companies\CompanyCreateParams\Address;
 use Wuro\Companies\CompanyGetByIDResponse;
 use Wuro\Companies\CompanyGetCgvResponse;
 use Wuro\Companies\CompanyGetExtraInfosResponse;
@@ -20,6 +21,10 @@ use Wuro\ServiceContracts\CompaniesContract;
 use Wuro\Services\Companies\AppInfosService;
 use Wuro\Services\Companies\PositionService;
 
+/**
+ * @phpstan-import-type AddressShape from \Wuro\Companies\CompanyCreateParams\Address
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class CompaniesService implements CompaniesContract
 {
     /**
@@ -64,9 +69,7 @@ final class CompaniesService implements CompaniesContract
      *
      * @param string $name Nom de l'entreprise (obligatoire)
      * @param string $url URL unique pour l'entreprise (obligatoire)
-     * @param list<array{
-     *   city?: string, country?: string, street?: string, zipCode?: string
-     * }> $addresses
+     * @param list<Address|AddressShape> $addresses
      * @param string $commercialCourt Tribunal de commerce
      * @param string $companyType ID du type d'entreprise (SARL, SAS, etc.)
      * @param string $email Email principal de l'entreprise
@@ -79,6 +82,7 @@ final class CompaniesService implements CompaniesContract
      * @param string $siret Numéro SIRET (14 chiffres)
      * @param string $tvaNumber Numéro de TVA intracommunautaire
      * @param string $website Site web de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -98,7 +102,7 @@ final class CompaniesService implements CompaniesContract
         ?string $siret = null,
         ?string $tvaNumber = null,
         ?string $website = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): CompanyNewResponse {
         $params = Util::removeNulls(
             [
@@ -131,10 +135,12 @@ final class CompaniesService implements CompaniesContract
      *
      * Retourne les informations de l'entreprise associée à la requête authentifiée.
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function retrieve(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyGetResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieve(requestOptions: $requestOptions);
@@ -152,11 +158,13 @@ final class CompaniesService implements CompaniesContract
      *
      * **Événement déclenché:** UPDATE_COMPANY
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function update(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyUpdateResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->update($uid, requestOptions: $requestOptions);
@@ -175,11 +183,13 @@ final class CompaniesService implements CompaniesContract
      *
      * **Événement déclenché:** DELETE_COMPANY
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): mixed {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->delete($uid, requestOptions: $requestOptions);
@@ -201,12 +211,13 @@ final class CompaniesService implements CompaniesContract
      * - Active les fonctionnalités liées au domaine personnalisé (envoi d'emails, etc.)
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function confirmDomain(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyConfirmDomainResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->confirmDomain($uid, requestOptions: $requestOptions);
@@ -228,12 +239,13 @@ final class CompaniesService implements CompaniesContract
      * - Gestion des droits et permissions
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function listPositions(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyListPositionsResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->listPositions($uid, requestOptions: $requestOptions);
@@ -247,12 +259,13 @@ final class CompaniesService implements CompaniesContract
      * Récupère les détails d'une entreprise spécifique.
      *
      * @param string $uid ID de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieveByID(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyGetByIDResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieveByID($uid, requestOptions: $requestOptions);
@@ -275,12 +288,13 @@ final class CompaniesService implements CompaniesContract
      * - Page de mentions légales
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieveCgv(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyGetCgvResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieveCgv($uid, requestOptions: $requestOptions);
@@ -302,12 +316,13 @@ final class CompaniesService implements CompaniesContract
      * - Administration et configuration
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieveExtraInfos(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyGetExtraInfosResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieveExtraInfos($uid, requestOptions: $requestOptions);
