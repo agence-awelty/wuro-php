@@ -124,14 +124,14 @@ final class VariantService implements VariantContract
      *
      * @param string $uid Path param: Identifiant unique de la variante
      * @param string $productID Path param: Identifiant unique du produit parent
-     * @param float $buyingPrice Body param:
-     * @param string $name Body param:
-     * @param mixed $options Body param:
-     * @param float $priceHt Body param:
-     * @param string $reference Body param:
-     * @param string $sku Body param:
-     * @param \Wuro\Products\Variant\VariantUpdateParams\Stock|StockShape1 $stock Body param:
-     * @param float $tvaRate Body param:
+     * @param float $buyingPrice Body param
+     * @param string $name Body param
+     * @param mixed $options Body param
+     * @param float $priceHt Body param
+     * @param string $reference Body param
+     * @param string $sku Body param
+     * @param \Wuro\Products\Variant\VariantUpdateParams\Stock|StockShape1 $stock Body param
+     * @param float $tvaRate Body param
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
