@@ -24,6 +24,9 @@ use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\ClientsRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class ClientsRawService implements ClientsRawContract
 {
     // @phpstan-ignore-next-line
@@ -76,6 +79,7 @@ final class ClientsRawService implements ClientsRawContract
      *   website?: string,
      *   zipCode?: string,
      * }|ClientCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientNewResponse>
      *
@@ -83,7 +87,7 @@ final class ClientsRawService implements ClientsRawContract
      */
     public function create(
         array|ClientCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ClientCreateParams::parseRequest(
             $params,
@@ -113,6 +117,7 @@ final class ClientsRawService implements ClientsRawContract
      *
      * @param string $uid Identifiant unique du client
      * @param array{populate?: string}|ClientRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientGetResponse>
      *
@@ -121,7 +126,7 @@ final class ClientsRawService implements ClientsRawContract
     public function retrieve(
         string $uid,
         array|ClientRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ClientRetrieveParams::parseRequest(
             $params,
@@ -177,6 +182,7 @@ final class ClientsRawService implements ClientsRawContract
      *   website?: string,
      *   zipCode?: string,
      * }|ClientUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientUpdateResponse>
      *
@@ -185,7 +191,7 @@ final class ClientsRawService implements ClientsRawContract
     public function update(
         string $uid,
         array|ClientUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ClientUpdateParams::parseRequest(
             $params,
@@ -225,8 +231,9 @@ final class ClientsRawService implements ClientsRawContract
      *   search?: string,
      *   skip?: int,
      *   sort?: string,
-     *   state?: 'active'|'inactive'|State,
+     *   state?: State|value-of<State>,
      * }|ClientListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientListResponse>
      *
@@ -234,7 +241,7 @@ final class ClientsRawService implements ClientsRawContract
      */
     public function list(
         array|ClientListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ClientListParams::parseRequest(
             $params,
@@ -264,6 +271,7 @@ final class ClientsRawService implements ClientsRawContract
      * Un événement `DELETE_CLIENT` est émis après la suppression.
      *
      * @param string $uid Identifiant unique du client
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientDeleteResponse>
      *
@@ -271,7 +279,7 @@ final class ClientsRawService implements ClientsRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -313,6 +321,7 @@ final class ClientsRawService implements ClientsRawContract
      * - GET /files/clients.csv pour obtenir un fichier modèle
      *
      * @param array{file?: string}|ClientImportFromCsvParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientImportFromCsvResponse>
      *
@@ -320,7 +329,7 @@ final class ClientsRawService implements ClientsRawContract
      */
     public function importFromCsv(
         array|ClientImportFromCsvParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ClientImportFromCsvParams::parseRequest(
             $params,
@@ -361,6 +370,7 @@ final class ClientsRawService implements ClientsRawContract
      * **Événement déclenché:** MERGE_CLIENT
      *
      * @param array{source: string, target: string}|ClientMergeParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientMergeResponse>
      *
@@ -368,7 +378,7 @@ final class ClientsRawService implements ClientsRawContract
      */
     public function merge(
         array|ClientMergeParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ClientMergeParams::parseRequest(
             $params,

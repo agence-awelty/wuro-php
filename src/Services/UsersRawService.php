@@ -15,9 +15,16 @@ use Wuro\Users\UserListInvitationsResponse;
 use Wuro\Users\UserListNotificationsResponse;
 use Wuro\Users\UserListPositionsResponse;
 use Wuro\Users\UserUpdateParams;
+use Wuro\Users\UserUpdateParams\Address;
 use Wuro\Users\UserUpdateParams\Gender;
+use Wuro\Users\UserUpdateParams\Phone;
 use Wuro\Users\UserUpdateResponse;
 
+/**
+ * @phpstan-import-type AddressShape from \Wuro\Users\UserUpdateParams\Address
+ * @phpstan-import-type PhoneShape from \Wuro\Users\UserUpdateParams\Phone
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class UsersRawService implements UsersRawContract
 {
     // @phpstan-ignore-next-line
@@ -32,12 +39,14 @@ final class UsersRawService implements UsersRawContract
      * Retourne les informations de l'utilisateur actuellement authentifié.
      * Utile pour obtenir le profil de l'utilisateur après connexion.
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<UserGetResponse>
      *
      * @throws APIException
      */
     public function retrieve(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -59,27 +68,22 @@ final class UsersRawService implements UsersRawContract
      * - Déclenche un événement UPDATE_USER
      *
      * @param array{
-     *   address?: array{
-     *     city?: string,
-     *     country?: string,
-     *     street?: string,
-     *     streetEnd?: string,
-     *     zipCode?: string,
-     *   },
+     *   address?: Address|AddressShape,
      *   avatar?: string,
-     *   birthdate?: string|\DateTimeInterface,
+     *   birthdate?: \DateTimeInterface,
      *   firstName?: string,
-     *   gender?: 'H'|'F'|'Other'|Gender,
+     *   gender?: Gender|value-of<Gender>,
      *   lastName?: string,
      *   personalEmail?: string,
      *   personalPhoneFixe?: string,
-     *   phone?: array{number?: string},
+     *   phone?: Phone|PhoneShape,
      *   professionalEmail?: string,
      *   professionalPhone?: string,
      *   professionalPhoneFixe?: string,
      *   socialSecuNumber?: string,
      *   title?: string,
      * }|UserUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserUpdateResponse>
      *
@@ -88,7 +92,7 @@ final class UsersRawService implements UsersRawContract
     public function update(
         string $uid,
         array|UserUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = UserUpdateParams::parseRequest(
             $params,
@@ -115,13 +119,15 @@ final class UsersRawService implements UsersRawContract
      * - L'utilisateur n'est pas supprimé de la base de données
      * - Déclenche un événement DELETE_USER
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<mixed>
      *
      * @throws APIException
      */
     public function deactivate(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -152,6 +158,7 @@ final class UsersRawService implements UsersRawContract
      * - Gestion des demandes d'ajout à des entreprises
      *
      * @param string $uid Identifiant unique de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserListInvitationsResponse>
      *
@@ -159,7 +166,7 @@ final class UsersRawService implements UsersRawContract
      */
     public function listInvitations(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -191,6 +198,7 @@ final class UsersRawService implements UsersRawContract
      * - Badge de notifications non lues
      *
      * @param string $uid Identifiant unique de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserListNotificationsResponse>
      *
@@ -198,7 +206,7 @@ final class UsersRawService implements UsersRawContract
      */
     public function listNotifications(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -224,6 +232,7 @@ final class UsersRawService implements UsersRawContract
      * - Vérification des accès utilisateur
      *
      * @param string $uid Identifiant unique de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserListPositionsResponse>
      *
@@ -231,7 +240,7 @@ final class UsersRawService implements UsersRawContract
      */
     public function listPositions(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -254,6 +263,7 @@ final class UsersRawService implements UsersRawContract
      * L'API détecte automatiquement le format.
      *
      * @param string $uid ID MongoDB ou adresse email de l'utilisateur
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<UserGetByUidResponse>
      *
@@ -261,7 +271,7 @@ final class UsersRawService implements UsersRawContract
      */
     public function retrieveByUid(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(

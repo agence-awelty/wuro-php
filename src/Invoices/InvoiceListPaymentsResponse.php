@@ -15,7 +15,7 @@ use Wuro\Invoices\InvoiceListPaymentsResponse\Payment;
  * @phpstan-type InvoiceListPaymentsResponseShape = array{
  *   average?: float|null,
  *   count?: int|null,
- *   payments?: list<PaymentShape>|null,
+ *   payments?: list<Payment|PaymentShape>|null,
  *   total?: float|null,
  * }
  */
@@ -56,7 +56,7 @@ final class InvoiceListPaymentsResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<PaymentShape>|null $payments
+     * @param list<Payment|PaymentShape>|null $payments
      */
     public static function with(
         ?float $average = null,
@@ -97,7 +97,7 @@ final class InvoiceListPaymentsResponse implements BaseModel
     }
 
     /**
-     * @param list<PaymentShape> $payments
+     * @param list<Payment|PaymentShape> $payments
      */
     public function withPayments(array $payments): self
     {

@@ -11,6 +11,9 @@ use Wuro\Core\Util;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\AuthContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class AuthService implements AuthContract
 {
     /**
@@ -29,12 +32,14 @@ final class AuthService implements AuthContract
     /**
      * @api
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function login(
         string $apiKey,
         string $privateKey,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): AuthLoginResponse {
         $params = Util::removeNulls(
             ['apiKey' => $apiKey, 'privateKey' => $privateKey]

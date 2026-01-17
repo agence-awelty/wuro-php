@@ -16,6 +16,9 @@ use Wuro\PurchaseCategories\PurchaseCategoryUpdateParams\State;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\PurchaseCategoriesRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class PurchaseCategoriesRawService implements PurchaseCategoriesRawContract
 {
     // @phpstan-ignore-next-line
@@ -43,6 +46,7 @@ final class PurchaseCategoriesRawService implements PurchaseCategoriesRawContrac
      * @param array{
      *   name: string, company?: string
      * }|PurchaseCategoryCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseCategoryNewResponse>
      *
@@ -50,7 +54,7 @@ final class PurchaseCategoriesRawService implements PurchaseCategoriesRawContrac
      */
     public function create(
         array|PurchaseCategoryCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PurchaseCategoryCreateParams::parseRequest(
             $params,
@@ -73,6 +77,7 @@ final class PurchaseCategoriesRawService implements PurchaseCategoriesRawContrac
      * Récupère les détails d'une catégorie d'achat spécifique.
      *
      * @param string $uid Identifiant unique de la catégorie
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseCategoryGetResponse>
      *
@@ -80,7 +85,7 @@ final class PurchaseCategoriesRawService implements PurchaseCategoriesRawContrac
      */
     public function retrieve(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -106,8 +111,9 @@ final class PurchaseCategoriesRawService implements PurchaseCategoriesRawContrac
      *
      * @param string $uid Identifiant unique de la catégorie
      * @param array{
-     *   name?: string, state?: 'active'|'inactive'|State
+     *   name?: string, state?: State|value-of<State>
      * }|PurchaseCategoryUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -116,7 +122,7 @@ final class PurchaseCategoriesRawService implements PurchaseCategoriesRawContrac
     public function update(
         string $uid,
         array|PurchaseCategoryUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PurchaseCategoryUpdateParams::parseRequest(
             $params,
@@ -143,12 +149,15 @@ final class PurchaseCategoriesRawService implements PurchaseCategoriesRawContrac
      * - Ventilation comptable des achats
      * - Rapports et statistiques par catégorie
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<PurchaseCategoryListResponse>
      *
      * @throws APIException
      */
-    public function list(?RequestOptions $requestOptions = null): BaseResponse
-    {
+    public function list(
+        RequestOptions|array|null $requestOptions = null
+    ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
@@ -168,6 +177,7 @@ final class PurchaseCategoriesRawService implements PurchaseCategoriesRawContrac
      * - Cette opération est irréversible
      *
      * @param string $uid Identifiant unique de la catégorie
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -175,7 +185,7 @@ final class PurchaseCategoriesRawService implements PurchaseCategoriesRawContrac
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(

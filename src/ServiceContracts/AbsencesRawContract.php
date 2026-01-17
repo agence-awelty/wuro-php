@@ -17,12 +17,16 @@ use Wuro\Core\Contracts\BaseResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface AbsencesRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|AbsenceCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceNewResponse>
      *
@@ -30,7 +34,7 @@ interface AbsencesRawContract
      */
     public function create(
         array|AbsenceCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -38,6 +42,7 @@ interface AbsencesRawContract
      *
      * @param string $uid Identifiant unique de l'absence
      * @param array<string,mixed>|AbsenceRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceGetResponse>
      *
@@ -46,7 +51,7 @@ interface AbsencesRawContract
     public function retrieve(
         string $uid,
         array|AbsenceRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -54,6 +59,7 @@ interface AbsencesRawContract
      *
      * @param string $uid Identifiant unique de l'absence
      * @param array<string,mixed>|AbsenceUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceUpdateResponse>
      *
@@ -62,13 +68,14 @@ interface AbsencesRawContract
     public function update(
         string $uid,
         array|AbsenceUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|AbsenceListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceListResponse>
      *
@@ -76,13 +83,14 @@ interface AbsencesRawContract
      */
     public function list(
         array|AbsenceListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'absence
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceDeleteResponse>
      *
@@ -90,6 +98,6 @@ interface AbsencesRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 }

@@ -8,6 +8,9 @@ use Wuro\Client;
 use Wuro\Core\Contracts\BaseResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\Products\ProductCreateParams;
+use Wuro\Products\ProductCreateParams\Option;
+use Wuro\Products\ProductCreateParams\Specifications;
+use Wuro\Products\ProductCreateParams\Stock;
 use Wuro\Products\ProductDeleteResponse;
 use Wuro\Products\ProductGetResponse;
 use Wuro\Products\ProductImportFromCsvParams;
@@ -22,6 +25,15 @@ use Wuro\Products\ProductUpdateResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\ProductsRawContract;
 
+/**
+ * @phpstan-import-type OptionShape from \Wuro\Products\ProductCreateParams\Option
+ * @phpstan-import-type SpecificationsShape from \Wuro\Products\ProductCreateParams\Specifications
+ * @phpstan-import-type StockShape from \Wuro\Products\ProductCreateParams\Stock
+ * @phpstan-import-type OptionShape from \Wuro\Products\ProductUpdateParams\Option as OptionShape1
+ * @phpstan-import-type SpecificationsShape from \Wuro\Products\ProductUpdateParams\Specifications as SpecificationsShape1
+ * @phpstan-import-type StockShape from \Wuro\Products\ProductUpdateParams\Stock as StockShape1
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class ProductsRawService implements ProductsRawContract
 {
     // @phpstan-ignore-next-line
@@ -71,22 +83,19 @@ final class ProductsRawService implements ProductsRawContract
      *   hasVariations?: bool,
      *   isMarchandise?: bool,
      *   mandatoryMentions?: string,
-     *   options?: list<array{name?: string, values?: list<string>}>,
+     *   options?: list<Option|OptionShape>,
      *   priceHt?: float,
      *   reference?: string,
      *   sku?: string,
-     *   specifications?: array{
-     *     depth?: float, height?: float, weight?: float, width?: float
-     *   },
-     *   stock?: array{
-     *     forceSell?: bool, nbAlert?: float, nbMin?: float, nbStock?: float
-     *   },
+     *   specifications?: Specifications|SpecificationsShape,
+     *   stock?: Stock|StockShape,
      *   suppliers?: list<string>,
      *   tva?: string,
      *   tvaRate?: float,
      *   unit?: string,
      *   urlExt?: string,
      * }|ProductCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductNewResponse>
      *
@@ -94,7 +103,7 @@ final class ProductsRawService implements ProductsRawContract
      */
     public function create(
         array|ProductCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ProductCreateParams::parseRequest(
             $params,
@@ -125,6 +134,7 @@ final class ProductsRawService implements ProductsRawContract
      *
      * @param string $uid Identifiant unique du produit
      * @param array{populate?: string}|ProductRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductGetResponse>
      *
@@ -133,7 +143,7 @@ final class ProductsRawService implements ProductsRawContract
     public function retrieve(
         string $uid,
         array|ProductRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ProductRetrieveParams::parseRequest(
             $params,
@@ -180,22 +190,19 @@ final class ProductsRawService implements ProductsRawContract
      *   hasVariations?: bool,
      *   isMarchandise?: bool,
      *   mandatoryMentions?: string,
-     *   options?: list<array{name?: string, values?: list<string>}>,
+     *   options?: list<ProductUpdateParams\Option|OptionShape1>,
      *   priceHt?: float,
      *   reference?: string,
      *   sku?: string,
-     *   specifications?: array{
-     *     depth?: float, height?: float, weight?: float, width?: float
-     *   },
-     *   stock?: array{
-     *     forceSell?: bool, nbAlert?: float, nbMin?: float, nbStock?: float
-     *   },
+     *   specifications?: ProductUpdateParams\Specifications|SpecificationsShape1,
+     *   stock?: ProductUpdateParams\Stock|StockShape1,
      *   suppliers?: list<string>,
      *   tva?: string,
      *   tvaRate?: float,
      *   unit?: string,
      *   urlExt?: string,
      * }|ProductUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductUpdateResponse>
      *
@@ -204,7 +211,7 @@ final class ProductsRawService implements ProductsRawContract
     public function update(
         string $uid,
         array|ProductUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ProductUpdateParams::parseRequest(
             $params,
@@ -247,8 +254,9 @@ final class ProductsRawService implements ProductsRawContract
      *   search?: string,
      *   skip?: int,
      *   sort?: string,
-     *   state?: 'active'|'inactive'|State,
+     *   state?: State|value-of<State>,
      * }|ProductListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductListResponse>
      *
@@ -256,7 +264,7 @@ final class ProductsRawService implements ProductsRawContract
      */
     public function list(
         array|ProductListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ProductListParams::parseRequest(
             $params,
@@ -286,6 +294,7 @@ final class ProductsRawService implements ProductsRawContract
      * Un événement `DELETE_PRODUCT` est émis après la suppression.
      *
      * @param string $uid Identifiant unique du produit
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductDeleteResponse>
      *
@@ -293,7 +302,7 @@ final class ProductsRawService implements ProductsRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -333,6 +342,7 @@ final class ProductsRawService implements ProductsRawContract
      * - GET /files/products.csv pour obtenir un fichier modèle
      *
      * @param array{file?: string}|ProductImportFromCsvParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductImportFromCsvResponse>
      *
@@ -340,7 +350,7 @@ final class ProductsRawService implements ProductsRawContract
      */
     public function importFromCsv(
         array|ProductImportFromCsvParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ProductImportFromCsvParams::parseRequest(
             $params,
@@ -364,6 +374,7 @@ final class ProductsRawService implements ProductsRawContract
      * Récupère la liste des variantes associées à un produit spécifique.
      *
      * @param string $uid Identifiant unique du produit parent
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -371,7 +382,7 @@ final class ProductsRawService implements ProductsRawContract
      */
     public function listVariants(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(

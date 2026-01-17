@@ -14,7 +14,7 @@ use Wuro\Quotes\Line\Quote;
  *
  * @phpstan-type QuoteListResponseShape = array{
  *   limit?: int|null,
- *   quotes?: list<QuoteShape>|null,
+ *   quotes?: list<Quote|QuoteShape>|null,
  *   skip?: int|null,
  *   total?: int|null,
  * }
@@ -50,7 +50,7 @@ final class QuoteListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<QuoteShape>|null $quotes
+     * @param list<Quote|QuoteShape>|null $quotes
      */
     public static function with(
         ?int $limit = null,
@@ -77,7 +77,7 @@ final class QuoteListResponse implements BaseModel
     }
 
     /**
-     * @param list<QuoteShape> $quotes
+     * @param list<Quote|QuoteShape> $quotes
      */
     public function withQuotes(array $quotes): self
     {

@@ -13,6 +13,9 @@ use Wuro\ProductCategories\ProductCategoryUpdateParams\State;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\ProductCategoriesContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class ProductCategoriesService implements ProductCategoriesContract
 {
     /**
@@ -40,13 +43,14 @@ final class ProductCategoriesService implements ProductCategoriesContract
      *
      * @param string $name Nom de la catégorie
      * @param string $company ID de l'entreprise (optionnel, défaut = entreprise courante)
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function create(
         string $name,
         ?string $company = null,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): ProductCategory {
         $params = Util::removeNulls(['name' => $name, 'company' => $company]);
 
@@ -62,12 +66,13 @@ final class ProductCategoriesService implements ProductCategoriesContract
      * Récupère les détails d'une catégorie de produit spécifique.
      *
      * @param string $uid Identifiant unique de la catégorie
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieve(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): ProductCategory {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieve($uid, requestOptions: $requestOptions);
@@ -90,15 +95,16 @@ final class ProductCategoriesService implements ProductCategoriesContract
      *
      * @param string $uid Identifiant unique de la catégorie
      * @param string $name Nouveau nom de la catégorie
-     * @param 'active'|'inactive'|State $state État de la catégorie
+     * @param State|value-of<State> $state État de la catégorie
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function update(
         string $uid,
         ?string $name = null,
-        string|State|null $state = null,
-        ?RequestOptions $requestOptions = null,
+        State|string|null $state = null,
+        RequestOptions|array|null $requestOptions = null,
     ): mixed {
         $params = Util::removeNulls(['name' => $name, 'state' => $state]);
 
@@ -118,10 +124,12 @@ final class ProductCategoriesService implements ProductCategoriesContract
      * - Filtrage des produits par catégorie
      * - Rapports et statistiques par catégorie
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function list(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): ProductCategoryListResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->list(requestOptions: $requestOptions);
@@ -139,12 +147,13 @@ final class ProductCategoriesService implements ProductCategoriesContract
      * - Cette opération est irréversible
      *
      * @param string $uid Identifiant unique de la catégorie
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): mixed {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->delete($uid, requestOptions: $requestOptions);

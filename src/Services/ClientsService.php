@@ -18,6 +18,9 @@ use Wuro\Core\Util;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\ClientsContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class ClientsService implements ClientsContract
 {
     /**
@@ -56,6 +59,7 @@ final class ClientsService implements ClientsContract
      *
      * @param string $name Name of the client (required)
      * @param list<string> $tags
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -81,7 +85,7 @@ final class ClientsService implements ClientsContract
         ?string $tvaNumber = null,
         ?string $website = null,
         ?string $zipCode = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): ClientNewResponse {
         $params = Util::removeNulls(
             [
@@ -128,13 +132,14 @@ final class ClientsService implements ClientsContract
      *
      * @param string $uid Identifiant unique du client
      * @param string $populate Relations à inclure
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieve(
         string $uid,
         ?string $populate = null,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): ClientGetResponse {
         $params = Util::removeNulls(['populate' => $populate]);
 
@@ -162,6 +167,7 @@ final class ClientsService implements ClientsContract
      * @param string $uid Identifiant unique du client
      * @param string $name Name of the client (required)
      * @param list<string> $tags
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -188,7 +194,7 @@ final class ClientsService implements ClientsContract
         ?string $tvaNumber = null,
         ?string $website = null,
         ?string $zipCode = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): ClientUpdateResponse {
         $params = Util::removeNulls(
             [
@@ -244,7 +250,8 @@ final class ClientsService implements ClientsContract
      * @param string $search Recherche textuelle dans nom, email, téléphone, code client
      * @param int $skip Nombre de clients à ignorer (pagination)
      * @param string $sort Champ et direction de tri (ex. "name:1" pour tri alphabétique)
-     * @param 'active'|'inactive'|State $state Filtrer par état (active = visible, inactive = archivé)
+     * @param State|value-of<State> $state Filtrer par état (active = visible, inactive = archivé)
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -253,8 +260,8 @@ final class ClientsService implements ClientsContract
         ?string $search = null,
         int $skip = 0,
         ?string $sort = null,
-        string|State|null $state = null,
-        ?RequestOptions $requestOptions = null,
+        State|string|null $state = null,
+        RequestOptions|array|null $requestOptions = null,
     ): ClientListResponse {
         $params = Util::removeNulls(
             [
@@ -285,12 +292,13 @@ final class ClientsService implements ClientsContract
      * Un événement `DELETE_CLIENT` est émis après la suppression.
      *
      * @param string $uid Identifiant unique du client
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): ClientDeleteResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->delete($uid, requestOptions: $requestOptions);
@@ -329,12 +337,13 @@ final class ClientsService implements ClientsContract
      * - GET /files/clients.csv pour obtenir un fichier modèle
      *
      * @param string $file Fichier CSV à importer
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function importFromCsv(
         ?string $file = null,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): ClientImportFromCsvResponse {
         $params = Util::removeNulls(['file' => $file]);
 
@@ -368,13 +377,14 @@ final class ClientsService implements ClientsContract
      *
      * @param string $source ID du client à fusionner (sera supprimé)
      * @param string $target ID du client cible (recevra les documents)
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function merge(
         string $source,
         string $target,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): ClientMergeResponse {
         $params = Util::removeNulls(['source' => $source, 'target' => $target]);
 

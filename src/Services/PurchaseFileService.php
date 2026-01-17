@@ -11,6 +11,9 @@ use Wuro\PurchaseFile\PurchaseFileAnalyzeResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\PurchaseFileContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class PurchaseFileService implements PurchaseFileContract
 {
     /**
@@ -43,12 +46,13 @@ final class PurchaseFileService implements PurchaseFileContract
      * - `preSubmitPurchase` : Données avec totaux recalculés (pour vérification)
      *
      * @param string $file Fichier PDF encodé en base64
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function analyze(
         ?string $file = null,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): PurchaseFileAnalyzeResponse {
         $params = Util::removeNulls(['file' => $file]);
 

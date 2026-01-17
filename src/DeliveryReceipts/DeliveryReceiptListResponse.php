@@ -13,7 +13,7 @@ use Wuro\Core\Contracts\BaseModel;
  *
  * @phpstan-type DeliveryReceiptListResponseShape = array{
  *   limit?: int|null,
- *   receipts?: list<ReceiptShape>|null,
+ *   receipts?: list<Receipt|ReceiptShape>|null,
  *   skip?: int|null,
  *   total?: int|null,
  * }
@@ -46,7 +46,7 @@ final class DeliveryReceiptListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<ReceiptShape>|null $receipts
+     * @param list<Receipt|ReceiptShape>|null $receipts
      */
     public static function with(
         ?int $limit = null,
@@ -73,7 +73,7 @@ final class DeliveryReceiptListResponse implements BaseModel
     }
 
     /**
-     * @param list<ReceiptShape> $receipts
+     * @param list<Receipt|ReceiptShape> $receipts
      */
     public function withReceipts(array $receipts): self
     {

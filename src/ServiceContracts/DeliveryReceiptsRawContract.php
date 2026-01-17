@@ -20,12 +20,16 @@ use Wuro\DeliveryReceipts\DeliveryReceiptUpdateParams;
 use Wuro\DeliveryReceipts\DeliveryReceiptUpdateResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface DeliveryReceiptsRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|DeliveryReceiptCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptNewResponse>
      *
@@ -33,7 +37,7 @@ interface DeliveryReceiptsRawContract
      */
     public function create(
         array|DeliveryReceiptCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -41,6 +45,7 @@ interface DeliveryReceiptsRawContract
      *
      * @param string $uid Identifiant unique du bon de livraison
      * @param array<string,mixed>|DeliveryReceiptRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptGetResponse>
      *
@@ -49,7 +54,7 @@ interface DeliveryReceiptsRawContract
     public function retrieve(
         string $uid,
         array|DeliveryReceiptRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -57,6 +62,7 @@ interface DeliveryReceiptsRawContract
      *
      * @param string $uid Identifiant unique du bon de livraison
      * @param array<string,mixed>|DeliveryReceiptUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptUpdateResponse>
      *
@@ -65,13 +71,14 @@ interface DeliveryReceiptsRawContract
     public function update(
         string $uid,
         array|DeliveryReceiptUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|DeliveryReceiptListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptListResponse>
      *
@@ -79,13 +86,14 @@ interface DeliveryReceiptsRawContract
      */
     public function list(
         array|DeliveryReceiptListParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du bon de livraison
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptDeleteResponse>
      *
@@ -93,13 +101,14 @@ interface DeliveryReceiptsRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du bon de livraison source
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptNewInvoiceResponse>
      *
@@ -107,13 +116,14 @@ interface DeliveryReceiptsRawContract
      */
     public function createInvoice(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du bon de livraison
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<DeliveryReceiptGenerateHTMLResponse>
      *
@@ -121,7 +131,7 @@ interface DeliveryReceiptsRawContract
      */
     public function generateHTML(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
@@ -129,6 +139,7 @@ interface DeliveryReceiptsRawContract
      *
      * @param string $uid Identifiant unique du bon de livraison
      * @param array<string,mixed>|DeliveryReceiptGeneratePdfParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<string>
      *
@@ -137,6 +148,6 @@ interface DeliveryReceiptsRawContract
     public function generatePdf(
         string $uid,
         array|DeliveryReceiptGeneratePdfParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

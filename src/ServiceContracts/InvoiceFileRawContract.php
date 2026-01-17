@@ -10,12 +10,16 @@ use Wuro\InvoiceFile\InvoiceFileAnalyzeParams;
 use Wuro\InvoiceFile\InvoiceFileAnalyzeResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface InvoiceFileRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|InvoiceFileAnalyzeParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceFileAnalyzeResponse>
      *
@@ -23,6 +27,6 @@ interface InvoiceFileRawContract
      */
     public function analyze(
         array|InvoiceFileAnalyzeParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }
