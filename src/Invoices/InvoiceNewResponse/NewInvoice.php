@@ -22,7 +22,7 @@ use Wuro\Invoices\Line\VatRate;
  *
  * @phpstan-type NewInvoiceShape = array{
  *   _id?: string|null,
- *   acomptes?: list<AcompteShape>|null,
+ *   acomptes?: list<Acompte|AcompteShape>|null,
  *   baseCurrency?: string|null,
  *   client?: string|null,
  *   clientAddress?: string|null,
@@ -35,17 +35,17 @@ use Wuro\Invoices\Line\VatRate;
  *   company?: string|null,
  *   companyName?: string|null,
  *   date?: \DateTimeInterface|null,
- *   invoiceLines?: list<InvoiceLineShape>|null,
+ *   invoiceLines?: list<InvoiceLine|InvoiceLineShape>|null,
  *   number?: string|null,
  *   paymentExpiryDate?: \DateTimeInterface|null,
- *   payments?: list<PaymentShape>|null,
+ *   payments?: list<Payment|PaymentShape>|null,
  *   state?: null|State|value-of<State>,
  *   title?: string|null,
  *   totalHt?: float|null,
  *   totalTtc?: float|null,
  *   totalTva?: float|null,
  *   type?: null|Type|value-of<Type>,
- *   vatRates?: list<VatRateShape>|null,
+ *   vatRates?: list<VatRate|VatRateShape>|null,
  *   htmlLink?: string|null,
  *   pdfLink?: string|null,
  * }
@@ -239,12 +239,12 @@ final class NewInvoice implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<AcompteShape>|null $acomptes
-     * @param list<InvoiceLineShape>|null $invoiceLines
-     * @param list<PaymentShape>|null $payments
+     * @param list<Acompte|AcompteShape>|null $acomptes
+     * @param list<InvoiceLine|InvoiceLineShape>|null $invoiceLines
+     * @param list<Payment|PaymentShape>|null $payments
      * @param State|value-of<State>|null $state
      * @param Type|value-of<Type>|null $type
-     * @param list<VatRateShape>|null $vatRates
+     * @param list<VatRate|VatRateShape>|null $vatRates
      */
     public static function with(
         ?string $_id = null,
@@ -322,7 +322,7 @@ final class NewInvoice implements BaseModel
     /**
      * List of advance payments.
      *
-     * @param list<AcompteShape> $acomptes
+     * @param list<Acompte|AcompteShape> $acomptes
      */
     public function withAcomptes(array $acomptes): self
     {
@@ -467,7 +467,7 @@ final class NewInvoice implements BaseModel
     /**
      * List of invoice lines.
      *
-     * @param list<InvoiceLineShape> $invoiceLines
+     * @param list<InvoiceLine|InvoiceLineShape> $invoiceLines
      */
     public function withInvoiceLines(array $invoiceLines): self
     {
@@ -503,7 +503,7 @@ final class NewInvoice implements BaseModel
     /**
      * List of payments.
      *
-     * @param list<PaymentShape> $payments
+     * @param list<Payment|PaymentShape> $payments
      */
     public function withPayments(array $payments): self
     {
@@ -586,7 +586,7 @@ final class NewInvoice implements BaseModel
     /**
      * List of VAT rates applied to the invoice.
      *
-     * @param list<VatRateShape> $vatRates
+     * @param list<VatRate|VatRateShape> $vatRates
      */
     public function withVatRates(array $vatRates): self
     {

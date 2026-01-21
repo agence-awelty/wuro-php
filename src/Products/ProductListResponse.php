@@ -13,7 +13,7 @@ use Wuro\Core\Contracts\BaseModel;
  *
  * @phpstan-type ProductListResponseShape = array{
  *   limit?: int|null,
- *   products?: list<ProductShape>|null,
+ *   products?: list<Product|ProductShape>|null,
  *   skip?: int|null,
  *   total?: int|null,
  * }
@@ -59,7 +59,7 @@ final class ProductListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<ProductShape>|null $products
+     * @param list<Product|ProductShape>|null $products
      */
     public static function with(
         ?int $limit = null,
@@ -91,7 +91,7 @@ final class ProductListResponse implements BaseModel
     /**
      * Tableau des produits.
      *
-     * @param list<ProductShape> $products
+     * @param list<Product|ProductShape> $products
      */
     public function withProducts(array $products): self
     {

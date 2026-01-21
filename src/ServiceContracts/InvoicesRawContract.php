@@ -33,12 +33,16 @@ use Wuro\Invoices\InvoiceUpdateParams;
 use Wuro\Invoices\InvoiceUpdateResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface InvoicesRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|InvoiceCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceNewResponse>
      *
@@ -46,7 +50,7 @@ interface InvoicesRawContract
      */
     public function create(
         array|InvoiceCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -54,6 +58,7 @@ interface InvoicesRawContract
      *
      * @param string $uid ID de la facture
      * @param array<string,mixed>|InvoiceRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceGetResponse>
      *
@@ -62,13 +67,14 @@ interface InvoicesRawContract
     public function retrieve(
         string $uid,
         array|InvoiceRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|InvoiceUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceUpdateResponse>
      *
@@ -77,13 +83,14 @@ interface InvoicesRawContract
     public function update(
         string $uid,
         array|InvoiceUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|InvoiceListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceListResponse>
      *
@@ -91,11 +98,13 @@ interface InvoicesRawContract
      */
     public function list(
         array|InvoiceListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
+     *
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -103,13 +112,14 @@ interface InvoicesRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID de la facture d'origine
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceNewCreditResponse>
      *
@@ -117,13 +127,14 @@ interface InvoicesRawContract
      */
     public function createCredit(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID de la facture
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -131,13 +142,14 @@ interface InvoicesRawContract
      */
     public function createDeliveryReceipt(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|InvoiceCreatePackageParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceNewPackageResponse>
      *
@@ -145,13 +157,14 @@ interface InvoicesRawContract
      */
     public function createPackage(
         array|InvoiceCreatePackageParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|InvoiceGetLogsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceGetLogsResponse>
      *
@@ -159,13 +172,14 @@ interface InvoicesRawContract
      */
     public function getLogs(
         array|InvoiceGetLogsParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|InvoiceGetStatsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceGetStatsResponse>
      *
@@ -173,13 +187,14 @@ interface InvoicesRawContract
      */
     public function getStats(
         array|InvoiceGetStatsParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|InvoiceGetTurnoverParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceGetTurnoverResponse>
      *
@@ -187,13 +202,14 @@ interface InvoicesRawContract
      */
     public function getTurnover(
         array|InvoiceGetTurnoverParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|InvoiceListPaymentsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceListPaymentsResponse>
      *
@@ -201,13 +217,14 @@ interface InvoicesRawContract
      */
     public function listPayments(
         array|InvoiceListPaymentsParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|InvoiceListWaitingPaymentsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceListWaitingPaymentsResponse>
      *
@@ -215,7 +232,7 @@ interface InvoicesRawContract
      */
     public function listWaitingPayments(
         array|InvoiceListWaitingPaymentsParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -223,6 +240,7 @@ interface InvoicesRawContract
      *
      * @param string $uid ID de la facture
      * @param array<string,mixed>|InvoiceRecordPaymentParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceRecordPaymentResponse>
      *
@@ -231,13 +249,14 @@ interface InvoicesRawContract
     public function recordPayment(
         string $uid,
         array|InvoiceRecordPaymentParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID de la facture
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -245,7 +264,7 @@ interface InvoicesRawContract
      */
     public function retrieveLogs(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
@@ -253,6 +272,7 @@ interface InvoicesRawContract
      *
      * @param string $uid ID de la facture
      * @param array<string,mixed>|InvoiceSendEmailParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceSendEmailResponse>
      *
@@ -261,6 +281,6 @@ interface InvoicesRawContract
     public function sendEmail(
         string $uid,
         array|InvoiceSendEmailParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

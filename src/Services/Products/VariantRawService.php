@@ -8,12 +8,18 @@ use Wuro\Client;
 use Wuro\Core\Contracts\BaseResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\Products\Variant\VariantCreateParams;
+use Wuro\Products\Variant\VariantCreateParams\Stock;
 use Wuro\Products\Variant\VariantDeleteParams;
 use Wuro\Products\Variant\VariantRetrieveParams;
 use Wuro\Products\Variant\VariantUpdateParams;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\Products\VariantRawContract;
 
+/**
+ * @phpstan-import-type StockShape from \Wuro\Products\Variant\VariantCreateParams\Stock
+ * @phpstan-import-type StockShape from \Wuro\Products\Variant\VariantUpdateParams\Stock as StockShape1
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class VariantRawService implements VariantRawContract
 {
     // @phpstan-ignore-next-line
@@ -47,9 +53,10 @@ final class VariantRawService implements VariantRawContract
      *   priceHt?: float,
      *   reference?: string,
      *   sku?: string,
-     *   stock?: array{nbAlert?: float, nbMin?: float, nbStock?: float},
+     *   stock?: Stock|StockShape,
      *   tvaRate?: float,
      * }|VariantCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -58,7 +65,7 @@ final class VariantRawService implements VariantRawContract
     public function create(
         string $uid,
         array|VariantCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = VariantCreateParams::parseRequest(
             $params,
@@ -82,6 +89,7 @@ final class VariantRawService implements VariantRawContract
      *
      * @param string $uid Identifiant unique de la variante
      * @param array{productID: string}|VariantRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -90,7 +98,7 @@ final class VariantRawService implements VariantRawContract
     public function retrieve(
         string $uid,
         array|VariantRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = VariantRetrieveParams::parseRequest(
             $params,
@@ -130,9 +138,10 @@ final class VariantRawService implements VariantRawContract
      *   priceHt?: float,
      *   reference?: string,
      *   sku?: string,
-     *   stock?: array{nbAlert?: float, nbMin?: float, nbStock?: float},
+     *   stock?: VariantUpdateParams\Stock|StockShape1,
      *   tvaRate?: float,
      * }|VariantUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -141,7 +150,7 @@ final class VariantRawService implements VariantRawContract
     public function update(
         string $uid,
         array|VariantUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = VariantUpdateParams::parseRequest(
             $params,
@@ -174,12 +183,15 @@ final class VariantRawService implements VariantRawContract
      * - Gestion des déclinaisons produit
      * - Suivi du stock par variante
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<mixed>
      *
      * @throws APIException
      */
-    public function list(?RequestOptions $requestOptions = null): BaseResponse
-    {
+    public function list(
+        RequestOptions|array|null $requestOptions = null
+    ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
@@ -202,6 +214,7 @@ final class VariantRawService implements VariantRawContract
      *
      * @param string $uid Identifiant unique de la variante
      * @param array{productID: string}|VariantDeleteParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -210,7 +223,7 @@ final class VariantRawService implements VariantRawContract
     public function delete(
         string $uid,
         array|VariantDeleteParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = VariantDeleteParams::parseRequest(
             $params,

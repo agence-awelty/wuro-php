@@ -13,7 +13,7 @@ use Wuro\Users\UserListInvitationsResponse\Invitation;
  * @phpstan-import-type InvitationShape from \Wuro\Users\UserListInvitationsResponse\Invitation
  *
  * @phpstan-type UserListInvitationsResponseShape = array{
- *   invitations?: list<InvitationShape>|null
+ *   invitations?: list<Invitation|InvitationShape>|null
  * }
  */
 final class UserListInvitationsResponse implements BaseModel
@@ -35,7 +35,7 @@ final class UserListInvitationsResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<InvitationShape>|null $invitations
+     * @param list<Invitation|InvitationShape>|null $invitations
      */
     public static function with(?array $invitations = null): self
     {
@@ -47,7 +47,7 @@ final class UserListInvitationsResponse implements BaseModel
     }
 
     /**
-     * @param list<InvitationShape> $invitations
+     * @param list<Invitation|InvitationShape> $invitations
      */
     public function withInvitations(array $invitations): self
     {

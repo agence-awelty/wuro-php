@@ -19,7 +19,7 @@ use Wuro\Core\Contracts\BaseModel;
  *
  * @phpstan-type CompanyShape = array{
  *   _id?: string|null,
- *   addresses?: list<AddressShape>|null,
+ *   addresses?: list<Address|AddressShape>|null,
  *   cgv?: string|null,
  *   cgvLink?: string|null,
  *   cgvWuro?: bool|null,
@@ -33,14 +33,14 @@ use Wuro\Core\Contracts\BaseModel;
  *   email?: string|null,
  *   emailExpeditor?: string|null,
  *   logo?: string|null,
- *   mobiles?: list<MobileShape>|null,
+ *   mobiles?: list<Mobile|MobileShape>|null,
  *   nafApe?: string|null,
  *   name?: string|null,
  *   nic?: string|null,
  *   numRcs?: string|null,
  *   numTradeDirectory?: string|null,
  *   paymentDelayDefault?: float|null,
- *   phones?: list<PhoneShape>|null,
+ *   phones?: list<Phone|PhoneShape>|null,
  *   rateLatePenalties?: float|null,
  *   shareCapital?: float|null,
  *   siren?: string|null,
@@ -274,9 +274,9 @@ final class Company implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<AddressShape>|null $addresses
-     * @param list<MobileShape>|null $mobiles
-     * @param list<PhoneShape>|null $phones
+     * @param list<Address|AddressShape>|null $addresses
+     * @param list<Mobile|MobileShape>|null $mobiles
+     * @param list<Phone|PhoneShape>|null $phones
      * @param State|value-of<State>|null $state
      */
     public static function with(
@@ -367,7 +367,7 @@ final class Company implements BaseModel
     /**
      * List of company addresses.
      *
-     * @param list<AddressShape> $addresses
+     * @param list<Address|AddressShape> $addresses
      */
     public function withAddresses(array $addresses): self
     {
@@ -524,7 +524,7 @@ final class Company implements BaseModel
     /**
      * List of company mobile numbers.
      *
-     * @param list<MobileShape> $mobiles
+     * @param list<Mobile|MobileShape> $mobiles
      */
     public function withMobiles(array $mobiles): self
     {
@@ -603,7 +603,7 @@ final class Company implements BaseModel
     /**
      * List of company phone numbers.
      *
-     * @param list<PhoneShape> $phones
+     * @param list<Phone|PhoneShape> $phones
      */
     public function withPhones(array $phones): self
     {

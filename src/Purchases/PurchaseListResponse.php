@@ -13,7 +13,7 @@ use Wuro\Core\Contracts\BaseModel;
  *
  * @phpstan-type PurchaseListResponseShape = array{
  *   limit?: int|null,
- *   purchases?: list<PurchaseShape>|null,
+ *   purchases?: list<Purchase|PurchaseShape>|null,
  *   skip?: int|null,
  *   total?: int|null,
  * }
@@ -59,7 +59,7 @@ final class PurchaseListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<PurchaseShape>|null $purchases
+     * @param list<Purchase|PurchaseShape>|null $purchases
      */
     public static function with(
         ?int $limit = null,
@@ -91,7 +91,7 @@ final class PurchaseListResponse implements BaseModel
     /**
      * Tableau des achats.
      *
-     * @param list<PurchaseShape> $purchases
+     * @param list<Purchase|PurchaseShape> $purchases
      */
     public function withPurchases(array $purchases): self
     {

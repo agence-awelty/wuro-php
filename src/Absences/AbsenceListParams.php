@@ -38,6 +38,8 @@ use Wuro\Core\Contracts\BaseModel;
  *
  * @see Wuro\Services\AbsencesService::list()
  *
+ * @phpstan-import-type PositionToVariants from \Wuro\Absences\AbsenceListParams\PositionTo
+ * @phpstan-import-type TypeVariants from \Wuro\Absences\AbsenceListParams\Type
  * @phpstan-import-type PositionToShape from \Wuro\Absences\AbsenceListParams\PositionTo
  * @phpstan-import-type TypeShape from \Wuro\Absences\AbsenceListParams\Type
  *
@@ -97,7 +99,7 @@ final class AbsenceListParams implements BaseModel
      * - ID de poste pour un poste spécifique
      * - Tableau d'IDs pour plusieurs postes
      *
-     * @var string|list<string>|null $positionTo
+     * @var PositionToVariants|null $positionTo
      */
     #[Optional(union: PositionTo::class)]
     public string|array|null $positionTo;
@@ -142,7 +144,7 @@ final class AbsenceListParams implements BaseModel
     /**
      * Filtrer par type d'absence (peut être un tableau).
      *
-     * @var string|list<string>|null $type
+     * @var TypeVariants|null $type
      */
     #[Optional(union: Type::class)]
     public string|array|null $type;

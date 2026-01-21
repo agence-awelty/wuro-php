@@ -37,12 +37,12 @@ use Wuro\Purchases\Purchase\Type;
  *   exportedFec?: bool|null,
  *   exportedPdf?: bool|null,
  *   invoiceNumber?: string|null,
- *   lines?: list<LineShape>|null,
+ *   lines?: list<Line|LineShape>|null,
  *   number?: string|null,
  *   paymentDate?: \DateTimeInterface|null,
  *   paymentExpiryDate?: \DateTimeInterface|null,
  *   paymentMethods?: list<string>|null,
- *   payments?: list<PaymentShape>|null,
+ *   payments?: list<Payment|PaymentShape>|null,
  *   state?: null|State|value-of<State>,
  *   supplier?: string|null,
  *   supplierCode?: string|null,
@@ -55,7 +55,7 @@ use Wuro\Purchases\Purchase\Type;
  *   type?: null|Type|value-of<Type>,
  *   updatedAt?: \DateTimeInterface|null,
  *   url?: string|null,
- *   vatRates?: list<VatRateShape>|null,
+ *   vatRates?: list<VatRate|VatRateShape>|null,
  * }
  */
 final class Purchase implements BaseModel
@@ -248,12 +248,12 @@ final class Purchase implements BaseModel
      * @param BankReconciliationStatus|value-of<BankReconciliationStatus>|null $bankReconciliationStatus
      * @param list<string>|null $bankReconciliations
      * @param list<string>|null $categories
-     * @param list<LineShape>|null $lines
+     * @param list<Line|LineShape>|null $lines
      * @param list<string>|null $paymentMethods
-     * @param list<PaymentShape>|null $payments
+     * @param list<Payment|PaymentShape>|null $payments
      * @param State|value-of<State>|null $state
      * @param Type|value-of<Type>|null $type
-     * @param list<VatRateShape>|null $vatRates
+     * @param list<VatRate|VatRateShape>|null $vatRates
      */
     public static function with(
         ?string $_id = null,
@@ -503,7 +503,7 @@ final class Purchase implements BaseModel
     }
 
     /**
-     * @param list<LineShape> $lines
+     * @param list<Line|LineShape> $lines
      */
     public function withLines(array $lines): self
     {
@@ -553,7 +553,7 @@ final class Purchase implements BaseModel
     }
 
     /**
-     * @param list<PaymentShape> $payments
+     * @param list<Payment|PaymentShape> $payments
      */
     public function withPayments(array $payments): self
     {
@@ -693,7 +693,7 @@ final class Purchase implements BaseModel
     }
 
     /**
-     * @param list<VatRateShape> $vatRates
+     * @param list<VatRate|VatRateShape> $vatRates
      */
     public function withVatRates(array $vatRates): self
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Wuro\ServiceContracts;
 
 use Wuro\Companies\CompanyConfirmDomainResponse;
+use Wuro\Companies\CompanyCreateParams\Address;
 use Wuro\Companies\CompanyGetByIDResponse;
 use Wuro\Companies\CompanyGetCgvResponse;
 use Wuro\Companies\CompanyGetExtraInfosResponse;
@@ -15,6 +16,10 @@ use Wuro\Companies\CompanyUpdateResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type AddressShape from \Wuro\Companies\CompanyCreateParams\Address
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface CompaniesContract
 {
     /**
@@ -22,9 +27,7 @@ interface CompaniesContract
      *
      * @param string $name Nom de l'entreprise (obligatoire)
      * @param string $url URL unique pour l'entreprise (obligatoire)
-     * @param list<array{
-     *   city?: string, country?: string, street?: string, zipCode?: string
-     * }> $addresses
+     * @param list<Address|AddressShape> $addresses
      * @param string $commercialCourt Tribunal de commerce
      * @param string $companyType ID du type d'entreprise (SARL, SAS, etc.)
      * @param string $email Email principal de l'entreprise
@@ -37,6 +40,7 @@ interface CompaniesContract
      * @param string $siret Numéro SIRET (14 chiffres)
      * @param string $tvaNumber Numéro de TVA intracommunautaire
      * @param string $website Site web de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -56,95 +60,106 @@ interface CompaniesContract
         ?string $siret = null,
         ?string $tvaNumber = null,
         ?string $website = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): CompanyNewResponse;
 
     /**
      * @api
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function retrieve(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyGetResponse;
 
     /**
      * @api
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function update(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyUpdateResponse;
 
     /**
      * @api
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): mixed;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function confirmDomain(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyConfirmDomainResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function listPositions(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyListPositionsResponse;
 
     /**
      * @api
      *
      * @param string $uid ID de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieveByID(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyGetByIDResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieveCgv(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyGetCgvResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'entreprise
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieveExtraInfos(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): CompanyGetExtraInfosResponse;
 }

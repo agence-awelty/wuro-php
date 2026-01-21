@@ -9,6 +9,9 @@ use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\OrderContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class OrderService implements OrderContract
 {
     /**
@@ -40,12 +43,13 @@ final class OrderService implements OrderContract
      * - Génération d'un nouveau lien de paiement si nécessaire
      *
      * @param string $uid Identifiant unique de la commande
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrievePaymentInfos(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): mixed {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrievePaymentInfos($uid, requestOptions: $requestOptions);
