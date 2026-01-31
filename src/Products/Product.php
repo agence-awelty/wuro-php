@@ -33,16 +33,16 @@ use Wuro\Products\Product\Stock;
  *   description?: string|null,
  *   ecotax?: float|null,
  *   electronic?: bool|null,
- *   files?: list<FileShape>|null,
+ *   files?: list<File|FileShape>|null,
  *   grossMargin?: float|null,
  *   hasSpecifications?: bool|null,
  *   hasStockManagement?: bool|null,
  *   hasVariations?: bool|null,
- *   images?: list<ImageShape>|null,
+ *   images?: list<Image|ImageShape>|null,
  *   isMarchandise?: bool|null,
  *   mandatoryMentions?: string|null,
  *   name?: string|null,
- *   options?: list<OptionShape>|null,
+ *   options?: list<Option|OptionShape>|null,
  *   priceHt?: float|null,
  *   reference?: string|null,
  *   sku?: string|null,
@@ -261,9 +261,9 @@ final class Product implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<FileShape>|null $files
-     * @param list<ImageShape>|null $images
-     * @param list<OptionShape>|null $options
+     * @param list<File|FileShape>|null $files
+     * @param list<Image|ImageShape>|null $images
+     * @param list<Option|OptionShape>|null $options
      * @param Specifications|SpecificationsShape|null $specifications
      * @param State|value-of<State>|null $state
      * @param Stock|StockShape|null $stock
@@ -465,7 +465,7 @@ final class Product implements BaseModel
     }
 
     /**
-     * @param list<FileShape> $files
+     * @param list<File|FileShape> $files
      */
     public function withFiles(array $files): self
     {
@@ -520,7 +520,7 @@ final class Product implements BaseModel
     }
 
     /**
-     * @param list<ImageShape> $images
+     * @param list<Image|ImageShape> $images
      */
     public function withImages(array $images): self
     {
@@ -564,7 +564,7 @@ final class Product implements BaseModel
     }
 
     /**
-     * @param list<OptionShape> $options
+     * @param list<Option|OptionShape> $options
      */
     public function withOptions(array $options): self
     {

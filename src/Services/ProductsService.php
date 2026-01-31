@@ -7,6 +7,9 @@ namespace Wuro\Services;
 use Wuro\Client;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\Core\Util;
+use Wuro\Products\ProductCreateParams\Option;
+use Wuro\Products\ProductCreateParams\Specifications;
+use Wuro\Products\ProductCreateParams\Stock;
 use Wuro\Products\ProductDeleteResponse;
 use Wuro\Products\ProductGetResponse;
 use Wuro\Products\ProductImportFromCsvResponse;
@@ -18,6 +21,15 @@ use Wuro\RequestOptions;
 use Wuro\ServiceContracts\ProductsContract;
 use Wuro\Services\Products\VariantService;
 
+/**
+ * @phpstan-import-type OptionShape from \Wuro\Products\ProductCreateParams\Option
+ * @phpstan-import-type SpecificationsShape from \Wuro\Products\ProductCreateParams\Specifications
+ * @phpstan-import-type StockShape from \Wuro\Products\ProductCreateParams\Stock
+ * @phpstan-import-type OptionShape from \Wuro\Products\ProductUpdateParams\Option as OptionShape1
+ * @phpstan-import-type SpecificationsShape from \Wuro\Products\ProductUpdateParams\Specifications as SpecificationsShape1
+ * @phpstan-import-type StockShape from \Wuro\Products\ProductUpdateParams\Stock as StockShape1
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class ProductsService implements ProductsContract
 {
     /**
@@ -66,14 +78,11 @@ final class ProductsService implements ProductsContract
      *
      * Un événement `CREATE_PRODUCT` est émis après la création.
      *
-     * @param list<array{name?: string, values?: list<string>}> $options
-     * @param array{
-     *   depth?: float, height?: float, weight?: float, width?: float
-     * } $specifications
-     * @param array{
-     *   forceSell?: bool, nbAlert?: float, nbMin?: float, nbStock?: float
-     * } $stock
+     * @param list<Option|OptionShape> $options
+     * @param Specifications|SpecificationsShape $specifications
+     * @param Stock|StockShape $stock
      * @param list<string> $suppliers
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -95,14 +104,14 @@ final class ProductsService implements ProductsContract
         ?float $priceHt = null,
         ?string $reference = null,
         ?string $sku = null,
-        ?array $specifications = null,
-        ?array $stock = null,
+        Specifications|array|null $specifications = null,
+        Stock|array|null $stock = null,
         ?array $suppliers = null,
         ?string $tva = null,
         ?float $tvaRate = null,
         ?string $unit = null,
         ?string $urlExt = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): ProductNewResponse {
         $params = Util::removeNulls(
             [
@@ -153,13 +162,14 @@ final class ProductsService implements ProductsContract
      *
      * @param string $uid Identifiant unique du produit
      * @param string $populate Relations à inclure (ex. "category", "variants")
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieve(
         string $uid,
         ?string $populate = null,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): ProductGetResponse {
         $params = Util::removeNulls(['populate' => $populate]);
 
@@ -185,14 +195,11 @@ final class ProductsService implements ProductsContract
      * Un événement `UPDATE_PRODUCT` est émis après la mise à jour.
      *
      * @param string $uid Identifiant unique du produit
-     * @param list<array{name?: string, values?: list<string>}> $options
-     * @param array{
-     *   depth?: float, height?: float, weight?: float, width?: float
-     * } $specifications
-     * @param array{
-     *   forceSell?: bool, nbAlert?: float, nbMin?: float, nbStock?: float
-     * } $stock
+     * @param list<\Wuro\Products\ProductUpdateParams\Option|OptionShape1> $options
+     * @param \Wuro\Products\ProductUpdateParams\Specifications|SpecificationsShape1 $specifications
+     * @param \Wuro\Products\ProductUpdateParams\Stock|StockShape1 $stock
      * @param list<string> $suppliers
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -215,14 +222,14 @@ final class ProductsService implements ProductsContract
         ?float $priceHt = null,
         ?string $reference = null,
         ?string $sku = null,
-        ?array $specifications = null,
-        ?array $stock = null,
+        \Wuro\Products\ProductUpdateParams\Specifications|array|null $specifications = null,
+        \Wuro\Products\ProductUpdateParams\Stock|array|null $stock = null,
         ?array $suppliers = null,
         ?string $tva = null,
         ?float $tvaRate = null,
         ?string $unit = null,
         ?string $urlExt = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): ProductUpdateResponse {
         $params = Util::removeNulls(
             [
@@ -284,7 +291,8 @@ final class ProductsService implements ProductsContract
      * @param string $search Recherche textuelle dans nom, référence, description
      * @param int $skip Nombre de produits à ignorer (pagination)
      * @param string $sort Champ et direction de tri (ex. "name:1", "price:-1")
-     * @param 'active'|'inactive'|State $state Filtrer par état (active = visible, inactive = archivé)
+     * @param State|value-of<State> $state Filtrer par état (active = visible, inactive = archivé)
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -294,8 +302,8 @@ final class ProductsService implements ProductsContract
         ?string $search = null,
         int $skip = 0,
         ?string $sort = null,
-        string|State|null $state = null,
-        ?RequestOptions $requestOptions = null,
+        State|string|null $state = null,
+        RequestOptions|array|null $requestOptions = null,
     ): ProductListResponse {
         $params = Util::removeNulls(
             [
@@ -327,12 +335,13 @@ final class ProductsService implements ProductsContract
      * Un événement `DELETE_PRODUCT` est émis après la suppression.
      *
      * @param string $uid Identifiant unique du produit
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): ProductDeleteResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->delete($uid, requestOptions: $requestOptions);
@@ -369,12 +378,13 @@ final class ProductsService implements ProductsContract
      * - GET /files/products.csv pour obtenir un fichier modèle
      *
      * @param string $file Fichier CSV à importer
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function importFromCsv(
         ?string $file = null,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): ProductImportFromCsvResponse {
         $params = Util::removeNulls(['file' => $file]);
 
@@ -390,12 +400,13 @@ final class ProductsService implements ProductsContract
      * Récupère la liste des variantes associées à un produit spécifique.
      *
      * @param string $uid Identifiant unique du produit parent
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function listVariants(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): mixed {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->listVariants($uid, requestOptions: $requestOptions);

@@ -29,12 +29,16 @@ use Wuro\Quotes\QuoteUpdateParams;
 use Wuro\Quotes\QuoteUpdateResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface QuotesRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|QuoteCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewResponse>
      *
@@ -42,7 +46,7 @@ interface QuotesRawContract
      */
     public function create(
         array|QuoteCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -50,6 +54,7 @@ interface QuotesRawContract
      *
      * @param string $uid ID du devis
      * @param array<string,mixed>|QuoteRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteGetResponse>
      *
@@ -58,13 +63,14 @@ interface QuotesRawContract
     public function retrieve(
         string $uid,
         array|QuoteRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|QuoteUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteUpdateResponse>
      *
@@ -73,13 +79,14 @@ interface QuotesRawContract
     public function update(
         string $uid,
         array|QuoteUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|QuoteListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteListResponse>
      *
@@ -87,11 +94,13 @@ interface QuotesRawContract
      */
     public function list(
         array|QuoteListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
+     *
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteDeleteResponse>
      *
@@ -99,7 +108,7 @@ interface QuotesRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
@@ -107,6 +116,7 @@ interface QuotesRawContract
      *
      * @param string $uid ID du devis
      * @param array<string,mixed>|QuoteCreateAdvanceInvoiceParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewAdvanceInvoiceResponse>
      *
@@ -115,13 +125,14 @@ interface QuotesRawContract
     public function createAdvanceInvoice(
         string $uid,
         array|QuoteCreateAdvanceInvoiceParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -129,13 +140,14 @@ interface QuotesRawContract
      */
     public function createDeliveryReceipt(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewInvoiceResponse>
      *
@@ -143,13 +155,14 @@ interface QuotesRawContract
      */
     public function createInvoice(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewInvoiceFromQuoteResponse>
      *
@@ -157,13 +170,14 @@ interface QuotesRawContract
      */
     public function createInvoiceFromQuote(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|QuoteCreatePackageParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewPackageResponse>
      *
@@ -171,13 +185,14 @@ interface QuotesRawContract
      */
     public function createPackage(
         array|QuoteCreatePackageParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewProformaInvoiceResponse>
      *
@@ -185,13 +200,14 @@ interface QuotesRawContract
      */
     public function createProformaInvoice(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteNewPurchaseOrderResponse>
      *
@@ -199,13 +215,14 @@ interface QuotesRawContract
      */
     public function createPurchaseOrder(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<string>
      *
@@ -213,13 +230,14 @@ interface QuotesRawContract
      */
     public function generateHTML(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<string>
      *
@@ -227,13 +245,14 @@ interface QuotesRawContract
      */
     public function generatePdf(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<string>
      *
@@ -241,13 +260,14 @@ interface QuotesRawContract
      */
     public function generatePdfChromium(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|QuoteGetLogsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteGetLogsResponse>
      *
@@ -255,13 +275,14 @@ interface QuotesRawContract
      */
     public function getLogs(
         array|QuoteGetLogsParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|QuoteGetStatsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<QuoteGetStatsResponse>
      *
@@ -269,13 +290,14 @@ interface QuotesRawContract
      */
     public function getStats(
         array|QuoteGetStatsParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid ID du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -283,6 +305,6 @@ interface QuotesRawContract
      */
     public function retrieveLogs(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 }

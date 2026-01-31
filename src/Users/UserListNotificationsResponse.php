@@ -13,7 +13,8 @@ use Wuro\Users\UserListNotificationsResponse\Notification;
  * @phpstan-import-type NotificationShape from \Wuro\Users\UserListNotificationsResponse\Notification
  *
  * @phpstan-type UserListNotificationsResponseShape = array{
- *   notifications?: list<NotificationShape>|null, unreadCount?: int|null
+ *   notifications?: list<Notification|NotificationShape>|null,
+ *   unreadCount?: int|null,
  * }
  */
 final class UserListNotificationsResponse implements BaseModel
@@ -41,7 +42,7 @@ final class UserListNotificationsResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<NotificationShape>|null $notifications
+     * @param list<Notification|NotificationShape>|null $notifications
      */
     public static function with(
         ?array $notifications = null,
@@ -56,7 +57,7 @@ final class UserListNotificationsResponse implements BaseModel
     }
 
     /**
-     * @param list<NotificationShape> $notifications
+     * @param list<Notification|NotificationShape> $notifications
      */
     public function withNotifications(array $notifications): self
     {

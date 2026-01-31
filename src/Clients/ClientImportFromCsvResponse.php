@@ -13,7 +13,7 @@ use Wuro\Core\Contracts\BaseModel;
  * @phpstan-import-type ErrorShape from \Wuro\Clients\ClientImportFromCsvResponse\Error
  *
  * @phpstan-type ClientImportFromCsvResponseShape = array{
- *   created?: int|null, errors?: list<ErrorShape>|null, updated?: int|null
+ *   created?: int|null, errors?: list<Error|ErrorShape>|null, updated?: int|null
  * }
  */
 final class ClientImportFromCsvResponse implements BaseModel
@@ -51,7 +51,7 @@ final class ClientImportFromCsvResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<ErrorShape>|null $errors
+     * @param list<Error|ErrorShape>|null $errors
      */
     public static function with(
         ?int $created = null,
@@ -81,7 +81,7 @@ final class ClientImportFromCsvResponse implements BaseModel
     /**
      * Liste des erreurs rencontrées.
      *
-     * @param list<ErrorShape> $errors
+     * @param list<Error|ErrorShape> $errors
      */
     public function withErrors(array $errors): self
     {

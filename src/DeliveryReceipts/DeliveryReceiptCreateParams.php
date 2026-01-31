@@ -49,7 +49,7 @@ use Wuro\DeliveryReceipts\DeliveryReceiptCreateParams\Type;
  *   clientName?: string|null,
  *   clientZipCode?: string|null,
  *   date?: \DateTimeInterface|null,
- *   lines?: list<LineShape>|null,
+ *   lines?: list<Line|LineShape>|null,
  *   shippingDate?: \DateTimeInterface|null,
  *   state?: null|State|value-of<State>,
  *   title?: string|null,
@@ -170,7 +170,7 @@ final class DeliveryReceiptCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<LineShape>|null $lines
+     * @param list<Line|LineShape>|null $lines
      * @param State|value-of<State>|null $state
      * @param Type|value-of<Type>|null $type
      */
@@ -300,7 +300,7 @@ final class DeliveryReceiptCreateParams implements BaseModel
     /**
      * Lignes du bon de livraison.
      *
-     * @param list<LineShape> $lines
+     * @param list<Line|LineShape> $lines
      */
     public function withLines(array $lines): self
     {
