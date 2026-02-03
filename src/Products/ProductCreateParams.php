@@ -58,7 +58,7 @@ use Wuro\Products\ProductCreateParams\Stock;
  *   hasVariations?: bool|null,
  *   isMarchandise?: bool|null,
  *   mandatoryMentions?: string|null,
- *   options?: list<OptionShape>|null,
+ *   options?: list<Option|OptionShape>|null,
  *   priceHt?: float|null,
  *   reference?: string|null,
  *   sku?: string|null,
@@ -175,7 +175,7 @@ final class ProductCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<OptionShape>|null $options
+     * @param list<Option|OptionShape>|null $options
      * @param Specifications|SpecificationsShape|null $specifications
      * @param Stock|StockShape|null $stock
      * @param list<string>|null $suppliers
@@ -342,7 +342,7 @@ final class ProductCreateParams implements BaseModel
     }
 
     /**
-     * @param list<OptionShape> $options
+     * @param list<Option|OptionShape> $options
      */
     public function withOptions(array $options): self
     {

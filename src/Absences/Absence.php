@@ -23,7 +23,7 @@ use Wuro\Core\Contracts\BaseModel;
  *   decisionDate?: \DateTimeInterface|null,
  *   from?: \DateTimeInterface|null,
  *   fromMoment?: null|FromMoment|value-of<FromMoment>,
- *   logs?: list<LogShape>|null,
+ *   logs?: list<Log|LogShape>|null,
  *   nbDays?: float|null,
  *   period?: null|Period|value-of<Period>,
  *   positionDecider?: string|null,
@@ -192,7 +192,7 @@ final class Absence implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param FromMoment|value-of<FromMoment>|null $fromMoment
-     * @param list<LogShape>|null $logs
+     * @param list<Log|LogShape>|null $logs
      * @param Period|value-of<Period>|null $period
      * @param State|value-of<State>|null $state
      * @param ToMoment|value-of<ToMoment>|null $toMoment
@@ -318,7 +318,7 @@ final class Absence implements BaseModel
     /**
      * List of logs for the absence.
      *
-     * @param list<LogShape> $logs
+     * @param list<Log|LogShape> $logs
      */
     public function withLogs(array $logs): self
     {

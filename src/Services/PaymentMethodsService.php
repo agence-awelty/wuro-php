@@ -17,6 +17,9 @@ use Wuro\PaymentMethods\PaymentMethodUpdateResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\PaymentMethodsContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class PaymentMethodsService implements PaymentMethodsContract
 {
     /**
@@ -67,7 +70,8 @@ final class PaymentMethodsService implements PaymentMethodsContract
      * @param string $rang Rang Paybox (spécifique Paybox)
      * @param string $secret Clé secrète (Stripe, Paybox) - **Ne jamais exposer côté client**
      * @param string $site Numéro de site Paybox (spécifique Paybox)
-     * @param 'paybox'|'epayment'|'check'|'stripe'|'paypal'|'transfer'|'other'|Tag $tag Type de moyen de paiement
+     * @param Tag|value-of<Tag> $tag Type de moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -80,8 +84,8 @@ final class PaymentMethodsService implements PaymentMethodsContract
         ?string $rang = null,
         ?string $secret = null,
         ?string $site = null,
-        string|Tag $tag = 'other',
-        ?RequestOptions $requestOptions = null,
+        Tag|string $tag = 'other',
+        RequestOptions|array|null $requestOptions = null,
     ): PaymentMethodNewResponse {
         $params = Util::removeNulls(
             [
@@ -112,12 +116,13 @@ final class PaymentMethodsService implements PaymentMethodsContract
      * et si c'est le moyen par défaut.
      *
      * @param string $uid Identifiant unique du moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieve(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): PaymentMethodGetResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieve($uid, requestOptions: $requestOptions);
@@ -146,8 +151,8 @@ final class PaymentMethodsService implements PaymentMethodsContract
      * @param string $modality Modalités de paiement affichées sur les documents.
      * Ex. "Paiement à 30 jours", "RIB : FR76...", "Payable à réception"
      * @param string $name Nom du moyen de paiement (ex. "Virement bancaire", "Carte Bancaire")
-     * @param 'active'|'inactive'|State $state État du moyen de paiement
-     * @param 'paybox'|'epayment'|'check'|'stripe'|'paypal'|'transfer'|'other'|\Wuro\PaymentMethods\PaymentMethodUpdateParams\Tag $tag Type de moyen de paiement :
+     * @param State|value-of<State> $state État du moyen de paiement
+     * @param \Wuro\PaymentMethods\PaymentMethodUpdateParams\Tag|value-of<\Wuro\PaymentMethods\PaymentMethodUpdateParams\Tag> $tag Type de moyen de paiement :
      * - **check** : Chèque
      * - **transfer** : Virement bancaire
      * - **stripe** : Stripe
@@ -155,6 +160,7 @@ final class PaymentMethodsService implements PaymentMethodsContract
      * - **paybox** : Paybox
      * - **epayment** : Paiement électronique
      * - **other** : Autre
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -163,9 +169,9 @@ final class PaymentMethodsService implements PaymentMethodsContract
         ?bool $default = null,
         ?string $modality = null,
         ?string $name = null,
-        string|State|null $state = null,
-        string|\Wuro\PaymentMethods\PaymentMethodUpdateParams\Tag|null $tag = null,
-        ?RequestOptions $requestOptions = null,
+        State|string|null $state = null,
+        \Wuro\PaymentMethods\PaymentMethodUpdateParams\Tag|string|null $tag = null,
+        RequestOptions|array|null $requestOptions = null,
     ): PaymentMethodUpdateResponse {
         $params = Util::removeNulls(
             [
@@ -206,15 +212,16 @@ final class PaymentMethodsService implements PaymentMethodsContract
      * Un seul moyen peut être défini comme "default" et sera automatiquement
      * sélectionné lors de la création de nouveaux documents.
      *
-     * @param 'active'|'inactive'|\Wuro\PaymentMethods\PaymentMethodListParams\State $state Filtrer par état (active/inactive)
-     * @param 'paybox'|'epayment'|'check'|'stripe'|'paypal'|'transfer'|'other'|\Wuro\PaymentMethods\PaymentMethodListParams\Tag $tag Filtrer par type de moyen de paiement
+     * @param \Wuro\PaymentMethods\PaymentMethodListParams\State|value-of<\Wuro\PaymentMethods\PaymentMethodListParams\State> $state Filtrer par état (active/inactive)
+     * @param \Wuro\PaymentMethods\PaymentMethodListParams\Tag|value-of<\Wuro\PaymentMethods\PaymentMethodListParams\Tag> $tag Filtrer par type de moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function list(
-        string|\Wuro\PaymentMethods\PaymentMethodListParams\State|null $state = null,
-        string|\Wuro\PaymentMethods\PaymentMethodListParams\Tag|null $tag = null,
-        ?RequestOptions $requestOptions = null,
+        \Wuro\PaymentMethods\PaymentMethodListParams\State|string|null $state = null,
+        \Wuro\PaymentMethods\PaymentMethodListParams\Tag|string|null $tag = null,
+        RequestOptions|array|null $requestOptions = null,
     ): PaymentMethodListResponse {
         $params = Util::removeNulls(['state' => $state, 'tag' => $tag]);
 
@@ -235,12 +242,13 @@ final class PaymentMethodsService implements PaymentMethodsContract
      * pour conserver l'historique des documents utilisant ce moyen.
      *
      * @param string $uid Identifiant unique du moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): PaymentMethodDeleteResponse {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->delete($uid, requestOptions: $requestOptions);

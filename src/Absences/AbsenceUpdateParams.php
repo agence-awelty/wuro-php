@@ -45,7 +45,7 @@ use Wuro\Core\Contracts\BaseModel;
  * @phpstan-type AbsenceUpdateParamsShape = array{
  *   from?: \DateTimeInterface|null,
  *   fromMoment?: null|FromMoment|value-of<FromMoment>,
- *   logs?: list<LogShape>|null,
+ *   logs?: list<Log|LogShape>|null,
  *   state?: null|State|value-of<State>,
  *   to?: \DateTimeInterface|null,
  *   toMoment?: null|ToMoment|value-of<ToMoment>,
@@ -129,7 +129,7 @@ final class AbsenceUpdateParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param FromMoment|value-of<FromMoment>|null $fromMoment
-     * @param list<LogShape>|null $logs
+     * @param list<Log|LogShape>|null $logs
      * @param State|value-of<State>|null $state
      * @param ToMoment|value-of<ToMoment>|null $toMoment
      */
@@ -185,7 +185,7 @@ final class AbsenceUpdateParams implements BaseModel
     /**
      * Ajouter des entrées à l'historique de l'absence.
      *
-     * @param list<LogShape> $logs
+     * @param list<Log|LogShape> $logs
      */
     public function withLogs(array $logs): self
     {

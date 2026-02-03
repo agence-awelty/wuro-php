@@ -20,6 +20,9 @@ use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\AbsenceTypesRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class AbsenceTypesRawService implements AbsenceTypesRawContract
 {
     // @phpstan-ignore-next-line
@@ -51,9 +54,10 @@ final class AbsenceTypesRawService implements AbsenceTypesRawContract
      *   backgroundColorRgb?: string,
      *   color?: string,
      *   icon?: string,
-     *   state?: 'active'|'inactive'|State,
-     *   type?: 'absence'|'event'|Type,
+     *   state?: State|value-of<State>,
+     *   type?: Type|value-of<Type>,
      * }|AbsenceTypeCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceTypeNewResponse>
      *
@@ -61,7 +65,7 @@ final class AbsenceTypesRawService implements AbsenceTypesRawContract
      */
     public function create(
         array|AbsenceTypeCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = AbsenceTypeCreateParams::parseRequest(
             $params,
@@ -86,6 +90,7 @@ final class AbsenceTypesRawService implements AbsenceTypesRawContract
      * Les informations incluent le nom, l'icône, les couleurs d'affichage et la catégorie (absence ou event).
      *
      * @param string $uid Identifiant unique du type d'absence
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceTypeGetResponse>
      *
@@ -93,7 +98,7 @@ final class AbsenceTypesRawService implements AbsenceTypesRawContract
      */
     public function retrieve(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -124,8 +129,9 @@ final class AbsenceTypesRawService implements AbsenceTypesRawContract
      *   color?: string,
      *   icon?: string,
      *   name?: string,
-     *   state?: 'active'|'inactive'|AbsenceTypeUpdateParams\State,
+     *   state?: AbsenceTypeUpdateParams\State|value-of<AbsenceTypeUpdateParams\State>,
      * }|AbsenceTypeUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceTypeUpdateResponse>
      *
@@ -134,7 +140,7 @@ final class AbsenceTypesRawService implements AbsenceTypesRawContract
     public function update(
         string $uid,
         array|AbsenceTypeUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = AbsenceTypeUpdateParams::parseRequest(
             $params,
@@ -167,9 +173,10 @@ final class AbsenceTypesRawService implements AbsenceTypesRawContract
      *   limit?: int,
      *   skip?: int,
      *   sort?: string,
-     *   state?: 'active'|'inactive'|AbsenceTypeListParams\State,
-     *   type?: 'absence'|'event'|AbsenceTypeListParams\Type,
+     *   state?: AbsenceTypeListParams\State|value-of<AbsenceTypeListParams\State>,
+     *   type?: AbsenceTypeListParams\Type|value-of<AbsenceTypeListParams\Type>,
      * }|AbsenceTypeListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceTypeListResponse>
      *
@@ -177,7 +184,7 @@ final class AbsenceTypesRawService implements AbsenceTypesRawContract
      */
     public function list(
         array|AbsenceTypeListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = AbsenceTypeListParams::parseRequest(
             $params,
@@ -205,6 +212,7 @@ final class AbsenceTypesRawService implements AbsenceTypesRawContract
      * La suppression peut échouer si des absences sont liées à ce type.
      *
      * @param string $uid Identifiant unique du type d'absence
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AbsenceTypeDeleteResponse>
      *
@@ -212,7 +220,7 @@ final class AbsenceTypesRawService implements AbsenceTypesRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(

@@ -12,6 +12,9 @@ use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\AuthRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class AuthRawService implements AuthRawContract
 {
     // @phpstan-ignore-next-line
@@ -24,6 +27,7 @@ final class AuthRawService implements AuthRawContract
      * @api
      *
      * @param array{apiKey: string, privateKey: string}|AuthLoginParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AuthLoginResponse>
      *
@@ -31,7 +35,7 @@ final class AuthRawService implements AuthRawContract
      */
     public function login(
         array|AuthLoginParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = AuthLoginParams::parseRequest(
             $params,

@@ -43,7 +43,7 @@ use Wuro\Quotes\QuoteCreateParams\Type;
  *   clientZipCode?: string|null,
  *   date?: \DateTimeInterface|null,
  *   expiryDate?: \DateTimeInterface|null,
- *   quoteLines?: list<QuoteLineShape>|null,
+ *   quoteLines?: list<QuoteLine|QuoteLineShape>|null,
  *   state?: null|State|value-of<State>,
  *   title?: string|null,
  *   type?: null|Type|value-of<Type>,
@@ -134,7 +134,7 @@ final class QuoteCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<QuoteLineShape>|null $quoteLines
+     * @param list<QuoteLine|QuoteLineShape>|null $quoteLines
      * @param State|value-of<State>|null $state
      * @param Type|value-of<Type>|null $type
      */
@@ -259,7 +259,7 @@ final class QuoteCreateParams implements BaseModel
     /**
      * Lignes du devis.
      *
-     * @param list<QuoteLineShape> $quoteLines
+     * @param list<QuoteLine|QuoteLineShape> $quoteLines
      */
     public function withQuoteLines(array $quoteLines): self
     {

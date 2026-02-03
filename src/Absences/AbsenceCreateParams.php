@@ -47,7 +47,7 @@ use Wuro\Core\Contracts\BaseModel;
  *   to: \DateTimeInterface,
  *   type: string,
  *   fromMoment?: null|FromMoment|value-of<FromMoment>,
- *   logs?: list<LogShape>|null,
+ *   logs?: list<Log|LogShape>|null,
  *   positionTo?: string|null,
  *   state?: null|State|value-of<State>,
  *   toMoment?: null|ToMoment|value-of<ToMoment>,
@@ -155,7 +155,7 @@ final class AbsenceCreateParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param FromMoment|value-of<FromMoment>|null $fromMoment
-     * @param list<LogShape>|null $logs
+     * @param list<Log|LogShape>|null $logs
      * @param State|value-of<State>|null $state
      * @param ToMoment|value-of<ToMoment>|null $toMoment
      */
@@ -238,7 +238,7 @@ final class AbsenceCreateParams implements BaseModel
     /**
      * Historique initial (généralement vide à la création).
      *
-     * @param list<LogShape> $logs
+     * @param list<Log|LogShape> $logs
      */
     public function withLogs(array $logs): self
     {

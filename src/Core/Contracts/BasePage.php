@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Wuro\Core\Contracts;
 
 /**
- * @internal
+ * @phpstan-import-type NormalizedRequest from \Wuro\Core\BaseClient
  *
- * @phpstan-import-type normalized_request from \Wuro\Core\BaseClient
+ * @internal
  *
  * @template Item
  *

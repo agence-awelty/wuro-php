@@ -15,6 +15,9 @@ use Wuro\ProductCategories\ProductCategoryUpdateParams\State;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\ProductCategoriesRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class ProductCategoriesRawService implements ProductCategoriesRawContract
 {
     // @phpstan-ignore-next-line
@@ -34,6 +37,7 @@ final class ProductCategoriesRawService implements ProductCategoriesRawContract
      * **Événement déclenché:** CREATE_PRODUCT_CATEGORY
      *
      * @param array{name: string, company?: string}|ProductCategoryCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductCategory>
      *
@@ -41,7 +45,7 @@ final class ProductCategoriesRawService implements ProductCategoriesRawContract
      */
     public function create(
         array|ProductCategoryCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ProductCategoryCreateParams::parseRequest(
             $params,
@@ -64,6 +68,7 @@ final class ProductCategoriesRawService implements ProductCategoriesRawContract
      * Récupère les détails d'une catégorie de produit spécifique.
      *
      * @param string $uid Identifiant unique de la catégorie
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductCategory>
      *
@@ -71,7 +76,7 @@ final class ProductCategoriesRawService implements ProductCategoriesRawContract
      */
     public function retrieve(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -97,8 +102,9 @@ final class ProductCategoriesRawService implements ProductCategoriesRawContract
      *
      * @param string $uid Identifiant unique de la catégorie
      * @param array{
-     *   name?: string, state?: 'active'|'inactive'|State
+     *   name?: string, state?: State|value-of<State>
      * }|ProductCategoryUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -107,7 +113,7 @@ final class ProductCategoriesRawService implements ProductCategoriesRawContract
     public function update(
         string $uid,
         array|ProductCategoryUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ProductCategoryUpdateParams::parseRequest(
             $params,
@@ -134,12 +140,15 @@ final class ProductCategoriesRawService implements ProductCategoriesRawContract
      * - Filtrage des produits par catégorie
      * - Rapports et statistiques par catégorie
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<ProductCategoryListResponse>
      *
      * @throws APIException
      */
-    public function list(?RequestOptions $requestOptions = null): BaseResponse
-    {
+    public function list(
+        RequestOptions|array|null $requestOptions = null
+    ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
@@ -159,6 +168,7 @@ final class ProductCategoriesRawService implements ProductCategoriesRawContract
      * - Cette opération est irréversible
      *
      * @param string $uid Identifiant unique de la catégorie
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -166,7 +176,7 @@ final class ProductCategoriesRawService implements ProductCategoriesRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
