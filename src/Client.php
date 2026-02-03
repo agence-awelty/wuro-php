@@ -154,10 +154,10 @@ class Client extends BaseClient
         ?string $baseUrl = null,
         RequestOptions|array|null $requestOptions = null,
     ) {
-        $this->appID = (string) ($appID ?? getenv('WURO_APP_ID'));
-        $this->appSecret = (string) ($appSecret ?? getenv('WURO_APP_SECRET'));
+        $this->appID = (string) ($appID ?? Util::getenv('WURO_APP_ID'));
+        $this->appSecret = (string) ($appSecret ?? Util::getenv('WURO_APP_SECRET'));
 
-        $baseUrl ??= getenv('WURO_BASE_URL') ?: 'https://wuro.pro/api/v3.2';
+        $baseUrl ??= Util::getenv('WURO_BASE_URL') ?: 'https://wuro.pro/api/v3.2';
 
         $options = RequestOptions::parse(
             RequestOptions::with(
