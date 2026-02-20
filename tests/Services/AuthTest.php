@@ -36,7 +36,7 @@ final class AuthTest extends TestCase
     public function testLogin(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->auth->login(
@@ -52,7 +52,7 @@ final class AuthTest extends TestCase
     public function testLoginWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->auth->login(
