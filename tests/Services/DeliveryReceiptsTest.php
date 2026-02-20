@@ -173,7 +173,7 @@ final class DeliveryReceiptsTest extends TestCase
     public function testGeneratePdf(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Mock server doesn\'t support application/pdf responses');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->deliveryReceipts->generatePdf('uid');
