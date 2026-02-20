@@ -35,7 +35,7 @@ final class OrderTest extends TestCase
     public function testRetrievePaymentInfos(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->order->retrievePaymentInfos('uid');

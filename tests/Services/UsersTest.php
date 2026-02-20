@@ -41,7 +41,7 @@ final class UsersTest extends TestCase
     public function testRetrieve(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->users->retrieve();
@@ -54,7 +54,7 @@ final class UsersTest extends TestCase
     public function testUpdate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->users->update('uid');
@@ -67,7 +67,7 @@ final class UsersTest extends TestCase
     public function testDeactivate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->users->deactivate('uid');
@@ -80,7 +80,7 @@ final class UsersTest extends TestCase
     public function testListInvitations(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->users->listInvitations('uid');
@@ -93,7 +93,7 @@ final class UsersTest extends TestCase
     public function testListNotifications(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->users->listNotifications('uid');
@@ -106,7 +106,7 @@ final class UsersTest extends TestCase
     public function testListPositions(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->users->listPositions('uid');
@@ -119,7 +119,7 @@ final class UsersTest extends TestCase
     public function testRetrieveByUid(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->users->retrieveByUid('uid');

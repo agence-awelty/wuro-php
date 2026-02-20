@@ -36,7 +36,7 @@ final class AppInfosTest extends TestCase
     public function testRetrieve(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->appInfos->retrieve();
@@ -49,7 +49,7 @@ final class AppInfosTest extends TestCase
     public function testRetrieveByID(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->appInfos->retrieveByID('uid');

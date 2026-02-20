@@ -43,7 +43,7 @@ final class CompaniesTest extends TestCase
     public function testCreate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->create(name: 'name', url: 'url');
@@ -56,7 +56,7 @@ final class CompaniesTest extends TestCase
     public function testCreateWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->create(
@@ -92,7 +92,7 @@ final class CompaniesTest extends TestCase
     public function testRetrieve(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->retrieve();
@@ -105,7 +105,7 @@ final class CompaniesTest extends TestCase
     public function testUpdate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->update('uid');
@@ -118,7 +118,7 @@ final class CompaniesTest extends TestCase
     public function testDelete(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->delete('uid');
@@ -131,7 +131,7 @@ final class CompaniesTest extends TestCase
     public function testConfirmDomain(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->confirmDomain('uid');
@@ -144,7 +144,7 @@ final class CompaniesTest extends TestCase
     public function testListPositions(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->listPositions('uid');
@@ -157,7 +157,7 @@ final class CompaniesTest extends TestCase
     public function testRetrieveByID(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->retrieveByID('uid');
@@ -170,7 +170,7 @@ final class CompaniesTest extends TestCase
     public function testRetrieveCgv(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->retrieveCgv('uid');
@@ -183,7 +183,7 @@ final class CompaniesTest extends TestCase
     public function testRetrieveExtraInfos(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->retrieveExtraInfos('uid');

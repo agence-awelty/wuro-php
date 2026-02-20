@@ -36,7 +36,7 @@ final class InvoiceFileTest extends TestCase
     public function testAnalyze(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoiceFile->analyze(file: 'file');
@@ -49,7 +49,7 @@ final class InvoiceFileTest extends TestCase
     public function testAnalyzeWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoiceFile->analyze(file: 'file');
