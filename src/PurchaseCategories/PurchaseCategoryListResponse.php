@@ -13,7 +13,7 @@ use Wuro\PurchaseCategories\PurchaseCategoryListResponse\Data;
  * @phpstan-import-type DataShape from \Wuro\PurchaseCategories\PurchaseCategoryListResponse\Data
  *
  * @phpstan-type PurchaseCategoryListResponseShape = array{
- *   count?: int|null, data?: list<DataShape>|null
+ *   count?: int|null, data?: list<Data|DataShape>|null
  * }
  */
 final class PurchaseCategoryListResponse implements BaseModel
@@ -41,7 +41,7 @@ final class PurchaseCategoryListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<DataShape>|null $data
+     * @param list<Data|DataShape>|null $data
      */
     public static function with(?int $count = null, ?array $data = null): self
     {
@@ -65,7 +65,7 @@ final class PurchaseCategoryListResponse implements BaseModel
     }
 
     /**
-     * @param list<DataShape> $data
+     * @param list<Data|DataShape> $data
      */
     public function withData(array $data): self
     {

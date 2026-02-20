@@ -12,6 +12,7 @@ use Wuro\AbsenceTypes\AbsenceTypeListResponse;
 use Wuro\AbsenceTypes\AbsenceTypeNewResponse;
 use Wuro\AbsenceTypes\AbsenceTypeUpdateResponse;
 use Wuro\Client;
+use Wuro\Core\Util;
 
 /**
  * @internal
@@ -25,7 +26,7 @@ final class AbsenceTypesTest extends TestCase
     {
         parent::setUp();
 
-        $testUrl = getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
+        $testUrl = Util::getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
         $client = new Client(
             appID: 'My App ID',
             appSecret: 'My App Secret',
@@ -39,7 +40,7 @@ final class AbsenceTypesTest extends TestCase
     public function testCreate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->absenceTypes->create(name: 'Congés payés');
@@ -52,7 +53,7 @@ final class AbsenceTypesTest extends TestCase
     public function testCreateWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->absenceTypes->create(
@@ -73,7 +74,7 @@ final class AbsenceTypesTest extends TestCase
     public function testRetrieve(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->absenceTypes->retrieve('uid');
@@ -86,7 +87,7 @@ final class AbsenceTypesTest extends TestCase
     public function testUpdate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->absenceTypes->update('uid');
@@ -99,7 +100,7 @@ final class AbsenceTypesTest extends TestCase
     public function testList(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->absenceTypes->list();
@@ -112,7 +113,7 @@ final class AbsenceTypesTest extends TestCase
     public function testDelete(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->absenceTypes->delete('uid');

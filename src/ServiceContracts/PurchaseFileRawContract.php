@@ -10,12 +10,16 @@ use Wuro\PurchaseFile\PurchaseFileAnalyzeParams;
 use Wuro\PurchaseFile\PurchaseFileAnalyzeResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface PurchaseFileRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|PurchaseFileAnalyzeParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseFileAnalyzeResponse>
      *
@@ -23,6 +27,6 @@ interface PurchaseFileRawContract
      */
     public function analyze(
         array|PurchaseFileAnalyzeParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

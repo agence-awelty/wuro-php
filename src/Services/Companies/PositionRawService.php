@@ -7,6 +7,7 @@ namespace Wuro\Services\Companies;
 use Wuro\Client;
 use Wuro\Companies\Position\Position;
 use Wuro\Companies\Position\PositionCreateParams;
+use Wuro\Companies\Position\PositionCreateParams\Right;
 use Wuro\Companies\Position\PositionUpdateParams;
 use Wuro\Companies\Position\PositionUpdateParams\State;
 use Wuro\Core\Contracts\BaseResponse;
@@ -14,6 +15,11 @@ use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\Companies\PositionRawContract;
 
+/**
+ * @phpstan-import-type RightShape from \Wuro\Companies\Position\PositionCreateParams\Right
+ * @phpstan-import-type RightShape from \Wuro\Companies\Position\PositionUpdateParams\Right as RightShape1
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class PositionRawService implements PositionRawContract
 {
     // @phpstan-ignore-next-line
@@ -40,10 +46,9 @@ final class PositionRawService implements PositionRawContract
      *
      * @param string $uid Identifiant unique de l'entreprise
      * @param array{
-     *   type: string,
-     *   user: string,
-     *   rights?: list<array{checked?: bool, group?: string, name?: string}>,
+     *   type: string, user: string, rights?: list<Right|RightShape>
      * }|PositionCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<Position>
      *
@@ -52,7 +57,7 @@ final class PositionRawService implements PositionRawContract
     public function create(
         string $uid,
         array|PositionCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PositionCreateParams::parseRequest(
             $params,
@@ -88,10 +93,11 @@ final class PositionRawService implements PositionRawContract
      * @param string $uid Path param: Identifiant unique du poste
      * @param array{
      *   company: string,
-     *   rights?: list<array{checked?: bool, group?: string, name?: string}>,
-     *   state?: 'active'|'inactive'|State,
+     *   rights?: list<PositionUpdateParams\Right|RightShape1>,
+     *   state?: State|value-of<State>,
      *   type?: string,
      * }|PositionUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<Position>
      *
@@ -100,7 +106,7 @@ final class PositionRawService implements PositionRawContract
     public function update(
         string $uid,
         array|PositionUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PositionUpdateParams::parseRequest(
             $params,

@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Tests\UnsupportedMockTests;
 use Wuro\Client;
 use Wuro\Companies\Position\Position;
+use Wuro\Core\Util;
 
 /**
  * @internal
@@ -21,7 +22,7 @@ final class PositionTest extends TestCase
     {
         parent::setUp();
 
-        $testUrl = getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
+        $testUrl = Util::getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
         $client = new Client(
             appID: 'My App ID',
             appSecret: 'My App Secret',
@@ -35,7 +36,7 @@ final class PositionTest extends TestCase
     public function testCreate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->position->create(
@@ -52,7 +53,7 @@ final class PositionTest extends TestCase
     public function testCreateWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->position->create(
@@ -70,7 +71,7 @@ final class PositionTest extends TestCase
     public function testUpdate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->position->update(
@@ -86,7 +87,7 @@ final class PositionTest extends TestCase
     public function testUpdateWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->companies->position->update(

@@ -18,12 +18,16 @@ use Wuro\Purchases\PurchaseUpdateParams;
 use Wuro\Purchases\PurchaseUpdateResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface PurchasesRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|PurchaseCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseNewResponse>
      *
@@ -31,7 +35,7 @@ interface PurchasesRawContract
      */
     public function create(
         array|PurchaseCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -39,6 +43,7 @@ interface PurchasesRawContract
      *
      * @param string $uid Identifiant unique de l'achat
      * @param array<string,mixed>|PurchaseRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseGetResponse>
      *
@@ -47,7 +52,7 @@ interface PurchasesRawContract
     public function retrieve(
         string $uid,
         array|PurchaseRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -55,6 +60,7 @@ interface PurchasesRawContract
      *
      * @param string $uid Identifiant unique de l'achat
      * @param array<string,mixed>|PurchaseUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseUpdateResponse>
      *
@@ -63,13 +69,14 @@ interface PurchasesRawContract
     public function update(
         string $uid,
         array|PurchaseUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|PurchaseListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseListResponse>
      *
@@ -77,13 +84,14 @@ interface PurchasesRawContract
      */
     public function list(
         array|PurchaseListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'achat
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseDeleteResponse>
      *
@@ -91,13 +99,14 @@ interface PurchasesRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'achat d'origine
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PurchaseNewCreditResponse>
      *
@@ -105,17 +114,19 @@ interface PurchasesRawContract
      */
     public function createCredit(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
+     *
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
      * @throws APIException
      */
     public function getStats(
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 }

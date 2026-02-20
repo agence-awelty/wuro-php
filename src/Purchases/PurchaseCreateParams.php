@@ -45,10 +45,10 @@ use Wuro\Purchases\PurchaseCreateParams\Type;
  *   currency?: string|null,
  *   date?: \DateTimeInterface|null,
  *   invoiceNumber?: string|null,
- *   lines?: list<LineShape>|null,
+ *   lines?: list<Line|LineShape>|null,
  *   paymentDate?: \DateTimeInterface|null,
  *   paymentExpiryDate?: \DateTimeInterface|null,
- *   payments?: list<PaymentShape>|null,
+ *   payments?: list<Payment|PaymentShape>|null,
  *   state?: null|State|value-of<State>,
  *   supplier?: string|null,
  *   supplierCode?: string|null,
@@ -140,8 +140,8 @@ final class PurchaseCreateParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param list<string>|null $categories
-     * @param list<LineShape>|null $lines
-     * @param list<PaymentShape>|null $payments
+     * @param list<Line|LineShape>|null $lines
+     * @param list<Payment|PaymentShape>|null $payments
      * @param State|value-of<State>|null $state
      * @param Type|value-of<Type>|null $type
      */
@@ -235,7 +235,7 @@ final class PurchaseCreateParams implements BaseModel
     }
 
     /**
-     * @param list<LineShape> $lines
+     * @param list<Line|LineShape> $lines
      */
     public function withLines(array $lines): self
     {
@@ -263,7 +263,7 @@ final class PurchaseCreateParams implements BaseModel
     }
 
     /**
-     * @param list<PaymentShape> $payments
+     * @param list<Payment|PaymentShape> $payments
      */
     public function withPayments(array $payments): self
     {

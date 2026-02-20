@@ -21,12 +21,16 @@ use Wuro\Core\Contracts\BaseResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface ClientsRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|ClientCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientNewResponse>
      *
@@ -34,7 +38,7 @@ interface ClientsRawContract
      */
     public function create(
         array|ClientCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -42,6 +46,7 @@ interface ClientsRawContract
      *
      * @param string $uid Identifiant unique du client
      * @param array<string,mixed>|ClientRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientGetResponse>
      *
@@ -50,7 +55,7 @@ interface ClientsRawContract
     public function retrieve(
         string $uid,
         array|ClientRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -58,6 +63,7 @@ interface ClientsRawContract
      *
      * @param string $uid Identifiant unique du client
      * @param array<string,mixed>|ClientUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientUpdateResponse>
      *
@@ -66,13 +72,14 @@ interface ClientsRawContract
     public function update(
         string $uid,
         array|ClientUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|ClientListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientListResponse>
      *
@@ -80,13 +87,14 @@ interface ClientsRawContract
      */
     public function list(
         array|ClientListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique du client
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientDeleteResponse>
      *
@@ -94,13 +102,14 @@ interface ClientsRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|ClientImportFromCsvParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientImportFromCsvResponse>
      *
@@ -108,13 +117,14 @@ interface ClientsRawContract
      */
     public function importFromCsv(
         array|ClientImportFromCsvParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param array<string,mixed>|ClientMergeParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ClientMergeResponse>
      *
@@ -122,6 +132,6 @@ interface ClientsRawContract
      */
     public function merge(
         array|ClientMergeParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

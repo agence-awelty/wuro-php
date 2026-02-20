@@ -12,7 +12,7 @@ use Wuro\Core\Contracts\BaseModel;
  * @phpstan-import-type AbsenceShape from \Wuro\Absences\Absence
  *
  * @phpstan-type AbsenceListResponseShape = array{
- *   absences?: list<AbsenceShape>|null,
+ *   absences?: list<Absence|AbsenceShape>|null,
  *   limit?: int|null,
  *   skip?: int|null,
  *   total?: int|null,
@@ -59,7 +59,7 @@ final class AbsenceListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<AbsenceShape>|null $absences
+     * @param list<Absence|AbsenceShape>|null $absences
      */
     public static function with(
         ?array $absences = null,
@@ -80,7 +80,7 @@ final class AbsenceListResponse implements BaseModel
     /**
      * Tableau des absences correspondant aux filtres.
      *
-     * @param list<AbsenceShape> $absences
+     * @param list<Absence|AbsenceShape> $absences
      */
     public function withAbsences(array $absences): self
     {

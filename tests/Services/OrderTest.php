@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\UnsupportedMockTests;
 use Wuro\Client;
+use Wuro\Core\Util;
 
 /**
  * @internal
@@ -20,7 +21,7 @@ final class OrderTest extends TestCase
     {
         parent::setUp();
 
-        $testUrl = getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
+        $testUrl = Util::getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
         $client = new Client(
             appID: 'My App ID',
             appSecret: 'My App Secret',
@@ -34,7 +35,7 @@ final class OrderTest extends TestCase
     public function testRetrievePaymentInfos(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->order->retrievePaymentInfos('uid');

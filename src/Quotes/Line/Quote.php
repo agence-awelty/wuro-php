@@ -20,7 +20,7 @@ use Wuro\Quotes\Line\Quote\Type;
  * @phpstan-type QuoteShape = array{
  *   _id?: string|null,
  *   acceptDate?: \DateTimeInterface|null,
- *   acomptes?: list<AcompteShape>|null,
+ *   acomptes?: list<Acompte|AcompteShape>|null,
  *   baseCurrency?: string|null,
  *   client?: string|null,
  *   clientAddress?: string|null,
@@ -35,14 +35,14 @@ use Wuro\Quotes\Line\Quote\Type;
  *   date?: \DateTimeInterface|null,
  *   expiryDate?: \DateTimeInterface|null,
  *   number?: string|null,
- *   quoteLines?: list<QuoteLineShape>|null,
+ *   quoteLines?: list<QuoteLine|QuoteLineShape>|null,
  *   state?: null|State|value-of<State>,
  *   title?: string|null,
  *   totalHt?: float|null,
  *   totalTtc?: float|null,
  *   totalTva?: float|null,
  *   type?: null|Type|value-of<Type>,
- *   vatRates?: list<VatRateShape>|null,
+ *   vatRates?: list<VatRate|VatRateShape>|null,
  * }
  */
 final class Quote implements BaseModel
@@ -220,11 +220,11 @@ final class Quote implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<AcompteShape>|null $acomptes
-     * @param list<QuoteLineShape>|null $quoteLines
+     * @param list<Acompte|AcompteShape>|null $acomptes
+     * @param list<QuoteLine|QuoteLineShape>|null $quoteLines
      * @param State|value-of<State>|null $state
      * @param Type|value-of<Type>|null $type
-     * @param list<VatRateShape>|null $vatRates
+     * @param list<VatRate|VatRateShape>|null $vatRates
      */
     public static function with(
         ?string $_id = null,
@@ -309,7 +309,7 @@ final class Quote implements BaseModel
     /**
      * List of advance payments.
      *
-     * @param list<AcompteShape> $acomptes
+     * @param list<Acompte|AcompteShape> $acomptes
      */
     public function withAcomptes(array $acomptes): self
     {
@@ -476,7 +476,7 @@ final class Quote implements BaseModel
     /**
      * List of quote lines.
      *
-     * @param list<QuoteLineShape> $quoteLines
+     * @param list<QuoteLine|QuoteLineShape> $quoteLines
      */
     public function withQuoteLines(array $quoteLines): self
     {
@@ -559,7 +559,7 @@ final class Quote implements BaseModel
     /**
      * List of VAT rates applied to the quote.
      *
-     * @param list<VatRateShape> $vatRates
+     * @param list<VatRate|VatRateShape> $vatRates
      */
     public function withVatRates(array $vatRates): self
     {

@@ -20,6 +20,9 @@ use Wuro\PaymentMethods\PaymentMethodUpdateResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\PaymentMethodsRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class PaymentMethodsRawService implements PaymentMethodsRawContract
 {
     // @phpstan-ignore-next-line
@@ -63,8 +66,9 @@ final class PaymentMethodsRawService implements PaymentMethodsRawContract
      *   rang?: string,
      *   secret?: string,
      *   site?: string,
-     *   tag?: 'paybox'|'epayment'|'check'|'stripe'|'paypal'|'transfer'|'other'|Tag,
+     *   tag?: Tag|value-of<Tag>,
      * }|PaymentMethodCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PaymentMethodNewResponse>
      *
@@ -72,7 +76,7 @@ final class PaymentMethodsRawService implements PaymentMethodsRawContract
      */
     public function create(
         array|PaymentMethodCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PaymentMethodCreateParams::parseRequest(
             $params,
@@ -98,6 +102,7 @@ final class PaymentMethodsRawService implements PaymentMethodsRawContract
      * et si c'est le moyen par défaut.
      *
      * @param string $uid Identifiant unique du moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PaymentMethodGetResponse>
      *
@@ -105,7 +110,7 @@ final class PaymentMethodsRawService implements PaymentMethodsRawContract
      */
     public function retrieve(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -137,9 +142,10 @@ final class PaymentMethodsRawService implements PaymentMethodsRawContract
      *   default?: bool,
      *   modality?: string,
      *   name?: string,
-     *   state?: 'active'|'inactive'|State,
-     *   tag?: 'paybox'|'epayment'|'check'|'stripe'|'paypal'|'transfer'|'other'|PaymentMethodUpdateParams\Tag,
+     *   state?: State|value-of<State>,
+     *   tag?: PaymentMethodUpdateParams\Tag|value-of<PaymentMethodUpdateParams\Tag>,
      * }|PaymentMethodUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PaymentMethodUpdateResponse>
      *
@@ -148,7 +154,7 @@ final class PaymentMethodsRawService implements PaymentMethodsRawContract
     public function update(
         string $uid,
         array|PaymentMethodUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PaymentMethodUpdateParams::parseRequest(
             $params,
@@ -189,9 +195,10 @@ final class PaymentMethodsRawService implements PaymentMethodsRawContract
      * sélectionné lors de la création de nouveaux documents.
      *
      * @param array{
-     *   state?: 'active'|'inactive'|PaymentMethodListParams\State,
-     *   tag?: 'paybox'|'epayment'|'check'|'stripe'|'paypal'|'transfer'|'other'|PaymentMethodListParams\Tag,
+     *   state?: PaymentMethodListParams\State|value-of<PaymentMethodListParams\State>,
+     *   tag?: PaymentMethodListParams\Tag|value-of<PaymentMethodListParams\Tag>,
      * }|PaymentMethodListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PaymentMethodListResponse>
      *
@@ -199,7 +206,7 @@ final class PaymentMethodsRawService implements PaymentMethodsRawContract
      */
     public function list(
         array|PaymentMethodListParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = PaymentMethodListParams::parseRequest(
             $params,
@@ -227,6 +234,7 @@ final class PaymentMethodsRawService implements PaymentMethodsRawContract
      * pour conserver l'historique des documents utilisant ce moyen.
      *
      * @param string $uid Identifiant unique du moyen de paiement
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<PaymentMethodDeleteResponse>
      *
@@ -234,7 +242,7 @@ final class PaymentMethodsRawService implements PaymentMethodsRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Wuro\ServiceContracts;
 
 use Wuro\Core\Exceptions\APIException;
+use Wuro\Purchases\PurchaseCreateParams\Line;
+use Wuro\Purchases\PurchaseCreateParams\Payment;
 use Wuro\Purchases\PurchaseCreateParams\State;
 use Wuro\Purchases\PurchaseCreateParams\Type;
 use Wuro\Purchases\PurchaseDeleteResponse;
@@ -15,25 +17,24 @@ use Wuro\Purchases\PurchaseNewResponse;
 use Wuro\Purchases\PurchaseUpdateResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type LineShape from \Wuro\Purchases\PurchaseCreateParams\Line
+ * @phpstan-import-type PaymentShape from \Wuro\Purchases\PurchaseCreateParams\Payment
+ * @phpstan-import-type LineShape from \Wuro\Purchases\PurchaseUpdateParams\Line as LineShape1
+ * @phpstan-import-type PaymentShape from \Wuro\Purchases\PurchaseUpdateParams\Payment as PaymentShape1
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface PurchasesContract
 {
     /**
      * @api
      *
      * @param list<string> $categories
-     * @param list<array{
-     *   title?: string,
-     *   totalHt?: float,
-     *   totalTtc?: float,
-     *   totalTva?: float,
-     *   tvaRate?: float,
-     *   type?: string,
-     * }> $lines
-     * @param list<array{
-     *   amount?: float, date?: string|\DateTimeInterface, mode?: string
-     * }> $payments
-     * @param 'draft'|'waiting'|'paid'|'to_pay'|'notpaid'|State $state
-     * @param 'purchase'|'purchase_credit'|Type $type
+     * @param list<Line|LineShape> $lines
+     * @param list<Payment|PaymentShape> $payments
+     * @param State|value-of<State> $state
+     * @param Type|value-of<Type> $type
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -41,13 +42,13 @@ interface PurchasesContract
         ?string $analyticalCode = null,
         ?array $categories = null,
         ?string $currency = null,
-        string|\DateTimeInterface|null $date = null,
+        ?\DateTimeInterface $date = null,
         ?string $invoiceNumber = null,
         ?array $lines = null,
-        string|\DateTimeInterface|null $paymentDate = null,
-        string|\DateTimeInterface|null $paymentExpiryDate = null,
+        ?\DateTimeInterface $paymentDate = null,
+        ?\DateTimeInterface $paymentExpiryDate = null,
         ?array $payments = null,
-        string|State|null $state = null,
+        State|string|null $state = null,
         ?string $supplier = null,
         ?string $supplierCode = null,
         ?string $supplierName = null,
@@ -56,8 +57,8 @@ interface PurchasesContract
         ?float $totalHt = null,
         ?float $totalTtc = null,
         ?float $totalTva = null,
-        string|Type|null $type = null,
-        ?RequestOptions $requestOptions = null,
+        Type|string|null $type = null,
+        RequestOptions|array|null $requestOptions = null,
     ): PurchaseNewResponse;
 
     /**
@@ -65,13 +66,14 @@ interface PurchasesContract
      *
      * @param string $uid Identifiant unique de l'achat
      * @param string $populate Relations à inclure (ex. "supplier")
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function retrieve(
         string $uid,
         ?string $populate = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): PurchaseGetResponse;
 
     /**
@@ -79,19 +81,11 @@ interface PurchasesContract
      *
      * @param string $uid Identifiant unique de l'achat
      * @param list<string> $categories
-     * @param list<array{
-     *   title?: string,
-     *   totalHt?: float,
-     *   totalTtc?: float,
-     *   totalTva?: float,
-     *   tvaRate?: float,
-     *   type?: string,
-     * }> $lines
-     * @param list<array{
-     *   amount?: float, date?: string|\DateTimeInterface, mode?: string
-     * }> $payments
-     * @param 'draft'|'waiting'|'paid'|'to_pay'|'notpaid'|\Wuro\Purchases\PurchaseUpdateParams\State $state
-     * @param 'purchase'|'purchase_credit'|\Wuro\Purchases\PurchaseUpdateParams\Type $type
+     * @param list<\Wuro\Purchases\PurchaseUpdateParams\Line|LineShape1> $lines
+     * @param list<\Wuro\Purchases\PurchaseUpdateParams\Payment|PaymentShape1> $payments
+     * @param \Wuro\Purchases\PurchaseUpdateParams\State|value-of<\Wuro\Purchases\PurchaseUpdateParams\State> $state
+     * @param \Wuro\Purchases\PurchaseUpdateParams\Type|value-of<\Wuro\Purchases\PurchaseUpdateParams\Type> $type
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -100,13 +94,13 @@ interface PurchasesContract
         ?string $analyticalCode = null,
         ?array $categories = null,
         ?string $currency = null,
-        string|\DateTimeInterface|null $date = null,
+        ?\DateTimeInterface $date = null,
         ?string $invoiceNumber = null,
         ?array $lines = null,
-        string|\DateTimeInterface|null $paymentDate = null,
-        string|\DateTimeInterface|null $paymentExpiryDate = null,
+        ?\DateTimeInterface $paymentDate = null,
+        ?\DateTimeInterface $paymentExpiryDate = null,
         ?array $payments = null,
-        string|\Wuro\Purchases\PurchaseUpdateParams\State|null $state = null,
+        \Wuro\Purchases\PurchaseUpdateParams\State|string|null $state = null,
         ?string $supplier = null,
         ?string $supplierCode = null,
         ?string $supplierName = null,
@@ -115,8 +109,8 @@ interface PurchasesContract
         ?float $totalHt = null,
         ?float $totalTtc = null,
         ?float $totalTva = null,
-        string|\Wuro\Purchases\PurchaseUpdateParams\Type|null $type = null,
-        ?RequestOptions $requestOptions = null,
+        \Wuro\Purchases\PurchaseUpdateParams\Type|string|null $type = null,
+        RequestOptions|array|null $requestOptions = null,
     ): PurchaseUpdateResponse;
 
     /**
@@ -125,8 +119,9 @@ interface PurchasesContract
      * @param int $limit Nombre maximum d'achats à retourner
      * @param int $skip Nombre d'achats à ignorer (pagination)
      * @param string $sort Champ et direction de tri (ex. "date:-1" pour les plus récents)
-     * @param 'draft'|'waiting'|'paid'|'to_pay'|'notpaid'|'inactive'|\Wuro\Purchases\PurchaseListParams\State $state Filtrer par état de l'achat
+     * @param \Wuro\Purchases\PurchaseListParams\State|value-of<\Wuro\Purchases\PurchaseListParams\State> $state Filtrer par état de l'achat
      * @param string $supplier Filtrer par fournisseur (ID du fournisseur)
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -134,39 +129,45 @@ interface PurchasesContract
         int $limit = 20,
         int $skip = 0,
         ?string $sort = null,
-        string|\Wuro\Purchases\PurchaseListParams\State|null $state = null,
+        \Wuro\Purchases\PurchaseListParams\State|string|null $state = null,
         ?string $supplier = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): PurchaseListResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'achat
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): PurchaseDeleteResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de l'achat d'origine
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function createCredit(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): PurchaseNewCreditResponse;
 
     /**
      * @api
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @throws APIException
      */
-    public function getStats(?RequestOptions $requestOptions = null): mixed;
+    public function getStats(
+        RequestOptions|array|null $requestOptions = null
+    ): mixed;
 }

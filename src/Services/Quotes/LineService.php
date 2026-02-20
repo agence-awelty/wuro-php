@@ -14,6 +14,9 @@ use Wuro\Quotes\Line\Quote;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\Quotes\LineContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class LineService implements LineContract
 {
     /**
@@ -56,6 +59,7 @@ final class LineService implements LineContract
      * @param string $title Body param: Titre de la ligne
      * @param float $tvaRate Body param: Taux de TVA (ex. 20 pour 20%)
      * @param string $unit Body param: Unité de mesure (pièce, heure, kg, etc.)
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -70,7 +74,7 @@ final class LineService implements LineContract
         ?string $title = null,
         ?float $tvaRate = null,
         ?string $unit = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): LineUpdateResponse {
         $params = Util::removeNulls(
             [
@@ -105,13 +109,14 @@ final class LineService implements LineContract
      *
      * @param string $lineUuid Identifiant unique de la ligne à supprimer
      * @param string $uid Identifiant unique du devis
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function delete(
         string $lineUuid,
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): Quote {
         $params = Util::removeNulls(['uid' => $uid]);
 
@@ -138,8 +143,9 @@ final class LineService implements LineContract
      * @param float $totalHt Total amount without tax
      * @param float $totalTtc Total amount with tax
      * @param float $tvaRate VAT rate
-     * @param 'product'|'header'|'subtotal'|'globalDiscount'|Type $type Type of the line
+     * @param Type|value-of<Type> $type Type of the line
      * @param string $unit Unit of measurement
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
@@ -154,9 +160,9 @@ final class LineService implements LineContract
         float $totalHt = 0,
         float $totalTtc = 0,
         ?float $tvaRate = null,
-        string|Type $type = 'product',
+        Type|string $type = 'product',
         ?string $unit = null,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): LineAddResponse {
         $params = Util::removeNulls(
             [

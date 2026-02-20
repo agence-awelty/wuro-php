@@ -32,7 +32,7 @@ use Wuro\Core\Contracts\BaseModel;
  *
  * @phpstan-type PositionUpdateParamsShape = array{
  *   company: string,
- *   rights?: list<RightShape>|null,
+ *   rights?: list<Right|RightShape>|null,
  *   state?: null|State|value-of<State>,
  *   type?: string|null,
  * }
@@ -92,7 +92,7 @@ final class PositionUpdateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<RightShape>|null $rights
+     * @param list<Right|RightShape>|null $rights
      * @param State|value-of<State>|null $state
      */
     public static function with(
@@ -123,7 +123,7 @@ final class PositionUpdateParams implements BaseModel
     /**
      * Liste des droits spécifiques.
      *
-     * @param list<RightShape> $rights
+     * @param list<Right|RightShape> $rights
      */
     public function withRights(array $rights): self
     {

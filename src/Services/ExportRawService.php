@@ -12,6 +12,9 @@ use Wuro\Export\ExportExportAbsencesResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\ExportRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class ExportRawService implements ExportRawContract
 {
     // @phpstan-ignore-next-line
@@ -28,6 +31,7 @@ final class ExportRawService implements ExportRawContract
      * @param array{
      *   company?: string, filters?: mixed
      * }|ExportExportAbsencesParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ExportExportAbsencesResponse>
      *
@@ -35,7 +39,7 @@ final class ExportRawService implements ExportRawContract
      */
     public function exportAbsences(
         array|ExportExportAbsencesParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = ExportExportAbsencesParams::parseRequest(
             $params,

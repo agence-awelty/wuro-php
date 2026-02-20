@@ -14,6 +14,9 @@ use Wuro\Quotes\Line\LineUpdateResponse;
 use Wuro\Quotes\Line\Quote;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface LineRawContract
 {
     /**
@@ -21,6 +24,7 @@ interface LineRawContract
      *
      * @param string $lineUuid Path param: Identifiant unique de la ligne à modifier
      * @param array<string,mixed>|LineUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<LineUpdateResponse>
      *
@@ -29,7 +33,7 @@ interface LineRawContract
     public function update(
         string $lineUuid,
         array|LineUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -37,6 +41,7 @@ interface LineRawContract
      *
      * @param string $lineUuid Identifiant unique de la ligne à supprimer
      * @param array<string,mixed>|LineDeleteParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<Quote>
      *
@@ -45,7 +50,7 @@ interface LineRawContract
     public function delete(
         string $lineUuid,
         array|LineDeleteParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
@@ -53,6 +58,7 @@ interface LineRawContract
      *
      * @param string $uid ID du devis
      * @param array<string,mixed>|LineAddParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<LineAddResponse>
      *
@@ -61,6 +67,6 @@ interface LineRawContract
     public function add(
         string $uid,
         array|LineAddParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

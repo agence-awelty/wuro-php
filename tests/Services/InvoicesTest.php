@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\UnsupportedMockTests;
 use Wuro\Client;
+use Wuro\Core\Util;
 use Wuro\Invoices\InvoiceGetLogsResponse;
 use Wuro\Invoices\InvoiceGetResponse;
 use Wuro\Invoices\InvoiceGetStatsResponse;
@@ -33,7 +34,7 @@ final class InvoicesTest extends TestCase
     {
         parent::setUp();
 
-        $testUrl = getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
+        $testUrl = Util::getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
         $client = new Client(
             appID: 'My App ID',
             appSecret: 'My App Secret',
@@ -47,7 +48,7 @@ final class InvoicesTest extends TestCase
     public function testCreate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->create();
@@ -60,7 +61,7 @@ final class InvoicesTest extends TestCase
     public function testRetrieve(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->retrieve('uid');
@@ -73,7 +74,7 @@ final class InvoicesTest extends TestCase
     public function testUpdate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->update('uid');
@@ -86,7 +87,7 @@ final class InvoicesTest extends TestCase
     public function testList(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->list();
@@ -99,7 +100,7 @@ final class InvoicesTest extends TestCase
     public function testDelete(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->delete('uid');
@@ -112,7 +113,7 @@ final class InvoicesTest extends TestCase
     public function testCreateCredit(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->createCredit('uid');
@@ -125,7 +126,7 @@ final class InvoicesTest extends TestCase
     public function testCreateDeliveryReceipt(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->createDeliveryReceipt('uid');
@@ -138,7 +139,7 @@ final class InvoicesTest extends TestCase
     public function testCreatePackage(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->createPackage(invoicesID: ['string']);
@@ -151,7 +152,7 @@ final class InvoicesTest extends TestCase
     public function testCreatePackageWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->createPackage(
@@ -167,7 +168,7 @@ final class InvoicesTest extends TestCase
     public function testGetLogs(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->getLogs();
@@ -180,7 +181,7 @@ final class InvoicesTest extends TestCase
     public function testGetStats(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->getStats();
@@ -193,7 +194,7 @@ final class InvoicesTest extends TestCase
     public function testGetTurnover(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->getTurnover();
@@ -206,7 +207,7 @@ final class InvoicesTest extends TestCase
     public function testListPayments(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->listPayments();
@@ -219,7 +220,7 @@ final class InvoicesTest extends TestCase
     public function testListWaitingPayments(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->listWaitingPayments();
@@ -232,7 +233,7 @@ final class InvoicesTest extends TestCase
     public function testRecordPayment(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->recordPayment(
@@ -249,7 +250,7 @@ final class InvoicesTest extends TestCase
     public function testRecordPaymentWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->recordPayment(
@@ -266,7 +267,7 @@ final class InvoicesTest extends TestCase
     public function testRetrieveLogs(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->retrieveLogs('uid');
@@ -279,7 +280,7 @@ final class InvoicesTest extends TestCase
     public function testSendEmail(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->invoices->sendEmail('uid');

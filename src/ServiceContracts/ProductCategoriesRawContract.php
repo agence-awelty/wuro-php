@@ -12,12 +12,16 @@ use Wuro\ProductCategories\ProductCategoryListResponse;
 use Wuro\ProductCategories\ProductCategoryUpdateParams;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface ProductCategoriesRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|ProductCategoryCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductCategory>
      *
@@ -25,13 +29,14 @@ interface ProductCategoriesRawContract
      */
     public function create(
         array|ProductCategoryCreateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de la catégorie
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ProductCategory>
      *
@@ -39,7 +44,7 @@ interface ProductCategoriesRawContract
      */
     public function retrieve(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 
     /**
@@ -47,6 +52,7 @@ interface ProductCategoriesRawContract
      *
      * @param string $uid Identifiant unique de la catégorie
      * @param array<string,mixed>|ProductCategoryUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -55,22 +61,27 @@ interface ProductCategoriesRawContract
     public function update(
         string $uid,
         array|ProductCategoryUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<ProductCategoryListResponse>
      *
      * @throws APIException
      */
-    public function list(?RequestOptions $requestOptions = null): BaseResponse;
+    public function list(
+        RequestOptions|array|null $requestOptions = null
+    ): BaseResponse;
 
     /**
      * @api
      *
      * @param string $uid Identifiant unique de la catégorie
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -78,6 +89,6 @@ interface ProductCategoriesRawContract
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
 }

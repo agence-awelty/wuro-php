@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\UnsupportedMockTests;
 use Wuro\Client;
+use Wuro\Core\Util;
 use Wuro\PaymentMethods\PaymentMethodDeleteResponse;
 use Wuro\PaymentMethods\PaymentMethodGetResponse;
 use Wuro\PaymentMethods\PaymentMethodListResponse;
@@ -25,7 +26,7 @@ final class PaymentMethodsTest extends TestCase
     {
         parent::setUp();
 
-        $testUrl = getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
+        $testUrl = Util::getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
         $client = new Client(
             appID: 'My App ID',
             appSecret: 'My App Secret',
@@ -39,7 +40,7 @@ final class PaymentMethodsTest extends TestCase
     public function testCreate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->paymentMethods->create(name: 'Virement bancaire');
@@ -52,7 +53,7 @@ final class PaymentMethodsTest extends TestCase
     public function testCreateWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->paymentMethods->create(
@@ -75,7 +76,7 @@ final class PaymentMethodsTest extends TestCase
     public function testRetrieve(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->paymentMethods->retrieve('uid');
@@ -88,7 +89,7 @@ final class PaymentMethodsTest extends TestCase
     public function testUpdate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->paymentMethods->update('uid');
@@ -101,7 +102,7 @@ final class PaymentMethodsTest extends TestCase
     public function testList(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->paymentMethods->list();
@@ -114,7 +115,7 @@ final class PaymentMethodsTest extends TestCase
     public function testDelete(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->paymentMethods->delete('uid');

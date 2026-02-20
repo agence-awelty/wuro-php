@@ -14,6 +14,7 @@ use Wuro\Clients\ClientListResponse;
 use Wuro\Clients\ClientMergeResponse;
 use Wuro\Clients\ClientNewResponse;
 use Wuro\Clients\ClientUpdateResponse;
+use Wuro\Core\Util;
 
 /**
  * @internal
@@ -27,7 +28,7 @@ final class ClientsTest extends TestCase
     {
         parent::setUp();
 
-        $testUrl = getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
+        $testUrl = Util::getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
         $client = new Client(
             appID: 'My App ID',
             appSecret: 'My App Secret',
@@ -41,7 +42,7 @@ final class ClientsTest extends TestCase
     public function testCreate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->clients->create(name: 'name');
@@ -54,7 +55,7 @@ final class ClientsTest extends TestCase
     public function testCreateWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->clients->create(
@@ -89,7 +90,7 @@ final class ClientsTest extends TestCase
     public function testRetrieve(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->clients->retrieve('uid');
@@ -102,7 +103,7 @@ final class ClientsTest extends TestCase
     public function testUpdate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->clients->update('uid', name: 'name');
@@ -115,7 +116,7 @@ final class ClientsTest extends TestCase
     public function testUpdateWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->clients->update(
@@ -151,7 +152,7 @@ final class ClientsTest extends TestCase
     public function testList(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->clients->list();
@@ -164,7 +165,7 @@ final class ClientsTest extends TestCase
     public function testDelete(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->clients->delete('uid');
@@ -177,7 +178,7 @@ final class ClientsTest extends TestCase
     public function testImportFromCsv(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->clients->importFromCsv();
@@ -190,7 +191,7 @@ final class ClientsTest extends TestCase
     public function testMerge(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->clients->merge(source: 'source', target: 'target');
@@ -203,7 +204,7 @@ final class ClientsTest extends TestCase
     public function testMergeWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->clients->merge(source: 'source', target: 'target');

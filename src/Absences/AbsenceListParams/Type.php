@@ -12,7 +12,8 @@ use Wuro\Core\Conversion\ListOf;
 /**
  * Filtrer par type d'absence (peut être un tableau).
  *
- * @phpstan-type TypeShape = string|list<string>
+ * @phpstan-type TypeVariants = string|list<string>
+ * @phpstan-type TypeShape = TypeVariants
  */
 final class Type implements ConverterSource
 {

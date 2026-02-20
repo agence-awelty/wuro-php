@@ -17,6 +17,9 @@ use Wuro\Invoices\Line\LineUpdateResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\Invoices\LineRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class LineRawService implements LineRawContract
 {
     // @phpstan-ignore-next-line
@@ -58,6 +61,7 @@ final class LineRawService implements LineRawContract
      *   tvaRate?: float,
      *   unit?: string,
      * }|LineUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<LineUpdateResponse>
      *
@@ -66,7 +70,7 @@ final class LineRawService implements LineRawContract
     public function update(
         string $lineUuid,
         array|LineUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = LineUpdateParams::parseRequest(
             $params,
@@ -102,6 +106,7 @@ final class LineRawService implements LineRawContract
      *
      * @param string $lineUuid Identifiant unique de la ligne à supprimer
      * @param array{uid: string}|LineDeleteParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<Invoice>
      *
@@ -110,7 +115,7 @@ final class LineRawService implements LineRawContract
     public function delete(
         string $lineUuid,
         array|LineDeleteParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = LineDeleteParams::parseRequest(
             $params,
@@ -146,9 +151,10 @@ final class LineRawService implements LineRawContract
      *   totalHt?: float,
      *   totalTtc?: float,
      *   tvaRate?: float,
-     *   type?: 'product'|'header'|'subtotal'|'globalDiscount'|Type,
+     *   type?: Type|value-of<Type>,
      *   unit?: string,
      * }|LineAddParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<LineAddResponse>
      *
@@ -157,7 +163,7 @@ final class LineRawService implements LineRawContract
     public function add(
         string $uid,
         array|LineAddParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = LineAddParams::parseRequest(
             $params,

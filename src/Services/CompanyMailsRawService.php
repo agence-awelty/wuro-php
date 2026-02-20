@@ -11,6 +11,9 @@ use Wuro\Core\Exceptions\APIException;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\CompanyMailsRawContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class CompanyMailsRawService implements CompanyMailsRawContract
 {
     // @phpstan-ignore-next-line
@@ -28,12 +31,15 @@ final class CompanyMailsRawService implements CompanyMailsRawContract
      * - Sélection de l'expéditeur pour l'envoi de documents
      * - Configuration des réponses automatiques
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<CompanyMailListResponse>
      *
      * @throws APIException
      */
-    public function list(?RequestOptions $requestOptions = null): BaseResponse
-    {
+    public function list(
+        RequestOptions|array|null $requestOptions = null
+    ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',

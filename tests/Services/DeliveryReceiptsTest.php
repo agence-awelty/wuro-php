@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\UnsupportedMockTests;
 use Wuro\Client;
+use Wuro\Core\Util;
 use Wuro\DeliveryReceipts\DeliveryReceiptDeleteResponse;
 use Wuro\DeliveryReceipts\DeliveryReceiptGenerateHTMLResponse;
 use Wuro\DeliveryReceipts\DeliveryReceiptGetResponse;
@@ -27,7 +28,7 @@ final class DeliveryReceiptsTest extends TestCase
     {
         parent::setUp();
 
-        $testUrl = getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
+        $testUrl = Util::getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
         $client = new Client(
             appID: 'My App ID',
             appSecret: 'My App Secret',
@@ -41,7 +42,7 @@ final class DeliveryReceiptsTest extends TestCase
     public function testCreate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->deliveryReceipts->create(client: 'client');
@@ -54,7 +55,7 @@ final class DeliveryReceiptsTest extends TestCase
     public function testCreateWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->deliveryReceipts->create(
@@ -91,7 +92,7 @@ final class DeliveryReceiptsTest extends TestCase
     public function testRetrieve(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->deliveryReceipts->retrieve('uid');
@@ -104,7 +105,7 @@ final class DeliveryReceiptsTest extends TestCase
     public function testUpdate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->deliveryReceipts->update('uid');
@@ -117,7 +118,7 @@ final class DeliveryReceiptsTest extends TestCase
     public function testList(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->deliveryReceipts->list();
@@ -130,7 +131,7 @@ final class DeliveryReceiptsTest extends TestCase
     public function testDelete(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->deliveryReceipts->delete('uid');
@@ -143,7 +144,7 @@ final class DeliveryReceiptsTest extends TestCase
     public function testCreateInvoice(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->deliveryReceipts->createInvoice('uid');
@@ -156,7 +157,7 @@ final class DeliveryReceiptsTest extends TestCase
     public function testGenerateHTML(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->deliveryReceipts->generateHTML('uid');
@@ -172,7 +173,7 @@ final class DeliveryReceiptsTest extends TestCase
     public function testGeneratePdf(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism doesn\'t support application/pdf responses');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->deliveryReceipts->generatePdf('uid');

@@ -11,6 +11,9 @@ use Wuro\InvoiceFile\InvoiceFileAnalyzeResponse;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\InvoiceFileContract;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class InvoiceFileService implements InvoiceFileContract
 {
     /**
@@ -43,12 +46,13 @@ final class InvoiceFileService implements InvoiceFileContract
      * - `preSubmitInvoice`: Données avec totaux recalculés (pour vérification)
      *
      * @param string $file Fichier PDF encodé en base64
+     * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function analyze(
         string $file,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): InvoiceFileAnalyzeResponse {
         $params = Util::removeNulls(['file' => $file]);
 

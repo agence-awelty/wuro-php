@@ -53,7 +53,7 @@ use Wuro\Invoices\InvoiceCreateParams\Type;
  *   clientName?: string|null,
  *   clientZipCode?: string|null,
  *   date?: \DateTimeInterface|null,
- *   invoiceLines?: list<InvoiceLineShape>|null,
+ *   invoiceLines?: list<InvoiceLine|InvoiceLineShape>|null,
  *   paymentExpiryDate?: \DateTimeInterface|null,
  *   state?: null|State|value-of<State>,
  *   title?: string|null,
@@ -144,7 +144,7 @@ final class InvoiceCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<InvoiceLineShape>|null $invoiceLines
+     * @param list<InvoiceLine|InvoiceLineShape>|null $invoiceLines
      * @param State|value-of<State>|null $state
      * @param Type|value-of<Type>|null $type
      */
@@ -261,7 +261,7 @@ final class InvoiceCreateParams implements BaseModel
     /**
      * Lignes de la facture.
      *
-     * @param list<InvoiceLineShape> $invoiceLines
+     * @param list<InvoiceLine|InvoiceLineShape> $invoiceLines
      */
     public function withInvoiceLines(array $invoiceLines): self
     {

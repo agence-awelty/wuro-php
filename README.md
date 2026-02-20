@@ -1,12 +1,5 @@
 # Wuro PHP API library
 
-> [!NOTE]
-> The Wuro PHP API Library is currently in **beta** and we're excited for you to experiment with it!
->
-> This library has not yet been exhaustively tested in production environments and may be missing some features you'd expect in a stable release. As we continue development, there may be breaking changes that require updates to your code.
->
-> **We'd love your feedback!** Please share any suggestions, bug reports, feature requests, or general thoughts by [filing an issue](https://www.github.com/stainless-sdks/wuro-php/issues/new).
-
 The Wuro PHP library provides convenient access to the Wuro REST API from any PHP 8.1.0+ application.
 
 It is generated with [Stainless](https://www.stainless.com/).
@@ -17,12 +10,14 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 To use this package, install via Composer by adding the following to your application's `composer.json`:
 
+<!-- x-release-please-start-version -->
+
 ```json
 {
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:stainless-sdks/wuro-php.git"
+      "url": "git@github.com:agence-awelty/wuro-php.git"
     }
   ],
   "require": {
@@ -30,6 +25,8 @@ To use this package, install via Composer by adding the following to your applic
   }
 }
 ```
+
+<!-- x-release-please-end -->
 
 ## Usage
 
@@ -66,15 +63,17 @@ When the library is unable to connect to the API, or if the API returns a non-su
 <?php
 
 use Wuro\Core\Exceptions\APIConnectionException;
+use Wuro\Core\Exceptions\RateLimitException;
+use Wuro\Core\Exceptions\APIStatusException;
 
 try {
   $invoice = $client->invoices->create();
 } catch (APIConnectionException $e) {
   echo "The server could not be reached", PHP_EOL;
   var_dump($e->getPrevious());
-} catch (RateLimitError $e) {
+} catch (RateLimitException $e) {
   echo "A 429 status code was received; we should back off a bit.", PHP_EOL;
-} catch (APIStatusError $e) {
+} catch (APIStatusException $e) {
   echo "Another non-200-range status code was received", PHP_EOL;
   echo $e->getMessage();
 }
@@ -108,15 +107,12 @@ You can use the `maxRetries` option to configure or disable this:
 <?php
 
 use Wuro\Client;
-use Wuro\RequestOptions;
 
 // Configure the default for all requests:
-$client = new Client(maxRetries: 0);
+$client = new Client(requestOptions: ['maxRetries' => 0]);
 
 // Or, configure per-request:
-$result = $client->invoices->create(
-  requestOptions: RequestOptions::with(maxRetries: 5)
-);
+$result = $client->invoices->create(requestOptions: ['maxRetries' => 5]);
 ```
 
 ## Advanced concepts
@@ -132,14 +128,12 @@ Note: the `extra*` parameters of the same name overrides the documented paramete
 ```php
 <?php
 
-use Wuro\RequestOptions;
-
 $invoice = $client->invoices->create(
-  requestOptions: RequestOptions::with(
-    extraQueryParams: ['my_query_parameter' => 'value'],
-    extraBodyParams: ['my_body_parameter' => 'value'],
-    extraHeaders: ['my-header' => 'value'],
-  ),
+  requestOptions: [
+    'extraQueryParams' => ['my_query_parameter' => 'value'],
+    'extraBodyParams' => ['my_body_parameter' => 'value'],
+    'extraHeaders' => ['my-header' => 'value'],
+  ],
 );
 ```
 
@@ -175,4 +169,4 @@ PHP 8.1.0 or higher.
 
 ## Contributing
 
-See [the contributing documentation](https://github.com/stainless-sdks/wuro-php/tree/main/CONTRIBUTING.md).
+See [the contributing documentation](https://github.com/agence-awelty/wuro-php/tree/main/CONTRIBUTING.md).

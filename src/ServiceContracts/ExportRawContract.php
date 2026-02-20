@@ -10,12 +10,16 @@ use Wuro\Export\ExportExportAbsencesParams;
 use Wuro\Export\ExportExportAbsencesResponse;
 use Wuro\RequestOptions;
 
+/**
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 interface ExportRawContract
 {
     /**
      * @api
      *
      * @param array<string,mixed>|ExportExportAbsencesParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<ExportExportAbsencesResponse>
      *
@@ -23,6 +27,6 @@ interface ExportRawContract
      */
     public function exportAbsences(
         array|ExportExportAbsencesParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

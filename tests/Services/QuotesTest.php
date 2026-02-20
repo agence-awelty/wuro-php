@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Tests\UnsupportedMockTests;
 use Wuro\Client;
+use Wuro\Core\Util;
 use Wuro\Quotes\QuoteDeleteResponse;
 use Wuro\Quotes\QuoteGetLogsResponse;
 use Wuro\Quotes\QuoteGetResponse;
@@ -33,7 +34,7 @@ final class QuotesTest extends TestCase
     {
         parent::setUp();
 
-        $testUrl = getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
+        $testUrl = Util::getenv('TEST_API_BASE_URL') ?: 'http://127.0.0.1:4010';
         $client = new Client(
             appID: 'My App ID',
             appSecret: 'My App Secret',
@@ -47,7 +48,7 @@ final class QuotesTest extends TestCase
     public function testCreate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->create();
@@ -60,7 +61,7 @@ final class QuotesTest extends TestCase
     public function testRetrieve(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->retrieve('uid');
@@ -73,7 +74,7 @@ final class QuotesTest extends TestCase
     public function testUpdate(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->update('uid');
@@ -86,7 +87,7 @@ final class QuotesTest extends TestCase
     public function testList(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->list();
@@ -99,7 +100,7 @@ final class QuotesTest extends TestCase
     public function testDelete(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->delete('uid');
@@ -112,7 +113,7 @@ final class QuotesTest extends TestCase
     public function testCreateAdvanceInvoice(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->createAdvanceInvoice('uid');
@@ -125,7 +126,7 @@ final class QuotesTest extends TestCase
     public function testCreateDeliveryReceipt(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->createDeliveryReceipt('uid');
@@ -138,7 +139,7 @@ final class QuotesTest extends TestCase
     public function testCreateInvoice(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->createInvoice('uid');
@@ -151,7 +152,7 @@ final class QuotesTest extends TestCase
     public function testCreateInvoiceFromQuote(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->createInvoiceFromQuote('uid');
@@ -164,7 +165,7 @@ final class QuotesTest extends TestCase
     public function testCreatePackage(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->createPackage(quotesID: ['string']);
@@ -177,7 +178,7 @@ final class QuotesTest extends TestCase
     public function testCreatePackageWithOptionalParams(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->createPackage(
@@ -193,7 +194,7 @@ final class QuotesTest extends TestCase
     public function testCreateProformaInvoice(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->createProformaInvoice('uid');
@@ -206,7 +207,7 @@ final class QuotesTest extends TestCase
     public function testCreatePurchaseOrder(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->createPurchaseOrder('uid');
@@ -219,7 +220,7 @@ final class QuotesTest extends TestCase
     public function testGenerateHTML(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->generateHTML('uid');
@@ -232,7 +233,7 @@ final class QuotesTest extends TestCase
     public function testGeneratePdf(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism doesn\'t support application/pdf responses');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->generatePdf('uid');
@@ -245,7 +246,7 @@ final class QuotesTest extends TestCase
     public function testGeneratePdfChromium(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism doesn\'t support application/pdf responses');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->generatePdfChromium('uid');
@@ -258,7 +259,7 @@ final class QuotesTest extends TestCase
     public function testGetLogs(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->getLogs();
@@ -271,7 +272,7 @@ final class QuotesTest extends TestCase
     public function testGetStats(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->getStats();
@@ -284,7 +285,7 @@ final class QuotesTest extends TestCase
     public function testRetrieveLogs(): void
     {
         if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Prism tests are disabled');
+            $this->markTestSkipped('Mock server tests are disabled');
         }
 
         $result = $this->client->quotes->retrieveLogs('uid');

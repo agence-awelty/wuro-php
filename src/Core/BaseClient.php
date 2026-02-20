@@ -5,12 +5,8 @@ declare(strict_types=1);
 namespace Wuro\Core;
 
 use Psr\Http\Client\ClientExceptionInterface;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamFactoryInterface;
-use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 use Wuro\Core\Contracts\BasePage;
 use Wuro\Core\Contracts\BaseResponse;
@@ -23,7 +19,9 @@ use Wuro\Core\Implementation\RawResponse;
 use Wuro\RequestOptions;
 
 /**
- * @phpstan-type normalized_request = array{
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ *
+ * @phpstan-type NormalizedRequest = array{
  *   method: string,
  *   path: string,
  *   query: array<string,mixed>,
@@ -73,13 +71,23 @@ abstract class BaseClient
         ?string $stream = null,
         RequestOptions|array|null $options = [],
     ): BaseResponse {
-        // @phpstan-ignore-next-line
-        [$req, $opts] = $this->buildRequest(method: $method, path: $path, query: $query, headers: $headers, body: $body, opts: $options);
+        [$req, $opts] = $this->buildRequest(
+            method: $method,
+            // @phpstan-ignore argument.type
+            path: $path,
+            query: $query,
+            // @phpstan-ignore argument.type
+            headers: $headers,
+            body: $body,
+            // @phpstan-ignore argument.type
+            opts: $options,
+        );
         ['method' => $method, 'path' => $uri, 'headers' => $headers, 'body' => $data] = $req;
         assert(!is_null($opts->requestFactory));
 
         $request = $opts->requestFactory->createRequest($method, uri: $uri);
         $request = Util::withSetHeaders($request, headers: $headers);
+        $request = $this->transformRequest($request);
 
         // @phpstan-ignore-next-line argument.type
         $rsp = $this->sendRequest($opts, req: $request, data: $data, redirectCount: 0, retryCount: 0);
@@ -87,18 +95,6 @@ abstract class BaseClient
         // @phpstan-ignore-next-line argument.type
         return new RawResponse(client: $this, request: $request, response: $rsp, options: $opts, requestInfo: $req, unwrap: $unwrap, stream: $stream, page: $page, convert: $convert ?? 'null');
     }
-
-    /** @return array<string,string> */
-    protected function authHeaders(): array
-    {
-        return [...$this->appIDAuth(), ...$this->appSecretAuth()];
-    }
-
-    /** @return array<string,string> */
-    abstract protected function appIDAuth(): array;
-
-    /** @return array<string,string> */
-    abstract protected function appSecretAuth(): array;
 
     /**
      * @internal
@@ -116,21 +112,9 @@ abstract class BaseClient
      * @param string|list<string> $path
      * @param array<string,mixed> $query
      * @param array<string,string|int|list<string|int>|null> $headers
-     * @param array{
-     *   timeout?: float|null,
-     *   maxRetries?: int|null,
-     *   initialRetryDelay?: float|null,
-     *   maxRetryDelay?: float|null,
-     *   extraHeaders?: array<string,string|int|list<string|int>|null>|null,
-     *   extraQueryParams?: array<string,mixed>|null,
-     *   extraBodyParams?: mixed,
-     *   transporter?: ClientInterface|null,
-     *   uriFactory?: UriFactoryInterface|null,
-     *   streamFactory?: StreamFactoryInterface|null,
-     *   requestFactory?: RequestFactoryInterface|null,
-     * }|null $opts
+     * @param RequestOpts|null $opts
      *
-     * @return array{normalized_request, RequestOptions}
+     * @return array{NormalizedRequest, RequestOptions}
      */
     protected function buildRequest(
         string $method,
@@ -157,7 +141,6 @@ abstract class BaseClient
         /** @var array<string,string|list<string>|null> $mergedHeaders */
         $mergedHeaders = [
             ...$this->headers,
-            ...$this->authHeaders(),
             ...$headers,
             ...($options->extraHeaders ?? []),
             ...$idempotencyHeaders,
@@ -166,6 +149,12 @@ abstract class BaseClient
         $req = ['method' => strtoupper($method), 'path' => $uri, 'query' => $mergedQuery, 'headers' => $mergedHeaders, 'body' => $body];
 
         return [$req, $options];
+    }
+
+    protected function transformRequest(
+        RequestInterface $request
+    ): RequestInterface {
+        return $request;
     }
 
     /**
@@ -282,7 +271,7 @@ abstract class BaseClient
                 throw $exn;
             }
 
-            $seconds = $this->retryDelay($opts, retryCount: $redirectCount, rsp: $rsp);
+            $seconds = $this->retryDelay($opts, retryCount: $retryCount, rsp: $rsp);
             $floor = floor($seconds);
             time_nanosleep((int) $floor, nanoseconds: (int) ($seconds - $floor) * 10 ** 9);
 

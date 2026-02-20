@@ -9,8 +9,8 @@ use Wuro\Core\Contracts\BaseResponse;
 use Wuro\Core\Exceptions\APIException;
 use Wuro\Invoices\InvoiceCreatePackageParams;
 use Wuro\Invoices\InvoiceCreateParams;
-use Wuro\Invoices\InvoiceCreateParams\InvoiceLine\Type;
 use Wuro\Invoices\InvoiceCreateParams\State;
+use Wuro\Invoices\InvoiceCreateParams\Type;
 use Wuro\Invoices\InvoiceGetLogsParams;
 use Wuro\Invoices\InvoiceGetLogsResponse;
 use Wuro\Invoices\InvoiceGetResponse;
@@ -39,6 +39,11 @@ use Wuro\Invoices\Line\InvoiceLine;
 use Wuro\RequestOptions;
 use Wuro\ServiceContracts\InvoicesRawContract;
 
+/**
+ * @phpstan-import-type InvoiceLineShape from \Wuro\Invoices\InvoiceCreateParams\InvoiceLine as InvoiceLineShape1
+ * @phpstan-import-type InvoiceLineShape from \Wuro\Invoices\Line\InvoiceLine
+ * @phpstan-import-type RequestOpts from \Wuro\RequestOptions
+ */
 final class InvoicesRawService implements InvoicesRawContract
 {
     // @phpstan-ignore-next-line
@@ -85,24 +90,14 @@ final class InvoicesRawService implements InvoicesRawContract
      *   clientEmail?: string,
      *   clientName?: string,
      *   clientZipCode?: string,
-     *   date?: string|\DateTimeInterface,
-     *   invoiceLines?: list<array{
-     *     description?: string,
-     *     discount?: float,
-     *     priceHt?: float,
-     *     product?: string,
-     *     quantity?: float,
-     *     reference?: string,
-     *     title?: string,
-     *     tvaRate?: float,
-     *     type?: 'product'|'header'|'subtotal'|'globalDiscount'|Type,
-     *     unit?: string,
-     *   }>,
-     *   paymentExpiryDate?: string|\DateTimeInterface,
-     *   state?: 'draft'|'waiting'|'paid'|'notpaid'|'late'|State,
+     *   date?: \DateTimeInterface,
+     *   invoiceLines?: list<InvoiceCreateParams\InvoiceLine|InvoiceLineShape1>,
+     *   paymentExpiryDate?: \DateTimeInterface,
+     *   state?: State|value-of<State>,
      *   title?: string,
-     *   type?: 'invoice'|'invoice_credit'|'external'|'external_credit'|'proforma'|'advance'|InvoiceCreateParams\Type,
+     *   type?: Type|value-of<Type>,
      * }|InvoiceCreateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceNewResponse>
      *
@@ -110,7 +105,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function create(
         array|InvoiceCreateParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceCreateParams::parseRequest(
             $params,
@@ -136,6 +131,7 @@ final class InvoicesRawService implements InvoicesRawContract
      *
      * @param string $uid ID de la facture
      * @param array{populate?: string}|InvoiceRetrieveParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceGetResponse>
      *
@@ -144,7 +140,7 @@ final class InvoicesRawService implements InvoicesRawContract
     public function retrieve(
         string $uid,
         array|InvoiceRetrieveParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceRetrieveParams::parseRequest(
             $params,
@@ -187,25 +183,14 @@ final class InvoicesRawService implements InvoicesRawContract
      *   clientEmail?: string,
      *   clientName?: string,
      *   clientZipCode?: string,
-     *   date?: string|\DateTimeInterface,
-     *   invoiceLines?: list<array{
-     *     _id?: string,
-     *     description?: string,
-     *     priceHt?: float,
-     *     quantity?: float,
-     *     reference?: string,
-     *     title?: string,
-     *     totalHt?: float,
-     *     totalTtc?: float,
-     *     tvaRate?: float,
-     *     type?: 'product'|'header'|'subtotal'|'globalDiscount'|InvoiceLine\Type,
-     *     unit?: string,
-     *   }|InvoiceLine>,
-     *   paymentExpiryDate?: string|\DateTimeInterface,
-     *   state?: 'draft'|'waiting'|'paid'|'notpaid'|'late'|InvoiceUpdateParams\State,
+     *   date?: \DateTimeInterface,
+     *   invoiceLines?: list<InvoiceLine|InvoiceLineShape>,
+     *   paymentExpiryDate?: \DateTimeInterface,
+     *   state?: InvoiceUpdateParams\State|value-of<InvoiceUpdateParams\State>,
      *   title?: string,
-     *   type?: 'invoice'|'invoice_credit'|'external'|'external_credit'|'proforma'|'advance'|InvoiceUpdateParams\Type,
+     *   type?: InvoiceUpdateParams\Type|value-of<InvoiceUpdateParams\Type>,
      * }|InvoiceUpdateParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceUpdateResponse>
      *
@@ -214,7 +199,7 @@ final class InvoicesRawService implements InvoicesRawContract
     public function update(
         string $uid,
         array|InvoiceUpdateParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceUpdateParams::parseRequest(
             $params,
@@ -252,15 +237,16 @@ final class InvoicesRawService implements InvoicesRawContract
      * @param array{
      *   client?: string,
      *   limit?: int,
-     *   maxDate?: string|\DateTimeInterface,
-     *   minDate?: string|\DateTimeInterface,
+     *   maxDate?: \DateTimeInterface,
+     *   minDate?: \DateTimeInterface,
      *   number?: string,
      *   search?: string,
      *   skip?: int,
      *   sort?: string,
-     *   state?: 'draft'|'waiting'|'paid'|'notpaid'|'late'|'inactive'|InvoiceListParams\State,
-     *   type?: 'invoice'|'invoice_credit'|'external'|'external_credit'|'proforma'|'advance'|InvoiceListParams\Type,
+     *   state?: InvoiceListParams\State|value-of<InvoiceListParams\State>,
+     *   type?: InvoiceListParams\Type|value-of<InvoiceListParams\Type>,
      * }|InvoiceListParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceListResponse>
      *
@@ -268,7 +254,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function list(
         array|InvoiceListParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceListParams::parseRequest(
             $params,
@@ -297,13 +283,15 @@ final class InvoicesRawService implements InvoicesRawContract
      *
      * **Événement déclenché:** DELETE_INVOICE
      *
+     * @param RequestOpts|null $requestOptions
+     *
      * @return BaseResponse<mixed>
      *
      * @throws APIException
      */
     public function delete(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -322,6 +310,7 @@ final class InvoicesRawService implements InvoicesRawContract
      * L'avoir reprend les informations de la facture d'origine avec des montants négatifs.
      *
      * @param string $uid ID de la facture d'origine
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceNewCreditResponse>
      *
@@ -329,7 +318,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function createCredit(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -348,6 +337,7 @@ final class InvoicesRawService implements InvoicesRawContract
      * Le bon de livraison reprend les lignes de la facture.
      *
      * @param string $uid ID de la facture
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -355,7 +345,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function createDeliveryReceipt(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -383,6 +373,7 @@ final class InvoicesRawService implements InvoicesRawContract
      * @param array{
      *   invoicesID: list<string>, deferred?: bool
      * }|InvoiceCreatePackageParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceNewPackageResponse>
      *
@@ -390,7 +381,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function createPackage(
         array|InvoiceCreatePackageParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceCreatePackageParams::parseRequest(
             $params,
@@ -417,6 +408,7 @@ final class InvoicesRawService implements InvoicesRawContract
      * @param array{
      *   invoice?: string, limit?: int, skip?: int
      * }|InvoiceGetLogsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceGetLogsResponse>
      *
@@ -424,7 +416,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function getLogs(
         array|InvoiceGetLogsParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceGetLogsParams::parseRequest(
             $params,
@@ -454,10 +446,9 @@ final class InvoicesRawService implements InvoicesRawContract
      * Utilise les mêmes filtres que GET /invoices (state, type, client, dates, etc.)
      *
      * @param array{
-     *   maxDate?: string|\DateTimeInterface,
-     *   minDate?: string|\DateTimeInterface,
-     *   state?: string,
+     *   maxDate?: \DateTimeInterface, minDate?: \DateTimeInterface, state?: string
      * }|InvoiceGetStatsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceGetStatsResponse>
      *
@@ -465,7 +456,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function getStats(
         array|InvoiceGetStatsParams $params,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceGetStatsParams::parseRequest(
             $params,
@@ -491,8 +482,9 @@ final class InvoicesRawService implements InvoicesRawContract
      * Exclut les avoirs et proformas.
      *
      * @param array{
-     *   maxDate?: string|\DateTimeInterface, minDate?: string|\DateTimeInterface
+     *   maxDate?: \DateTimeInterface, minDate?: \DateTimeInterface
      * }|InvoiceGetTurnoverParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceGetTurnoverResponse>
      *
@@ -500,7 +492,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function getTurnover(
         array|InvoiceGetTurnoverParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceGetTurnoverParams::parseRequest(
             $params,
@@ -536,11 +528,12 @@ final class InvoicesRawService implements InvoicesRawContract
      *
      * @param array{
      *   limit?: int,
-     *   maxDate?: string|\DateTimeInterface,
-     *   minDate?: string|\DateTimeInterface,
+     *   maxDate?: \DateTimeInterface,
+     *   minDate?: \DateTimeInterface,
      *   mode?: string,
      *   skip?: int,
      * }|InvoiceListPaymentsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceListPaymentsResponse>
      *
@@ -548,7 +541,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function listPayments(
         array|InvoiceListPaymentsParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceListPaymentsParams::parseRequest(
             $params,
@@ -578,8 +571,9 @@ final class InvoicesRawService implements InvoicesRawContract
      * @param array{
      *   limit?: int,
      *   skip?: int,
-     *   state?: list<'waiting'|'late'|InvoiceListWaitingPaymentsParams\State>,
+     *   state?: list<InvoiceListWaitingPaymentsParams\State|value-of<InvoiceListWaitingPaymentsParams\State>>,
      * }|InvoiceListWaitingPaymentsParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceListWaitingPaymentsResponse>
      *
@@ -587,7 +581,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function listWaitingPayments(
         array|InvoiceListWaitingPaymentsParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceListWaitingPaymentsParams::parseRequest(
             $params,
@@ -623,6 +617,7 @@ final class InvoicesRawService implements InvoicesRawContract
      *
      * @param string $uid ID de la facture
      * @param array{amount: float, mode: string}|InvoiceRecordPaymentParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceRecordPaymentResponse>
      *
@@ -631,7 +626,7 @@ final class InvoicesRawService implements InvoicesRawContract
     public function recordPayment(
         string $uid,
         array|InvoiceRecordPaymentParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceRecordPaymentParams::parseRequest(
             $params,
@@ -656,6 +651,7 @@ final class InvoicesRawService implements InvoicesRawContract
      * Inclut: création, modifications, numérotations, envois par email, etc.
      *
      * @param string $uid ID de la facture
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
      *
@@ -663,7 +659,7 @@ final class InvoicesRawService implements InvoicesRawContract
      */
     public function retrieveLogs(
         string $uid,
-        ?RequestOptions $requestOptions = null
+        RequestOptions|array|null $requestOptions = null
     ): BaseResponse {
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -693,7 +689,7 @@ final class InvoicesRawService implements InvoicesRawContract
      *
      * @param string $uid ID de la facture
      * @param array{
-     *   action?: 'send_invoice'|'dunning_invoice'|Action,
+     *   action?: Action|value-of<Action>,
      *   content?: string,
      *   copyto?: string,
      *   joinPdf?: bool,
@@ -701,6 +697,7 @@ final class InvoicesRawService implements InvoicesRawContract
      *   subject?: string,
      *   to?: string,
      * }|InvoiceSendEmailParams $params
+     * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<InvoiceSendEmailResponse>
      *
@@ -709,7 +706,7 @@ final class InvoicesRawService implements InvoicesRawContract
     public function sendEmail(
         string $uid,
         array|InvoiceSendEmailParams $params,
-        ?RequestOptions $requestOptions = null,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
         [$parsed, $options] = InvoiceSendEmailParams::parseRequest(
             $params,
